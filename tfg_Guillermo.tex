@@ -1,0 +1,141 @@
+\documentclass[tfg, rm, castellano]{tfgtfmetsii}
+
+% Opciones de la clase 'editorialupv'
+%
+% tfg         - TFG
+% tfm         - TFM
+% rm          - Tipo de letra roman
+% sf          - Tipo de letra sanserif
+% nomathskip  - No se modifican las distancias de las ecuaciones 
+%
+% castellano  - La publicaci�n est� escrita en castellano
+% valencia    - La publicaci� est� escrita en valenci�
+% english     - La publicaci�n est� escrita en ingl�s
+
+% Título del TFG
+
+\newcommand{\TFGtitulo}{Mejora de la Cuantificación en Imagen PET con Y-86 mediante Simulación Monte Carlo y Técnicas de Multiplexado.}
+
+
+\input{preambulo}
+
+\bibliography{referencias}
+
+\graphicspath{
+	{./figuras/}
+	{./logos/}
+	}
+
+% ---------------------------------------------------------------------
+
+\title{
+	\TF{}s de Guillermo\\[3ex]
+	\mdseries\large	Enero de 2026
+	}
+
+\author{
+	Guillermo Gutiérrez Caracuel
+	\and
+	Vicent Giménez Alventosa
+	\and
+	Sandra Oliver Gil
+}
+
+
+\begin{document}
+
+\input{referencias_cruzadas}
+
+% -------------------------------------------------------
+
+\frontmatter
+
+% -------------------------------------------------------
+% P�gina de t�tulo
+
+%\maketitle	
+
+\input{portada}
+
+% -------------------------------------------------------
+% Resumen, pr�logo o prefacio
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\abstractname}
+
+\input{agradecimientos}
+
+\input{cap_Resumen}
+
+% -------------------------------------------------------
+% �ndice: tabla de contenidos
+
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\contentsname}
+
+\tableofcontents
+
+% -------------------------------------------------------
+% Numeraci�n de p�ginas n�meros ar�bicos
+% Primer cap�tulo en p�gina 1
+
+\mainmatter
+
+% -------------------------------------------------------
+% -------------------------------------------------------
+% -------------------------------------------------------
+% Estructura en partes del TFG/TFM
+
+\part{Memoria}
+
+% Cap�tulos de la memoria
+
+% \input{cap_Manual}
+
+% \input{cap_Recomendaciones}
+
+\input{01_Introduccion.tex}
+
+\part{Presupuesto}
+
+%\input{presupuesto}
+
+\part{Planos}
+
+%\input{planos}
+
+% Otras partes
+
+%\part{....}
+
+%\input{.....}
+
+
+% -------------------------------------------------------
+% -------------------------------------------------------
+% -------------------------------------------------------
+% Bibliografía
+
+\bibitemsep = 3ex
+\bibhang = 2em
+
+\printbibliography[heading=bibintoc,title=\bibname]
+
+
+
+% -------------------------------------------------------
+% Índice alfabético
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\indexname}
+
+\printindex
+
+
+
+\end{document}
+

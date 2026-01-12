@@ -1,0 +1,197 @@
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% Configuraci�n general
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\ifcastellano\usepackage[spanish,es-tabla]{babel}\fi
+\ifvalencia\usepackage[catalan]{babel}\fi
+\ifenglish\usepackage[english]{babel}\usepackage{csquotes}\fi
+\newcommand{\sen}{\on{sen}}	
+
+
+\usepackage{xcolor}
+\usepackage{array,booktabs}
+\usepackage{tabularx,longtable,multicol}
+\usepackage{amssymb}
+
+%\ifenglish
+%	\raggedright % No justifica, i no divide las palabras con guiones
+%\fi
+
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% Bibliograf�a
+
+\usepackage[
+	url = false,
+	style = authoryear,
+	hyperref = true,
+	backref = true,
+	backend = biber, % Otra opci�n es 'backend = bibtex'
+	%backend = bibtex,
+	]{biblatex}
+
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% Documento electr�nico
+
+\usepackage{makeidx}
+\makeindex
+
+
+\colorlet{colorEnlace}{black} 
+
+
+\usepackage[
+	{colorlinks},
+	{linkcolor=colorEnlace},
+	{citecolor=colorEnlace},
+	{urlcolor=colorEnlace},
+	{bookmarksnumbered},
+	{breaklinks},
+	]{hyperref}
+
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% Expresi�n de unidades seg�n el Sistema Internacional, monedas
+
+\usepackage{eurosym}
+\usepackage{siunitx}
+
+\ifenglish
+	\sisetup{output-decimal-marker={.}}
+\else
+	\sisetup{output-decimal-marker={,}}
+\fi
+
+\DeclareSIUnit[number-unit-product = {\;}] \EURO{\geneuro}
+
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% Comandos y entornos personalizados
+
+
+% ---------------------------------------------------------------------
+
+\newcommand{\ingles}[1]{\textit{#1}}
+
+% ------------------------------------------------------------------------
+
+\usepackage{xspace}
+
+\newcommand{\angles}[1]{\textit{#1}\/}
+\newcommand{\miUrl}[1]{{\small%
+	%\texttt%
+	{\underline{#1}}}}
+
+\newcommand{\matlabr}{{\sc Matlab}$^\circledR$\xspace}
+\newcommand{\simulinkr}{\textit{Simulink}$^\circledR$\xspace}
+\newcommand{\matlab}{{\textsc{Matlab}}\xspace}
+\newcommand{\simulink}{\textit{Simulink}\xspace}
+
+\newcommand{\scr}{\textit{script\/}\xspace}
+\newcommand{\scrs}{\textit{scripts\/}\xspace}
+
+% ------------------------------------------------------------------------
+
+\definecolor{griset}{rgb}{.925, .925, .925}
+
+	\newsavebox{\mybox}
+	\newenvironment{parrafoDestacado}
+		{%
+		\fboxsep = 2ex
+		\fboxrule = .4pt
+	  	\begin{lrbox}{\mybox}%
+	  	\begin{minipage}{.85\textwidth-2\fboxsep}\itshape\parskip=2ex
+		}
+		{%
+		\end{minipage}
+	  	\end{lrbox}%
+		\begin{flushright}
+			\colorbox{griset}{\usebox{\mybox}}%
+	  		%\fcolorbox{black}{griset}{\usebox{\mybox}}%
+		\end{flushright}
+		}
+		
+%	\newenvironment{parrafoDestacado} % Si no nos gusta el sombreado
+%		{
+%		\vspace{0ex}
+%		\begin{quote}\noindent
+%		\itshape
+%		\samepage
+%		\parskip=2ex
+%		%\color{NavyBlue}
+%		}
+%		{
+%		\end{quote}
+%		}
+
+
+
+% ------------------------------------------------------------------------
+% Resumen del cap�tulo
+
+
+	\newsavebox{\myboxb}
+	\newenvironment{Resumen}
+		{%
+		\vspace*{-2.0cm}
+		\fboxsep = 0pt
+		\fboxrule = 0pt
+	  	\begin{lrbox}{\myboxb}%
+	  	\begin{minipage}{.85\textwidth}\itshape\parskip=2ex\parindent=2em
+		}
+		{%
+		\end{minipage}
+	  	\end{lrbox}%
+		\begin{flushright}
+			\usebox{\myboxb}%
+		\end{flushright}
+		\vspace{0.5cm}
+		}
+
+
+
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% S�mbolos matem�ticos
+
+\newcommand{\on}{\operatorname}
+
+% ---------------------------------------------------------------------
+% ---------------------------------------------------------------------
+% Teoremas y ejemplos
+
+\ifcastellano
+	\newtheorem{teorema}{\upshape\bfseries Teorema}[section]
+	\newtheorem{lema}{\mdseries\scshape Lema}[section]
+	\newtheorem{proposicion}{\upshape\bfseries Proposici�n}[section]
+	\newtheorem{ejemplo}{\bfseries\scshape Ejemplo}[section]
+\fi
+
+\ifvalencia % Es mantenen els mateixos noms per compatibilitat, per� l'autor els pot personalitzar
+	\newtheorem{teorema}{\upshape\bfseries Teorema}[section]
+	\newtheorem{lema}{\mdseries\scshape Lema}[section]
+	\newtheorem{proposicion}{\upshape\bfseries Proposici�}[section]
+	\newtheorem{ejemplo}{\bfseries\scshape Exemple}[section]
+\fi
+
+\ifenglish
+	\newtheorem{teorema}{\upshape\bfseries Theorem}[section]
+	\newtheorem{lema}{\mdseries\scshape Lemma}[section]
+	\newtheorem{proposicion}{\upshape\bfseries Proposition}[section]
+	\newtheorem{ejemplo}{\bfseries\scshape Example}[section]
+\fi
+
+
+
+% ---------------------------------------------------------------------
+
+% Isótopos
+\newcommand{\yochoseis}{\textsuperscript{86}Y }
+\newcommand{\ynuevecero}{\textsuperscript{90}Y }
+
+% Frameworks
+\newcommand{\penred}{PenRed}

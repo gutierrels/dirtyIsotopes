@@ -1,0 +1,35 @@
+\chapter{Introducción}
+
+\label{cap:introduccion}
+
+
+\section{Antecedentes}
+
+La medicina nuclear ha experimentado en las últimas décadas una transición hacia la medicina de precisión, impulsada en gran medida
+por el auge de la \textbf{teranosis} (acrónimo de terapia y diagnóstico). Este enfoque se basa en el uso de pares de isótopos radiactivos
+("matched pairs") que comparten propiedades químicas idénticas o muy similares, permitiendo utilizar uno para el diagnóstico por
+imagen y otro para la terapia en la misma diana molecular.
+
+Uno de los pares teranósticos más relevantes en la práctica clínica actual es el formado por el \textbf{Itrio-86} (\yochoseis) y el
+\textbf{Itrio-90} (\ynuevecero). El \ynuevecero es un emisor beta negativo puro ($\beta^-$). Sin embargo, su emisión carece de
+fotones gamma detectables, dificulta su detección mediante las técnicas de imagen convencionales, imposibilitando una dosimetría
+precisa previa al tratamiento. Su isótopo análogo, el \yochoseis es un emisor de positrones ($\beta^+$) que permite visualizar la
+biodistribución del fármaco mediante Tomografía por Emisión de Positrones (PET).
+
+A pesar de su utilidad, la imagen cuantitativa con \yochoseis presenta desafíos físicos significativos. Se clasifica como un
+\textbf{isótopo "sucio"}, ya que ya que su desintegración conlleva la emisión simultánea de una cascada de rayos gamma de alta
+energía (\textit{prompt gammas}). La literatura científica (\cite{Lubberink2011,Conti2016}) señala que estos gammas generan
+coincidencias triples y aumentan la tasa de eventos aleatorios, lo que los escáneres comerciales estándar malinterpretan,
+degradando severamente el contraste y la exactitud cuantitativa (\cite{Buchholz2003}).
+
+Para abordar esta problemática desde una perspectiva industrial y tecnológica, la simulación Monte Carlo es la herramienta
+fundamental. En este trabajo se utiliza el framework \textbf{\penred} (\cite{Gimnez-Alventosa2021})
+basado en PENELOPE, para modelar con alta fidelidad la geometría y la física de detección del escáner preclínico
+\textbf{Bruker PET/CT Si78}. El uso de las herramientas de reconstrucción propietarias de la empresa (Bruker RecoServer)
+permite validar los resultados en un entorno de aplicación real.
+
+\section{Motivación}
+
+La motivación principal de este trabajo surge de una necesidad clínica y tecnológica no resuelta: \textbf{la falta de precisión
+cuantitativa} en las imágenes PET de \yochoseis impide aprovechar todo el potencial del par teranóstico \yochoseis/\ynuevecero.
+
