@@ -1,0 +1,53 @@
+\chapter{Metodología}
+\label{cap:metodologia}
+
+\section{Herramientas de Simulación y Procesado}
+\label{sec:metodologia:herramientas}
+
+\subsection{Framework de simulación: penRed.}
+% qué es penRed
+% Descripción del software y su relación con PENELOPE (motor físico).
+% Características principales: Modularidad, paralelismo y lenguaje C++.
+% El módulo PENNUC: Justificación de su uso para la simulación de decaimientos complejos (\yochoseis)
+\subsubsection{Definiciones Clave de la Simulación}
+% Concepto de Historia (History): Definición como evento de decaimiento único y su importancia para la validación ("Same History").
+% Concepto de Singles vs. Coincidencias: Diferencia entre el dato crudo (output de penRed) y el dato procesado.
+% Tallies: Explicación del Tally Singles utilizado para la adquisición de datos en modo lista.
+
+\subsection{Entorno de simulación: Cluster UPV}
+\subsection{Software de reconstrucción: Bruker RecoServer (Algoritmo MLEM).}
+\subsection{Análisis de imagen: AMIDE.}
+% rois y obtención de la intensidad
+
+\section{Definición del Escenario de Simulación}
+\label{sec:metodologia:escenario_sim}
+
+\subsection{Modelado del escáner: Geometría del Bruker PET/CT Si78.}
+\subsection{El Fantoma Derenzo: Especificaciones y materiales.}
+\subsection{Configuración de la fuente radiactiva (Archivos .nuc).}
+
+\section{Desarrollo del Algoritmo de Post-Procesado (C++)}
+\label{sec:metodologia:postprocess}
+
+\subsection{Arquitectura del Software processs singles}
+\subsection{Modelado de la respuesta del detector (Energy Blurring).}
+\subsection{Implementación de algoritmos de coincidencia:}
+\subsection{Same History (Validación ideal).}
+\subsection{Closest Time (Simulación realista).}
+\subsection{Multiplexing Mode (Detección de triples).}
+
+\section{Diseño Experimental: Fases de Simulación}
+\label{sec:metodologia:fases}
+
+\subsection{Fase 1: Validación Ideal (Ground Truth).}
+\subsection{Fase 2: Estudio de Efectos Físicos (Scatter y Atenuación).}
+\subsection{Fase 3: Simulación Realista (Randoms).}
+\subsection{Fase 4: Optimización de Ventanas (Energía y Tiempo).}
+\subsection{Fase 5: Prueba de concepto de Multiplexado.}
+
+\section{Métricas de Evaluación de Calidad}
+\label{sec:metodologia:metricas}
+
+\subsection{Definición de ROIs.}
+\subsection{Coeficiente de Recuperación de Contraste (CRC).}
+\subsection{Relación Señal-Ruido (SNR).}

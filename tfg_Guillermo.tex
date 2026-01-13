@@ -29,7 +29,7 @@
 % ---------------------------------------------------------------------
 
 \title{
-	\TF{}s de Guillermo\\[3ex]
+	\TFGtitulo\\[3ex]
 	\mdseries\large	Enero de 2026
 	}
 
@@ -51,14 +51,14 @@
 \frontmatter
 
 % -------------------------------------------------------
-% P�gina de t�tulo
+% Página de título
 
-%\maketitle	
+\maketitle	
 
 \input{portada}
 
 % -------------------------------------------------------
-% Resumen, pr�logo o prefacio
+% Resumen, prólogo o prefacio
 
 \cleardoublepage
 \phantomsection
@@ -69,7 +69,7 @@
 \input{cap_Resumen}
 
 % -------------------------------------------------------
-% �ndice: tabla de contenidos
+% Índice: tabla de contenidos
 
 
 \cleardoublepage
@@ -79,25 +79,34 @@
 \tableofcontents
 
 % -------------------------------------------------------
-% Numeraci�n de p�ginas n�meros ar�bicos
-% Primer cap�tulo en p�gina 1
+% Numeración de páginas números arábicos
+% Primer capítulo en página 1
 
 \mainmatter
 
-% -------------------------------------------------------
-% -------------------------------------------------------
-% -------------------------------------------------------
+
+
 % Estructura en partes del TFG/TFM
 
 \part{Memoria}
 
-% Cap�tulos de la memoria
+% Capítulos de la memoria
 
-% \input{cap_Manual}
+%\input{cap_Manual}
 
-% \input{cap_Recomendaciones}
+%\input{cap_Recomendaciones}
 
-\input{01_Introduccion.tex}
+\input{capitulos/01_Introduccion.tex}
+
+\input{capitulos/02_Estado_del_arte.tex}
+
+\input{capitulos/03_Metodologia.tex}
+
+\input{capitulos/04_Resultados_discusion.tex}
+
+\input{capitulos/05_ODS.tex}
+
+\input{capitulos/06_conclusiones.tex}
 
 \part{Presupuesto}
 
