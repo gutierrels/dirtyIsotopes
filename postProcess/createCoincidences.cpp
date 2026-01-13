@@ -343,10 +343,7 @@ int main(int argc, char **argv) {
     pairIndexes.emplace_back(a, b);
   }
   fclose(fdetPair);
-
-  // =========================================================
-  // CORRECCION DE INICIALIZACION (ESTO EVITA EL SEGFAULT)
-  // =========================================================
+  
   FILE *fLM = nullptr;
   FILE *fcLM = nullptr;
   FILE *fLM_AB = nullptr;
@@ -373,8 +370,6 @@ int main(int argc, char **argv) {
   }
 
   if (coinMethod == COINCIDENCE_METHOD::TAKE_CLOSEST_MULTIPLEXING) {
-    printf("DEBUG: Modo Multiplexing Activado. Creando ficheros...\n");
-    fflush(stdout); // FORZAR IMPRESION INMEDIATA
 
     fLM_AB = fopen("data_AB.lm", "wb");
     if (fLM_AB == nullptr) {
@@ -390,8 +385,6 @@ int main(int argc, char **argv) {
       return -1;
     }
     fwrite(&header, sizeof(LMHeader), 1, fLM_B_prime);
-    printf("DEBUG: Ficheros creados correctamente.\n");
-    fflush(stdout);
   }
 
   // Open all module files
@@ -557,22 +550,6 @@ int main(int argc, char **argv) {
     // Sort new singles
     std::sort(nextSingles.begin(), nextSingles.end());
 
-    // =========================================================
-    // CODIGO DE DIAGNOSTICO TEMPORAL
-    // =========================================================
-    static double maxEnergySeen = 0.0;
-    bool printUpdate = false;
-    for (const auto &s : nextSingles) {
-      if (s.e > maxEnergySeen) {
-        maxEnergySeen = s.e;
-        printUpdate = true;
-      }
-    }
-    if (printUpdate &&
-        maxEnergySeen > 550.0) { // Solo imprimir si sube y es relevante
-      printf("DEBUG: Nuevo máximo de energía encontrado: %.2f keV\n",
-             maxEnergySeen);
-    }
     // =========================================================
 
     // Get first single history number
