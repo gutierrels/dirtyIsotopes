@@ -100,7 +100,7 @@
 	
 
 % ---------------------------------------------------------------------
-% Format de p�gina
+% Format de página
 
 \RequirePackage{geometry}
 
@@ -116,8 +116,8 @@
 	hmargin = {2.5cm, 2.5cm}, 	% {Izquierdo, Derecho}
 	vmargin = {3cm, 3cm}, % {Superior, Inferior} 
 	%includehead, includefoot, 	% Incluyendo encabezado y pie
-	headsep = \myheadsep,  % Separaci?n entre el encabezado y el texto
-	footskip = 1.75cm,        	% Separaci?n entre el texto y el pie
+	headsep = \myheadsep,  % Separación entre el encabezado y el texto
+	footskip = 1.75cm,        	% Separación entre el texto y el pie
 	headheight = 15pt
 }
 

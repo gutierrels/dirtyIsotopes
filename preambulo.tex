@@ -8,7 +8,7 @@
 \ifcastellano\usepackage[spanish,es-tabla]{babel}\fi
 \ifvalencia\usepackage[catalan]{babel}\fi
 \ifenglish\usepackage[english]{babel}\usepackage{csquotes}\fi
-\newcommand{\sen}{\on{sen}}	
+\newcommand{\sen}{\on{sen}}
 
 
 \usepackage{xcolor}
@@ -28,11 +28,14 @@
 	url = false,
 	style = authoryear,
 	hyperref = true,
-	backref = false,
+	backref = true,
 	backend = biber, % Otra opción es 'backend = bibtex'
-	%backend = bibtex,
-	]{biblatex}
+]{biblatex}
 
+\DefineBibliographyStrings{spanish}{%
+	backrefpage = {pág.},%
+	backrefpages = {págs.}%
+}
 % ---------------------------------------------------------------------
 % ---------------------------------------------------------------------
 % Documento electrónico
@@ -41,7 +44,7 @@
 \makeindex
 
 
-\colorlet{colorEnlace}{black} 
+\colorlet{colorEnlace}{black}
 
 
 \usepackage[
@@ -51,7 +54,7 @@
 	{urlcolor=colorEnlace},
 	{bookmarksnumbered},
 	{breaklinks},
-	]{hyperref}
+]{hyperref}
 
 % ---------------------------------------------------------------------
 % ---------------------------------------------------------------------
@@ -83,8 +86,8 @@
 
 \newcommand{\angles}[1]{\textit{#1}\/}
 \newcommand{\miUrl}[1]{{\small%
-	%\texttt%
-	{\underline{#1}}}}
+			%\texttt%
+			{\underline{#1}}}}
 
 \newcommand{\matlabr}{{\sc Matlab}$^\circledR$\xspace}
 \newcommand{\simulinkr}{\textit{Simulink}$^\circledR$\xspace}
@@ -98,23 +101,23 @@
 
 \definecolor{griset}{rgb}{.925, .925, .925}
 
-	\newsavebox{\mybox}
-	\newenvironment{parrafoDestacado}
-		{%
-		\fboxsep = 2ex
-		\fboxrule = .4pt
-	  	\begin{lrbox}{\mybox}%
-	  	\begin{minipage}{.85\textwidth-2\fboxsep}\itshape\parskip=2ex
-		}
-		{%
+\newsavebox{\mybox}
+\newenvironment{parrafoDestacado}
+{%
+	\fboxsep = 2ex
+	\fboxrule = .4pt
+	\begin{lrbox}{\mybox}%
+		\begin{minipage}{.85\textwidth-2\fboxsep}\itshape\parskip=2ex
+			}
+			{%
 		\end{minipage}
-	  	\end{lrbox}%
-		\begin{flushright}
-			\colorbox{griset}{\usebox{\mybox}}%
-	  		%\fcolorbox{black}{griset}{\usebox{\mybox}}%
-		\end{flushright}
-		}
-		
+	\end{lrbox}%
+	\begin{flushright}
+		\colorbox{griset}{\usebox{\mybox}}%
+		%\fcolorbox{black}{griset}{\usebox{\mybox}}%
+	\end{flushright}
+}
+
 %	\newenvironment{parrafoDestacado} % Si no nos gusta el sombreado
 %		{
 %		\vspace{0ex}
@@ -134,23 +137,23 @@
 % Resumen del capítulo
 
 
-	\newsavebox{\myboxb}
-	\newenvironment{Resumen}
-		{%
-		\vspace*{-2.0cm}
-		\fboxsep = 0pt
-		\fboxrule = 0pt
-	  	\begin{lrbox}{\myboxb}%
-	  	\begin{minipage}{.85\textwidth}\itshape\parskip=2ex\parindent=2em
-		}
-		{%
+\newsavebox{\myboxb}
+\newenvironment{Resumen}
+{%
+	\vspace*{-2.0cm}
+	\fboxsep = 0pt
+	\fboxrule = 0pt
+	\begin{lrbox}{\myboxb}%
+		\begin{minipage}{.85\textwidth}\itshape\parskip=2ex\parindent=2em
+			}
+			{%
 		\end{minipage}
-	  	\end{lrbox}%
-		\begin{flushright}
-			\usebox{\myboxb}%
-		\end{flushright}
-		\vspace{0.5cm}
-		}
+	\end{lrbox}%
+	\begin{flushright}
+		\usebox{\myboxb}%
+	\end{flushright}
+	\vspace{0.5cm}
+}
 
 
 
@@ -206,18 +209,21 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{frame=tb,
-  language=C++,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
 }
+
+% Para el QR
+\usepackage{qrcode}

@@ -4,8 +4,100 @@
 \section{Fundamentos de la Tomografía por Emisión de Positrones (PET)}
 \label{sec:estado_del_arte_fund_teoricos:fundamentos_PET}
 
+La Tomografía por Emisión de Positrones (PET) es una técnica de imagen
+que permite la visualización cuantitativa de procesos fisiológicos y
+metabólicos \emph{in vivo}. Se basa en la detección de pares de fotones
+gamma producidos por la \textbf{aniquilación de los positrones}. Cuando un
+radiotrazador emisor de positrones (radionúclido $\beta^+$ unido a una molécula
+biológicamente activa) es administrado al sujeto, se distribuye en el organismo
+en función de su afinidad biológica.
+
+El núcleo inestable del radionúclido busca la estabilidad emitiendo un positrón
+($e^+$) y un neutrino ($\nu_e$). El positrón viaja una corta distancia a través
+del tejido, perdiendo su energía cinética mediante colisiones inelásticas, hasta
+casi detenerse. Esta distancia media recorrida se denomina \textbf{rango del positrón}
+y representa el límite físico fundamental de la resolución espacial de la técnica
+(\cite{heiss2012positron}).
+
+Una vez el positrón ha perdido suficiente energía cinética, interactúa con un
+electrón del medio ($e^-$). En este encuentro, la masa de ambas partículas se
+convierte íntegramente en energía, siguiendo la ecuación de Einstein $E=mc^2$.
+Como resultado, se emiten dos fotones gamma ($\gamma$) de \SI{511}{\kilo\electronvolt}
+cada uno. Debido al principio de conservación del momento lineal, estos fotones
+son emitidos en direcciones opuestas, es decir, con un ángulo de aproximadamente
+\SI{180}{\degree} entre sí.
+
 \subsection{Principio de Detección por Coincidencia.}
+
+El escáner PET consta de uno o varios anillos de detectores de centelleo que rodean
+al paciente. La base de la formación de la imagen reside en la \textbf{detección en
+    coincidencia}. Cuando dos detectores opuestos registran la llegada de un fotón
+dentro de una ventana de tiempo muy corta (denominada ventana de coincidencia, $2\tau$,
+típicamente de \SI{4}{} a \SI{12}{\nano\second}), el sistema asume que ambos fotones provienen
+de la misma aniquilación.
+
+Este evento define una línea virtual que une ambos detectores, conocida como
+\textbf{Línea de Respuesta} o LOR (\emph{Line of Response}). La acumulación de
+millones de LORs, mediante algoritmos de reconstrucción tomográfica
+como \textbf{Maximum Likelihood Expectation Maximization} (MLEM) o
+\textbf{Ordered subset expectation maximization} (OSEM), permite generar una imagen tridimensional de la distribución del
+radiotrazador.
+
 \subsection{Física de la Aniquilación y Rango del Positrón.}
+
+El proceso de generación de la señal PET no es instantáneo ni puntual respecto a la ubicación del núcleo radiactivo. Existen dos fenómenos físicos fundamentales que limitan la resolución espacial intrínseca del sistema: el rango del positrón y la no-colinealidad.
+
+\textbf{Rango del Positrón:}
+Cuando el núcleo emite un positrón, este sale despedido con una energía cinética que depende del isótopo (espectro continuo de energía). El positrón debe perder esta energía mediante colisiones inelásticas en el tejido hasta termalizarse antes de poder aniquilarse. La distancia recorrida desde el núcleo hasta el punto de aniquilación se denomina \emph{rango del positrón}.
+El escáner detecta la aniquilación, no el núcleo. Por tanto, existe un error de posicionamiento intrínseco.
+\begin{itemize}
+    \item Para el $^{18}\text{F}$ ($E_{max} = \SI{0.63}{\mega\electronvolt}$), el
+          rango medio es muy corto ($\sim \SI{0.2}{\milli\meter}$ en agua).
+    \item Para el $^{86}\text{Y}$ ($E_{max} \approx \SI{3.1}{\mega\electronvolt}$),
+          el rango es significativamente mayor ($\sim \SI{3.9}{\milli\meter}$ en agua),
+          lo que introduce un emborronamiento (\emph{blurring}) natural en la imagen
+          (\cite{Conti2016}).
+\end{itemize}
+
+\textbf{No-colinealidad:}
+En el momento de la aniquilación, el par positrón-electrón no está completamente en reposo; posee un pequeño momento residual. Para conservar el momento lineal, los dos fotones no se emiten a exactamente \SI{180}{\degree}, sino con una desviación de $\pm \SI{0.25}{\degree}$. Esto provoca que la LOR reconstruida no pase exactamente por el punto de aniquilación, introduciendo un error que aumenta linealmente con el diámetro del anillo del escáner.
+
+
+\subsection{Tipos de Eventos de Coincidencia}
+\label{subsec:tipos_eventos}
+
+En una adquisición PET ideal, solo se registrarían pares de fotones que no han
+sufrido interacciones en su camino hacia los detectores. Sin embargo, en la
+práctica, existen diferentes tipos de eventos que afectan a la calidad y
+cuantificación de la imagen:
+
+\begin{itemize}
+    \item \textbf{Coincidencias Verdaderas (\emph{Trues}):} Ocurren cuando ambos
+          fotones de 511 keV provenientes de una misma aniquilación alcanzan los detectores
+          sin interactuar con el medio y son registrados dentro de la ventana de tiempo.
+          Son la señal útil que queremos medir.
+
+    \item \textbf{Coincidencias Dispersas (\emph{Scatter}):} Se producen cuando uno
+          o ambos fotones sufren interacción Compton en el cuerpo del paciente antes de
+          llegar al detector. Aunque provienen de la misma aniquilación, la dispersión
+          cambia la dirección del fotón, por lo que la LOR reconstruida no pasa por el
+          punto de emisión real. Esto reduce el contraste y añade un fondo difuso a la imagen.
+
+    \item \textbf{Coincidencias Aleatorias (\emph{Randoms}):} Ocurren cuando dos
+          fotones provenientes de \textbf{dos aniquilaciones diferentes} son detectados
+          casualmente dentro de la misma ventana de tiempo. El sistema los interpreta
+          erróneamente como un par. La tasa de randoms ($R$) depende cuadráticamente
+          de la tasa de eventos individuales (\emph{singles}), según la relación
+          $R = 2\tau S_1 S_2$, donde $S_1$ y $S_2$ son las tasas de singles en los detectores.
+\end{itemize}
+
+Como se detallará en la sección \ref{sec:estado_del_arte_fund_teoricos:isotopos_sucios}, en el caso de
+isótopos no convencionales como el $^{86}\text{Y}$, la presencia de rayos gamma en cascada
+(\emph{prompt gammas}) introduce una complejidad adicional, aumentando masivamente
+la tasa de \emph{singles} (y por tanto los \emph{randoms}) y generando coincidencias
+espurias adicionales (triples) que degradan severamente la cuantificación.
+
+
 \subsection{Reconstrucción de la Imagen}
 \subsection{Causas de Degradación de la Imagen}
 
