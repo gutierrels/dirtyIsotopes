@@ -34,16 +34,16 @@ permite validar los resultados en un entorno de aplicación real.
 La motivación principal de este trabajo surge de una necesidad clínica y tecnológica no resuelta: \textbf{la falta de precisión
     cuantitativa} en las imágenes PET de \yochoseis impide aprovechar todo el potencial del par teranóstico \yochoseis/\ynuevecero.
 
-Este proyecto se desarrolla en el marco de una \textbf{colaboración con la empresa Bruker}, líder mundial en instrumentación científica y
+Este proyecto se desarrolla en el marco de una colaboración con la empresa \textbf{Bruker}, líder mundial en instrumentación científica y
 diagnóstico por imagen. La motivación técnica reside en optimizar el rendimiento de sus sistemas preclínicos para isótopos complejos.
 Mediante el uso de simulación computacional avanzada, se pretende descomponer los efectos degradantes (\emph{scatter}, atenuación y \emph{prompt gammas})
-y proponer una \textbf{optimización de los parámetros de adquisición y procesado} (ventanas de energía y tiempo) específica para sus detectores.
+y proponer una \textbf{optimización} de los parámetros de \textbf{adquisición y procesado} (ventanas de energía y tiempo) específica para sus detectores.
 Se busca demostrar que, mediante un ajuste fino, es posible recuperar el contraste perdido y transformar una imagen ruidosa en una
 herramienta dosimétrica fiable.
 
-Además, este trabajo explora una motivación innovadora que va más allá de la corrección: el \textbf{cambio de paradigma} hacia la imagen
+Además, en este trabajo se explora una motivación innovadora que va más allá de la corrección: el \textbf{cambio de paradigma} hacia la imagen
 \textbf{multiplexada}. Se plantea la base para utilizar los \emph{prompt gammas} no como ruido, sino como una
-"firma" única para distinguir el \yochoseis de otros isótopos, abriendo la puerta a adquisiciones simultáneas duales (mPET).
+"firma"\space para distinguir el \yochoseis de otros isótopos, abriendo la puerta a adquisiciones simultáneas duales (mPET) (\cite{Pratt2023}).
 
 \section{Carácter Académico del Trabajo}
 \label{sec:introduccion:caracter}
@@ -72,18 +72,73 @@ preclínicos.
 El alcance del trabajo se estructura en los siguientes bloques principales:
 
 \subsection{Modelado y Simulación Computacional}
-El proyecto comprende la configuración y ejecución de simulaciones Monte Carlo utilizando el framework penRed
+El proyecto comprende la configuración y ejecución de simulaciones Monte Carlo utilizando el framework \textbf{penRed}
 (\cite{Gimnez-Alventosa2021}).
 
 \begin{itemize}
-    \item Se incluye el modelado geométrico preciso del escáner preclínico comercial Bruker PET/CT Si78 (\cite{unknown-author-no-date}), 
-    incluyendo la disposición de los cristales detectores
+    \item Se incluye el modelado geométrico preciso mediante el software
+          \textbf{Blender} del escáner preclínico comercial Bruker PET/CT Si78 (\cite{unknown-author-no-date}).
     \item Se abarca la simulación de la física de desintegración compleja del \yochoseis (emisión de positrones y cascadas de prompt gammas)
-    mediante el módulo PENNUC, así como la simulación de un isótopo de referencia (\fdiezocho) para estudios comparativos.
+          mediante el módulo PENNUC, así como la simulación de un isótopo de referencia (\fdiezocho) para estudios comparativos.
     \item El escenario de simulación se limita al uso del fantoma éstandar de calidad de imagen (Derenzo), permitiendo estudios
-    reproducibles de resolución y contraste.
+          reproducibles de resolución y contraste.
 \end{itemize}
 
-\subsection{}
+\subsection{Desarrollo de software de Post-procesado}
+
+El alcance comprende la implementación y validación de algoritmos de procesamiento de datos
+crudos (singles) para extraer las coincidencias PET correspondientes, en formato \emph{list mode} (LM).
+\footnote{Cabe aclarar que los códigos de Post-procesado iniciales, los cuales no contenían las funcinones
+    en relación al multiplexado me fueron proporcionados por Vicent. Partiendo de esa base,
+    yo los modifiqué para que permiteran multiplexing. Yo los he completado, mas no los desarrollé desde el principio}
+
+
+Se incluye el diseño de un algoritmo de clasificación de eventos para la clasificación
+de eventos triples basado en la tecnica de separación
+de isótopos de \cite{Andreyev2011}, implementado en C++.
+
+\subsection{Estudio de Optimización de Parámetros}
+
+El trabajo incluye un análisis cuantitativo para determinar los parámetros de adquisición óptimos.
+El alcance de este estudio incluye:
+\begin{itemize}
+    \item Un barrido sistemático de Ventanas de Energía (EW) y Ventanas de Coincidencia (CW).
+    \item La evaluación de la calidad de imagen mediante métricas estandarizadas: Coeficiente de Recuperación de Contraste (CRC) y Relación Señal-Ruido (SNR).
+    \item La reconstrucción de imágenes utilizando el software comercial Bruker RecoServer bajo el algoritmo estándar MLEM.
+\end{itemize}
+\footnote{esto lo hice previo a desarrollar el algoritmo de separación de isótopos, realmente}
+
+\subsection{Prueba de Concepto de Imagen Multiplexada}
+
+Finalmente, el proyecto alcanza la implementación de una prueba de concepto para la técnica de PET
+mutliplexado (mPET).
+
+Se modeló en Blender, un fantoma basado en el de \cite{Andreyev2011}, el cual contenía diferentes
+varillas con diferente concentración de dos isótopos, uno sucio (\yochoseis) y otro limpio (\fdiezocho).
+
+Se realizaron simulaciones con penRed, simulando altas energías para incluir todos los 
+gammas. Luego se usó el algoritmo de postProcess modificado con el nuevo metodo mutliplexing,
+aprovechando estos gammas de alta energía , para generar los distintos datasets, y finalmente se 
+usaron unos scripts de python para leer las imágenes crudas tras el proceso de
+reconstrucción y sustraer la imagen ($A+B - F*B'$). 
 
 \section{Estructura de la memoria}
+
+% Terminar más adelante cuando tenga la memoria hecha??
+
+
+\section{Repositorio}
+
+El código fuente desarrollado para el post-procesado y los scripts de análisis están 
+disponibles en: https://github.com/gutierrels/dirtyIsotopes/. Más iformación en \ref{fig:qr_repo}
+
+
+
+¿Qué SÍ subir?
+\begin{itemize}
+    \item Tus scripts de C++ (createCoincidences.cpp, etc.).
+    \item Los archivos de configuración de penRed (config.in) genéricos.
+    \item Los scripts de Python para generar gráficas.
+    \item El archivo .geo del fantoma Derenzo.
+\end{itemize}
+
