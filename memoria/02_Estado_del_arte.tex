@@ -17,7 +17,7 @@ El núcleo inestable del radionúclido busca la estabilidad emitiendo un positr�
 del tejido, perdiendo su energía cinética mediante colisiones inelásticas, hasta
 casi detenerse. Esta distancia media recorrida se denomina \textbf{rango del positrón}
 y representa el límite físico fundamental de la resolución espacial de la técnica
-(\cite{heiss2012positron}).
+\parencite{heiss2012positron}.
 
 Una vez el positrón ha perdido suficiente energía cinética, interactúa con un
 electrón del medio ($e^-$). En este encuentro, la masa de ambas partículas se
@@ -31,7 +31,7 @@ son emitidos en direcciones opuestas, es decir, con un ángulo de aproximadament
 
 El escáner PET consta de uno o varios anillos de detectores de centelleo que rodean
 al paciente. La base de la formación de la imagen reside en la \textbf{detección en
-    coincidencia}. Cuando dos detectores opuestos registran la llegada de un fotón
+      coincidencia}. Cuando dos detectores opuestos registran la llegada de un fotón
 dentro de una ventana de tiempo muy corta (denominada ventana de coincidencia, $2\tau$,
 típicamente de \SI{4}{} a \SI{12}{\nano\second}), el sistema asume que ambos fotones provienen
 de la misma aniquilación.
@@ -40,8 +40,8 @@ Este evento define una línea virtual que une ambos detectores, conocida como
 \textbf{Línea de Respuesta} o LOR (\emph{Line of Response}). La acumulación de
 millones de LORs, mediante algoritmos de reconstrucción tomográfica
 como \textbf{Maximum Likelihood Expectation Maximization} (MLEM) o
-\textbf{Ordered subset expectation maximization} (OSEM), permite generar una imagen tridimensional de la distribución del
-radiotrazador.
+\textbf{Ordered Subset Expectation Maximization} (OSEM), permite generar una imagen tridimensional de la distribución del
+radiotrazador. % para más adelante: insertar figura representando qué es una LOR
 
 \subsection{Física de la Aniquilación y Rango del Positrón.}
 
@@ -50,18 +50,18 @@ El proceso de generación de la señal PET no es instantáneo ni puntual respect
 \textbf{Rango del Positrón:}
 Cuando el núcleo emite un positrón, este sale despedido con una energía cinética que depende del isótopo (espectro continuo de energía). El positrón debe perder esta energía mediante colisiones inelásticas en el tejido hasta termalizarse antes de poder aniquilarse. La distancia recorrida desde el núcleo hasta el punto de aniquilación se denomina \emph{rango del positrón}.
 El escáner detecta la aniquilación, no el núcleo. Por tanto, existe un error de posicionamiento intrínseco.
+Cuanto menor sea el rango del positrón, mejores resoluciones espaciales se podrán alcanzar.
 \begin{itemize}
-    \item Para el $^{18}\text{F}$ ($E_{max} = \SI{0.63}{\mega\electronvolt}$), el
-          rango medio es muy corto ($\sim \SI{0.2}{\milli\meter}$ en agua).
-    \item Para el $^{86}\text{Y}$ ($E_{max} \approx \SI{3.1}{\mega\electronvolt}$),
-          el rango es significativamente mayor ($\sim \SI{3.9}{\milli\meter}$ en agua),
-          lo que introduce un emborronamiento (\emph{blurring}) natural en la imagen
-          (\cite{Conti2016}).
+      \item Para el $^{18}\text{F}$ ($E_{max} = \SI{0.634}{\mega\electronvolt}$), el
+            rango medio es muy corto alrededor de $\SI{0.6}{\milli\meter}$ en agua \parencite{Conti2016}.
+      \item Para el $^{86}\text{Y}$ ($E_{max} \approx \SI{2.01}{\mega\electronvolt}$),
+            el rango es significativamente mayor ($\sim \SI{2.5}{\milli\meter}$ en agua),
+            lo que introduce un emborronamiento (\emph{blurring}) natural en la imagen \parencite{Jdal2014}.
 \end{itemize}
 
 \textbf{No-colinealidad:}
 En el momento de la aniquilación, el par positrón-electrón no está completamente en reposo; posee un pequeño momento residual. Para conservar el momento lineal, los dos fotones no se emiten a exactamente \SI{180}{\degree}, sino con una desviación de $\pm \SI{0.25}{\degree}$. Esto provoca que la LOR reconstruida no pase exactamente por el punto de aniquilación, introduciendo un error que aumenta linealmente con el diámetro del anillo del escáner.
-
+% no se si hace falta incluir alguna figura aquí
 
 \subsection{Tipos de Eventos de Coincidencia}
 \label{subsec:tipos_eventos}
@@ -72,23 +72,23 @@ práctica, existen diferentes tipos de eventos que afectan a la calidad y
 cuantificación de la imagen:
 
 \begin{itemize}
-    \item \textbf{Coincidencias Verdaderas (\emph{Trues}):} Ocurren cuando ambos
-          fotones de 511 keV provenientes de una misma aniquilación alcanzan los detectores
-          sin interactuar con el medio y son registrados dentro de la ventana de tiempo.
-          Son la señal útil que queremos medir.
+      \item \textbf{Coincidencias Verdaderas (\emph{Trues}):} Ocurren cuando ambos
+            fotones de 511 keV provenientes de una misma aniquilación alcanzan los detectores
+            sin interactuar con el medio y son registrados dentro de la ventana de tiempo.
+            Son la señal útil que queremos medir.
 
-    \item \textbf{Coincidencias Dispersas (\emph{Scatter}):} Se producen cuando uno
-          o ambos fotones sufren interacción Compton en el cuerpo del paciente antes de
-          llegar al detector. Aunque provienen de la misma aniquilación, la dispersión
-          cambia la dirección del fotón, por lo que la LOR reconstruida no pasa por el
-          punto de emisión real. Esto reduce el contraste y añade un fondo difuso a la imagen.
+      \item \textbf{Coincidencias Dispersas (\emph{Scatter}):} Se producen cuando uno
+            o ambos fotones sufren interacción Compton en el cuerpo del paciente antes de
+            llegar al detector. Aunque provienen de la misma aniquilación, la dispersión
+            cambia la dirección del fotón, por lo que la LOR reconstruida no pasa por el
+            punto de emisión real. Esto reduce el contraste y añade un fondo difuso a la imagen.
 
-    \item \textbf{Coincidencias Aleatorias (\emph{Randoms}):} Ocurren cuando dos
-          fotones provenientes de \textbf{dos aniquilaciones diferentes} son detectados
-          casualmente dentro de la misma ventana de tiempo. El sistema los interpreta
-          erróneamente como un par. La tasa de randoms ($R$) depende cuadráticamente
-          de la tasa de eventos individuales (\emph{singles}), según la relación
-          $R = 2\tau S_1 S_2$, donde $S_1$ y $S_2$ son las tasas de singles en los detectores.
+      \item \textbf{Coincidencias Aleatorias (\emph{Randoms}):} Ocurren cuando dos
+            fotones provenientes de \textbf{dos aniquilaciones diferentes} son detectados
+            casualmente dentro de la misma ventana de tiempo. El sistema los interpreta
+            erróneamente como un par. La tasa de randoms ($R$) depende cuadráticamente
+            de la tasa de eventos individuales (\emph{singles}), según la relación
+            $R = 2\tau S_1 S_2$, donde $S_1$ y $S_2$ son las tasas de singles en los detectores.
 \end{itemize}
 
 Como se detallará en la sección \ref{sec:estado_del_arte_fund_teoricos:isotopos_sucios}, en el caso de
@@ -99,12 +99,94 @@ espurias adicionales (triples) que degradan severamente la cuantificación.
 
 
 \subsection{Reconstrucción de la Imagen}
+
+El objetivo de la reconstrucción es estimar la distribución tridimensional de actividad $f(x,y,z)$ a partir de los datos de proyección (sinogramas o datos en modo lista). Existen dos grandes familias de algoritmos:
+
+\textbf{1. Métodos Analíticos (FBP):}
+La Retroproyección Filtrada (\emph{Filtered Back Projection}) fue el estándar durante años. Es rápida y lineal, pero asume que los datos no tienen ruido y requiere una estadística alta. No modela bien los efectos físicos degradantes, produciendo artefactos de rayas (\emph{streak artifacts}) en imágenes con bajo conteo.
+
+\textbf{2. Métodos Iterativos (MLEM / OSEM):}
+Son el estándar actual en la práctica clínica y preclínica, y el método utilizado por el software \textbf{Bruker RecoServer} en este trabajo.
+El algoritmo de \textbf{Maximización de la Verosimilitud-Esperanza (MLEM)} modela la naturaleza estadística de la emisión radiactiva (distribución de Poisson).
+El proceso es cíclico:
+\begin{enumerate}
+      \item Se parte de una estimación inicial de la imagen.
+      \item Se calcula una "proyección hacia adelante" (\emph{forward projection}) para ver qué datos generaría esa imagen teórica.
+      \item Se comparan estos datos simulados con los datos reales medidos por el escáner.
+      \item Se calcula un factor de corrección y se actualiza la imagen ("retroproyección").
+\end{enumerate}
+Este ciclo se repite hasta la convergencia. El MLEM permite incorporar correcciones físicas precisas (atenuación, scatter, respuesta del detector) dentro del propio bucle de reconstrucción, resultando en imágenes con mejor relación señal-ruido y menos artefactos que la FBP.
+
+
 \subsection{Causas de Degradación de la Imagen}
 
-\section{Física de los Isótopos "Sucios" (\yochoseis)}
-\label{sec:estado_del_arte_fund_teoricos:isotopos_sucios}
+Además de los límites físicos intrínsecos (rango y no-colinealidad), la calidad y cuantificación de la imagen PET se ven afectadas por interacciones de los fotones con la materia y limitaciones del detector:
 
-\subsection{Esquema de desintegración del Itrio-86.}
+\begin{itemize}
+      \item \textbf{Atenuación:} Es la pérdida de fotones verdaderos debido a su absorción (efecto fotoeléctrico) o dispersión fuera del campo de visión. Depende de la densidad y el espesor del objeto atravesado. Si no se corrige (generalmente usando un mapa de atenuación obtenido por CT), las estructuras profundas aparecen con menos actividad de la real.
+
+      \item \textbf{Dispersión Compton (\emph{Scatter}):} Como se definió anteriormente, son fotones que cambian de dirección pero siguen siendo detectados. Esto añade un fondo de baja frecuencia a la imagen, reduciendo el contraste y falseando la cuantificación al añadir cuentas en zonas donde no hay actividad.
+
+      \item \textbf{Coincidencias Aleatorias (\emph{Randoms}):} Añaden un fondo ruidoso uniforme a toda la imagen. Son especialmente críticas en tasas de conteo altas o ventanas de coincidencia anchas.
+
+      \item \textbf{Tiempo Muerto (\emph{Dead Time}):} Es el tiempo que la electrónica necesita para procesar un evento, durante el cual es "ciega" a nuevos eventos. A altas actividades, esto provoca una pérdida de sensibilidad y una relación no lineal entre la actividad real y la medida.
+
+      \item \textbf{Efecto de Volumen Parcial (PVE):} Debido a la resolución finita del sistema, la actividad de objetos pequeños (menores que 2 o 3 veces la resolución FWHM) se "diluye" en el espacio circundante, haciendo que parezcan tener menos actividad de la real. Esto es crítico en la cuantificación de lesiones tumorales pequeñas o, en este trabajo, en las varillas finas del fantoma Derenzo.
+\end{itemize}
+
+\section{Física de los Isótopos "Sucios" ($^{86}\text{Y}$)}
+\label{sec:fisica_isostopos_sucios}
+
+A diferencia de los radionúclidos emisores de positrones puros o "estándar", como el $^{18}\text{F}$ o el $^{11}\text{C}$, que decaen casi exclusivamente al estado fundamental del núcleo hijo, existe una familia de isótopos conocidos en la literatura como \textbf{emisores de positrones no convencionales} o coloquialmente \textbf{"isótopos sucios"} (\emph{dirty isotopes}).
+
+El \textbf{Itrio-86 ($^{86}\text{Y}$)} es el ejemplo paradigmático de esta categoría. Su uso es fundamental en teranosis por ser el par diagnóstico del $^{90}\text{Y}$, pero su compleja física de desintegración introduce desafíos severos para la cuantificación en PET.
+
+\subsection{Esquema de desintegración del Itrio-86}
+\label{subsec:esquema_y86}
+
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+
+      \centering
+      \vspace{-20pt}
+      \includegraphics[width=\linewidth]{esquemaY86.png}
+      \caption{Esquema de decaimiento del \yochoseis.}
+      \label{fig:esquemaY86}
+      \vspace{-10pt}
+\end{wrapfigure}
+
+El \yochoseis es un núclido con una vida media de $T_{1/2} = \SI{14.74}{\hour}$, lo que permite el seguimiento de procesos biológicos lentos (como la farmacocinética de anticuerpos monoclonales) que no son observables con isótopos de vida corta. Se desintegra en Estroncio-86 ($^{86}\text{Sr}$) estable mediante dos procesos en competencia \parencite{Conti2016}:
+
+\begin{enumerate}
+      \item \textbf{Captura Electrónica (EC):} Es el modo dominante, representando aproximadamente el \SI{68.1}{\percent} de las desintegraciones. En este proceso, no se emite positrón y, por tanto, no contribuye a la señal PET útil, pero sí genera una gran cantidad de rayos gamma y rayos X característicos que aumentan el tiempo muerto y el ruido del detector.
+
+      \item \textbf{Emisión de Positrones ($\beta^+$):} Representa aproximadamente el \SI{31.9}{\percent} de las desintegraciones. Esto implica que la sensibilidad intrínseca (cuentas PET por Becquerelio inyectado) es aproximadamente un tercio de la del $^{18}\text{F}$. Además, el espectro de energía de estos positrones es complejo, con una energía máxima de $E_{max} = \SI{3.15}{\mega\electronvolt}$, considerablemente mayor que la del $^{18}\text{F}$ ($\SI{0.63}{\mega\electronvolt}$), resultando en un mayor rango del positrón y una peor resolución espacial intrínseca.
+\end{enumerate}
+
+
+
+
+
+
+\subsection{Fenómeno de \emph{Prompt Gammas}}
+\label{subsec:prompt_gammas}
+
+La característica definitoria del $^{86}\text{Y}$ como "isótopo sucio" no es solo su baja abundancia de positrones, sino el estado en el que queda el núcleo hijo. Tras la emisión $\beta^+$, el núcleo de $^{86}\text{Sr}$ resultante suele quedar en un \textbf{estado excitado} de alta energía.
+
+Para alcanzar el estado fundamental estable, el $^{86}\text{Sr}$ se desexcita emitiendo uno o varios fotones gamma. El tiempo de vida de estos estados excitados es del orden de picosegundos ($10^{-12}$ s), un tiempo despreciable comparado con la ventana de coincidencia temporal de un escáner PET (típicamente nanosegundos, $10^{-9}$ s).
+
+Por consiguiente, para el sistema de detección, estos fotones gamma se emiten \textbf{simultáneamente} a la aniquilación del positrón. Estos fotones se denominan \textbf{gamas en cascada} o \textit{\textbf{prompt gammas}}.
+
+Según los datos nucleares de referencia (ENSDF), las emisiones gamma más probables y energéticas que acompañan a la emisión de positrones en el $^{86}\text{Y}$ son:
+
+\begin{itemize}
+      \item $\gamma$ de \SI{1077}{\kilo\electronvolt} (Abundancia relativa respecto a decaimientos $\beta^+$: $\sim 82.5\%$).
+      \item $\gamma$ de \SI{628}{\kilo\electronvolt} (Abundancia: $\sim 32.6\%$).
+      \item Otros gammas de alta energía (\SI{1153}{\kilo\electronvolt}, \SI{1854}{\kilo\electronvolt}, \SI{1920}{\kilo\electronvolt}).
+\end{itemize}
+
+La presencia de estos fotones adicionales rompe la premisa fundamental de la imagen PET (que asume que solo existen dos fotones de 511 keV), dando lugar a las \textbf{coincidencias triples} y espurias que constituyen el problema central abordado en este trabajo.
+
 \subsection{Fenómeno de Prompt Gammas (Gamas en cascada).}
 \subsection{Tipos de eventos: Verdaderos, Scatter, Randoms y Coincidencias Triples.}
 

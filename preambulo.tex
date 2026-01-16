@@ -32,9 +32,14 @@
 	backend = biber, % Otra opción es 'backend = bibtex'
 ]{biblatex}
 
-\DefineBibliographyStrings{spanish}{%
-	backrefpage = {pág.},%
-	backrefpages = {págs.}%
+\DefineBibliographyStrings{spanish}{
+	backrefpage = {pág.},
+	backrefpages = {págs.},
+}
+
+\DefineBibliographyStrings{english}{
+	backrefpage = {p.},
+	backrefpages = {pp.},
 }
 % ---------------------------------------------------------------------
 % ---------------------------------------------------------------------
@@ -227,3 +232,6 @@
 
 % Para el QR
 \usepackage{qrcode}
+
+% para las figuras
+\usepackage{wrapfig}
