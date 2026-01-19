@@ -7,7 +7,7 @@
 
 La medicina nuclear ha experimentado en las últimas décadas una transición hacia la medicina de precisión, impulsada en gran medida
 por el auge de la \textbf{teranosis}, acrónimo de terapia y diagnóstico \parencite{Rsch2017}. Este enfoque se basa en el uso de pares de isótopos radiactivos
-("matched pairs") que comparten propiedades químicas idénticas o muy similares, permitiendo utilizar uno para el diagnóstico por
+(\enquote{matched pairs}) que comparten propiedades químicas idénticas o muy similares, permitiendo utilizar uno para el diagnóstico por
 imagen y otro para la terapia en la misma diana molecular.
 
 Uno de los pares teranósticos más relevantes en la práctica clínica actual es el formado por el \textbf{Itrio-86} (\yochoseis) y el
@@ -17,7 +17,7 @@ precisa previa al tratamiento. Su isótopo análogo, el \yochoseis es un emisor 
 biodistribución del fármaco mediante Tomografía por Emisión de Positrones (PET).
 
 A pesar de su utilidad, la imagen cuantitativa con \yochoseis presenta desafíos físicos significativos. Se clasifica como un
-\textbf{isótopo "sucio"}, ya que ya que su desintegración conlleva la emisión simultánea de una cascada de rayos gamma de alta
+\textbf{isótopo \enquote{sucio}}, ya que ya que su desintegración conlleva la emisión simultánea de una cascada de rayos gamma de alta
 energía (\textit{prompt gammas}). La literatura científica (\cite{Lubberink2011,Conti2016}) señala que estos gammas generan
 coincidencias triples y aumentan la tasa de eventos aleatorios, lo que los escáneres comerciales estándar malinterpretan,
 degradando severamente el contraste y la exactitud cuantitativa (\cite{Buchholz2003}).
@@ -43,7 +43,7 @@ herramienta dosimétrica fiable.
 
 Además, en este trabajo se explora una motivación innovadora que va más allá de la corrección: el \textbf{cambio de paradigma} hacia la imagen
 \textbf{multiplexada}. Se plantea la base para utilizar los \emph{prompt gammas} no como ruido, sino como una
-"firma"\space para distinguir el \yochoseis de otros isótopos, abriendo la puerta a adquisiciones simultáneas duales (mPET) (\cite{Pratt2023}).
+\enquote{firma} para distinguir el \yochoseis de otros isótopos, abriendo la puerta a adquisiciones simultáneas duales (mPET) (\cite{Pratt2023}).
 
 \section{Carácter Académico del Trabajo}
 \label{sec:introduccion:caracter}
@@ -88,9 +88,9 @@ El proyecto comprende la configuración y ejecución de simulaciones Monte Carlo
 
 El alcance comprende la implementación y validación de algoritmos de procesamiento de datos
 crudos (singles) para extraer las coincidencias PET correspondientes, en formato \emph{list mode} (LM).
-\footnote{Cabe aclarar que los códigos de Post-procesado iniciales, los cuales no contenían las funcinones
-    en relación al multiplexado me fueron proporcionados por Vicent. Partiendo de esa base,
-    yo los modifiqué para que permiteran multiplexing. Yo los he completado, mas no los desarrollé desde el principio}
+% Cabe aclarar que los códigos de Post-procesado iniciales, los cuales no contenían las funcinones
+%     en relación al multiplexado me fueron proporcionados por Vicent. Partiendo de esa base,
+%     yo los modifiqué para que permiteran multiplexing. Yo los he completado, mas no los desarrollé desde el principio
 
 
 Se incluye el diseño de un algoritmo de clasificación de eventos para la clasificación
@@ -106,7 +106,7 @@ El alcance de este estudio incluye:
     \item La evaluación de la calidad de imagen mediante métricas estandarizadas: Coeficiente de Recuperación de Contraste (CRC) y Relación Señal-Ruido (SNR).
     \item La reconstrucción de imágenes utilizando el software comercial Bruker RecoServer bajo el algoritmo estándar MLEM.
 \end{itemize}
-\footnote{esto lo hice previo a desarrollar el algoritmo de separación de isótopos, realmente}
+% esto lo hice previo a desarrollar el algoritmo de separación de isótopos, realmente
 
 \subsection{Prueba de Concepto de Imagen Multiplexada}
 
@@ -120,7 +120,7 @@ Se realizaron simulaciones con penRed, simulando altas energías para incluir to
 gammas. Luego se usó el algoritmo de postProcess modificado con el nuevo metodo mutliplexing,
 aprovechando estos gammas de alta energía , para generar los distintos datasets, y finalmente se
 usaron unos scripts de python para leer las imágenes crudas tras el proceso de
-reconstrucción y sustraer la imagen ($A+B - F*B'$).
+reconstrucción y sustraer la imagen ($A+B - F*B'$). %esto es un borrador, hay que cambiarlo y pulirlo
 
 \section{Estructura de la memoria}
 

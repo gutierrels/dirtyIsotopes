@@ -4,10 +4,10 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-
+\usepackage{csquotes}
 \ifcastellano\usepackage[spanish,es-tabla]{babel}\fi
 \ifvalencia\usepackage[catalan]{babel}\fi
-\ifenglish\usepackage[english]{babel}\usepackage{csquotes}\fi
+\ifenglish\usepackage[english]{babel}\fi
 \newcommand{\sen}{\on{sen}}
 
 
@@ -198,9 +198,12 @@
 % ---------------------------------------------------------------------
 
 % Isótopos
-\newcommand{\yochoseis}{\textsuperscript{86}Y }
-\newcommand{\ynuevecero}{\textsuperscript{90}Y }
-\newcommand{\fdiezocho}{\textsuperscript{18}F }
+
+\usepackage[version=4]{mhchem}
+\newcommand{\yochoseis}{\ce{^{86}Y} }
+\newcommand{\ynuevecero}{\ce{^{90}Y} }
+\newcommand{\fdiezocho}{\ce{^{18}F} }
+\newcommand{\conce}{\ce{^{11}C} }
 
 % Frameworks
 \newcommand{\penred}{PenRed}

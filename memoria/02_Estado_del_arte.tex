@@ -102,8 +102,15 @@ espurias adicionales (triples) que degradan severamente la cuantificación.
 
 El objetivo de la reconstrucción es estimar la distribución tridimensional de actividad $f(x,y,z)$ a partir de los datos de proyección (sinogramas o datos en modo lista). Existen dos grandes familias de algoritmos:
 
-\textbf{1. Métodos Analíticos (FBP):}
+\textbf{1. Métodos Analíticos:}
+Se basan en utilizar la transformada inversa de Radon,la cual modela el proceso de adquisición de datos como un conjunto de integrales de línea de la distribución espacial del objeto $f(x,y)$.
+
+$$R\{f\}(\rho, \theta) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x, y) \, \delta(x \cos \theta + y \sin \theta - \rho) \, dx \, dy$$
+
+Matemáticamente, el conjunto de estas proyecciones genera el sinograma. Estos métodos consisten en recuperar $f(x,y)$ a partir de este sinograma. Para solucionar esto, el método estándar en el estado del arte clásico es la Retroproyección Filtrada (FBP).
+
 La Retroproyección Filtrada (\emph{Filtered Back Projection}) fue el estándar durante años. Es rápida y lineal, pero asume que los datos no tienen ruido y requiere una estadística alta. No modela bien los efectos físicos degradantes, produciendo artefactos de rayas (\emph{streak artifacts}) en imágenes con bajo conteo.
+% Tocaría explicar un poco más e introducir alguna figura
 
 \textbf{2. Métodos Iterativos (MLEM / OSEM):}
 Son el estándar actual en la práctica clínica y preclínica, y el método utilizado por el software \textbf{Bruker RecoServer} en este trabajo.
@@ -111,9 +118,9 @@ El algoritmo de \textbf{Maximización de la Verosimilitud-Esperanza (MLEM)} mode
 El proceso es cíclico:
 \begin{enumerate}
       \item Se parte de una estimación inicial de la imagen.
-      \item Se calcula una "proyección hacia adelante" (\emph{forward projection}) para ver qué datos generaría esa imagen teórica.
+      \item Se calcula una \enquote{proyección hacia adelante} (\emph{forward projection}) para ver qué datos generaría esa imagen teórica.
       \item Se comparan estos datos simulados con los datos reales medidos por el escáner.
-      \item Se calcula un factor de corrección y se actualiza la imagen ("retroproyección").
+      \item Se calcula un factor de corrección y se actualiza la imagen (\enquote{retroproyección}).
 \end{enumerate}
 Este ciclo se repite hasta la convergencia. El MLEM permite incorporar correcciones físicas precisas (atenuación, scatter, respuesta del detector) dentro del propio bucle de reconstrucción, resultando en imágenes con mejor relación señal-ruido y menos artefactos que la FBP.
 
@@ -129,28 +136,28 @@ Además de los límites físicos intrínsecos (rango y no-colinealidad), la cali
 
       \item \textbf{Coincidencias Aleatorias (\emph{Randoms}):} Añaden un fondo ruidoso uniforme a toda la imagen. Son especialmente críticas en tasas de conteo altas o ventanas de coincidencia anchas.
 
-      \item \textbf{Tiempo Muerto (\emph{Dead Time}):} Es el tiempo que la electrónica necesita para procesar un evento, durante el cual es "ciega" a nuevos eventos. A altas actividades, esto provoca una pérdida de sensibilidad y una relación no lineal entre la actividad real y la medida.
+      \item \textbf{Tiempo Muerto (\emph{Dead Time}):} Es el tiempo que la electrónica necesita para procesar un evento, durante el cual es \enquote{ciega} a nuevos eventos. A altas actividades, esto provoca una pérdida de sensibilidad y una relación no lineal entre la actividad real y la medida.
 
-      \item \textbf{Efecto de Volumen Parcial (PVE):} Debido a la resolución finita del sistema, la actividad de objetos pequeños (menores que 2 o 3 veces la resolución FWHM) se "diluye" en el espacio circundante, haciendo que parezcan tener menos actividad de la real. Esto es crítico en la cuantificación de lesiones tumorales pequeñas o, en este trabajo, en las varillas finas del fantoma Derenzo.
+      \item \textbf{Efecto de Volumen Parcial (PVE):} Debido a la resolución finita del sistema, la actividad de objetos pequeños (menores que 2 o 3 veces la resolución FWHM) se \enquote{diluye} en el espacio circundante, haciendo que parezcan tener menos actividad de la real. Esto es crítico en la cuantificación de lesiones tumorales pequeñas o, en este trabajo, en las varillas finas del fantoma Derenzo.
 \end{itemize}
 
-\section{Física de los Isótopos "Sucios" ($^{86}\text{Y}$)}
-\label{sec:fisica_isostopos_sucios}
+\section{Física de los Isótopos \enquote{Sucios} (\yochoseis)}
+\label{sec:estado_del_arte_fund_teoricos:isotopos_sucios}
 
-A diferencia de los radionúclidos emisores de positrones puros o "estándar", como el $^{18}\text{F}$ o el $^{11}\text{C}$, que decaen casi exclusivamente al estado fundamental del núcleo hijo, existe una familia de isótopos conocidos en la literatura como \textbf{emisores de positrones no convencionales} o coloquialmente \textbf{"isótopos sucios"} (\emph{dirty isotopes}).
+A diferencia de los radionúclidos emisores de positrones puros o \enquote{estándar}, como el \fdiezocho o el \ce{^{11}C}, que decaen casi exclusivamente al estado fundamental del núcleo hijo, existe una familia de isótopos conocidos en la literatura como \textbf{emisores de positrones no convencionales} o coloquialmente \textbf{\enquote{isótopos sucios}} (\emph{dirty isotopes}).
 
-El \textbf{Itrio-86 ($^{86}\text{Y}$)} es el ejemplo paradigmático de esta categoría. Su uso es fundamental en teranosis por ser el par diagnóstico del $^{90}\text{Y}$, pero su compleja física de desintegración introduce desafíos severos para la cuantificación en PET.
+El \textbf{Itrio-86 (\yochoseis)} es el ejemplo paradigmático de esta categoría. Su uso es fundamental en teranosis por ser el par diagnóstico del \ynuevecero, pero su compleja física de desintegración introduce desafíos severos para la cuantificación en PET.
 
 \subsection{Esquema de desintegración del Itrio-86}
 \label{subsec:esquema_y86}
 
 
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{wrapfigure}{r}{0.35\textwidth}
 
       \centering
       \vspace{-20pt}
       \includegraphics[width=\linewidth]{esquemaY86.png}
-      \caption{Esquema de decaimiento del \yochoseis.}
+      \caption{Esquema simplificado de decaimiento del \yochoseis. Fuente: Adaptado de \cite{Lubberink2011}.}
       \label{fig:esquemaY86}
       \vspace{-10pt}
 \end{wrapfigure}
@@ -164,20 +171,16 @@ El \yochoseis es un núclido con una vida media de $T_{1/2} = \SI{14.74}{\hour}$
 \end{enumerate}
 
 
-
-
-
-
 \subsection{Fenómeno de \emph{Prompt Gammas}}
 \label{subsec:prompt_gammas}
 
-La característica definitoria del $^{86}\text{Y}$ como "isótopo sucio" no es solo su baja abundancia de positrones, sino el estado en el que queda el núcleo hijo. Tras la emisión $\beta^+$, el núcleo de $^{86}\text{Sr}$ resultante suele quedar en un \textbf{estado excitado} de alta energía.
+La característica definitoria del $^{86}\text{Y}$ como \enquote{isótopo sucio} no es solo su baja abundancia de positrones, sino el estado en el que queda el núcleo hijo. Tras la emisión $\beta^+$, el núcleo de $^{86}\text{Sr}$ resultante suele quedar en un \textbf{estado excitado} de alta energía.
 
 Para alcanzar el estado fundamental estable, el $^{86}\text{Sr}$ se desexcita emitiendo uno o varios fotones gamma. El tiempo de vida de estos estados excitados es del orden de picosegundos ($10^{-12}$ s), un tiempo despreciable comparado con la ventana de coincidencia temporal de un escáner PET (típicamente nanosegundos, $10^{-9}$ s).
 
 Por consiguiente, para el sistema de detección, estos fotones gamma se emiten \textbf{simultáneamente} a la aniquilación del positrón. Estos fotones se denominan \textbf{gamas en cascada} o \textit{\textbf{prompt gammas}}.
 
-Según los datos nucleares de referencia (ENSDF), las emisiones gamma más probables y energéticas que acompañan a la emisión de positrones en el $^{86}\text{Y}$ son:
+Según los datos nucleares de referencia \parencite{Negret2025}, las emisiones gamma más probables y energéticas que acompañan a la emisión de positrones en el \yochoseis son:
 
 \begin{itemize}
       \item $\gamma$ de \SI{1077}{\kilo\electronvolt} (Abundancia relativa respecto a decaimientos $\beta^+$: $\sim 82.5\%$).
@@ -187,14 +190,45 @@ Según los datos nucleares de referencia (ENSDF), las emisiones gamma más proba
 
 La presencia de estos fotones adicionales rompe la premisa fundamental de la imagen PET (que asume que solo existen dos fotones de 511 keV), dando lugar a las \textbf{coincidencias triples} y espurias que constituyen el problema central abordado en este trabajo.
 
-\subsection{Fenómeno de Prompt Gammas (Gamas en cascada).}
 \subsection{Tipos de eventos: Verdaderos, Scatter, Randoms y Coincidencias Triples.}
+La presencia de \textit{prompt gammas} altera significativamente la estadística de detección en comparación con un isótopo puro. En una adquisición de \yochoseis, el sistema PET registra una mezcla compleja de eventos:
+
+\begin{enumerate}
+      \item \textbf{Coincidencias Verdaderas Estándar ($\beta^+$ puro):} Detección de los dos fotones de \SI{511}{\kilo\electronvolt} procedentes de la aniquilación.
+      \item \textbf{Coincidencias Falsas por \textit{Prompt Gamma}:} Ocurren cuando se detecta un fotón de aniquilación en coincidencia con un \textit{prompt gamma} (por ejemplo, el de \SI{1077}{\kilo\electronvolt} dispersado o el de \SI{628}{\kilo\electronvolt}). Dado que no existe correlación angular entre el fotón de aniquilación y el gamma en cascada, la LOR resultante es aleatoria y no pasa por el punto de emisión, contribuyendo a un fondo estructurado que reduce el contraste.
+      \item \textbf{Aumento de Randoms:} Como cada desintegración emite múltiples fotones (no solo dos), la tasa de eventos individuales (\emph{singles}) en los detectores aumenta drásticamente. Dado que la tasa de coincidencias aleatorias es proporcional al cuadrado de la tasa de \emph{singles} ($R \propto S^2$), el \yochoseis genera un fondo de ruido aleatorio mucho más intenso que el \fdiezocho para la misma actividad.
+      \item \textbf{Coincidencias Triples:} Este es el evento característico de los isótopos sucios. Ocurre cuando el sistema detecta simultáneamente (dentro de la ventana de coincidencia) los dos fotones de aniquilación (\SI{511}{\kilo\electronvolt}) \textbf{más} un \textit{prompt gamma} emitido en la misma cascada.
+            \begin{itemize}
+                  \item En un escáner PET estándar, los triples suelen descartarse o procesarse erróneamente como múltiples pares dobles, introduciendo ruido.
+                  \item Sin embargo, como se verá en la sección \ref{sec:estado_del_arte_fund_teoricos:multiplexing}, estos eventos constituyen un marcador físico intrínseco que permite distinguir al isótopo sucio de un isótopo limpio.
+            \end{itemize}
+\end{enumerate}
+
 
 \section{Simulación Monte Carlo en Medicina Nuclear}
 \label{sec:estestado_del_arte_fund_teoricos:simulacion}
 
+La complejidad de las interacciones de la radiación con la materia, sumada a la geometría detallada de los tomógrafos PET, hace que los métodos analíticos deterministas sean insuficientes para modelar con precisión la adquisición de imágenes. La simulación Monte Carlo (MC) se ha establecido como el estándar para la investigación en física médica, permitiendo estudiar escenarios que serían imposibles o extremadamente costosos de replicar experimentalmente.
+
 \subsection{Introducción al método Monte Carlo.}
+
+El método Monte Carlo es una técnica numérica estadística utilizada para resolver problemas matemáticos complejos mediante la generación de variables aleatorias. En el contexto del transporte de radiación, el método simula el transporte individual de cada partícula (fotón, electrón o positrón) a través de la geometría definida, basándose en las distribuciones de probabilidad de las secciones eficaces de interacción \parencite{illana2013metodos}.
+
+El proceso se estructura en \textbf{\enquote{historias}} (\emph{histories}). Una historia comienza con la desintegración de un núcleo radiactivo y sigue la trayectoria de todas las partículas primarias y secundarias generadas hasta que son absorbidas, su energía cae por debajo de un umbral de corte, o abandonan el volumen de simulación.
+
+El algoritmo determina estocásticamente:
+\begin{itemize}
+    \item La distancia recorrida por la partícula antes de interactuar (camino libre medio).
+    \item El tipo de interacción que ocurre (efecto fotoeléctrico, dispersión Compton, producción de pares, aniquilación).
+    \item La energía depositada en el medio y la dirección de las partículas resultantes.
+\end{itemize}
+
+La precisión de la simulación depende del número de historias simuladas ($N$). El error estadístico disminuye proporcionalmente a $1/\sqrt{N}$, lo que implica que para reducir el ruido a la mitad, es necesario cuadruplicar el tiempo de cálculo.
+
 \subsection{El código PENELOPE y el framework penRed.}
+
+Para la simulación del transporte de radiación, este trabajo utiliza el código \textbf{PENELOPE} (\emph{Penetration and Energy Loss of Positrons and Electrons}), desarrollado por la Universidad de Barcelona \parencite{Bar1995}. PENELOPE es reconocido mundialmente por su precisión en el transporte acoplado de fotones y electrones/positrones en el rango de energía de \SI{50}{\electronvolt} a \SI{1}{\giga\electronvolt}. Una de sus características distintivas es el uso de un modelo de \textbf{simulación mixta} (clase II) para partículas cargadas, que combina la simulación detallada de colisiones fuertes con teorías de dispersión múltiple para colisiones suaves, optimizando así el tiempo de cómputo sin sacrificar precisión.
+
 \subsection{Simulación de fuentes complejas (módulo PENNUC).}
 
 \section{Imagen PET Multiplexada}
