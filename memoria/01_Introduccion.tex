@@ -31,19 +31,21 @@ permite validar los resultados en un entorno de aplicación real.
 \section{Motivación}
 \label{sec:introduccion:motivacion}
 
-La motivación principal de este trabajo surge de una necesidad clínica y tecnológica no resuelta: \textbf{la falta de precisión
-    cuantitativa} en las imágenes PET de \yochoseis impide aprovechar todo el potencial del par teranóstico \yochoseis/\ynuevecero.
+La motivación principal de este trabajo surge de una necesidad clínica y tecnológica no resuelta: la falta de precisión
+cuantitativa en las imágenes PET de \yochoseis impide aprovechar todo el potencial del par teranóstico \yochoseis/\ynuevecero.
 
 Este proyecto se desarrolla en el marco de una colaboración con la empresa \textbf{Bruker}, líder mundial en instrumentación científica y
 diagnóstico por imagen. La motivación técnica reside en optimizar el rendimiento de sus sistemas preclínicos para isótopos complejos.
 Mediante el uso de simulación computacional avanzada, se pretende descomponer los efectos degradantes (\emph{scatter}, atenuación y \emph{prompt gammas})
-y proponer una \textbf{optimización} de los parámetros de \textbf{adquisición y procesado} (ventanas de energía y tiempo) específica para sus detectores.
+y proponer una optimización de los parámetros de adquisición y procesado (ventanas de energía y tiempo) específica para sus detectores.
 Se busca demostrar que, mediante un ajuste fino, es posible recuperar el contraste perdido y transformar una imagen ruidosa en una
 herramienta dosimétrica fiable.
 
-Además, en este trabajo se explora una motivación innovadora que va más allá de la corrección: el \textbf{cambio de paradigma} hacia la imagen
+Además, en este trabajo se explora una motivación innovadora que va más allá de la corrección: el cambio de paradigma hacia la imagen
 \textbf{multiplexada}. Se plantea la base para utilizar los \emph{prompt gammas} no como ruido, sino como una
 \enquote{firma} para distinguir el \yochoseis de otros isótopos, abriendo la puerta a adquisiciones simultáneas duales (mPET) (\cite{Pratt2023}).
+La adquisición simultánea de dos trazadores permitiría una correlación espacio-temporal perfecta, observando la interacción dinámica de dos procesos biológicos. Al introducir dos trazadores al mismo tiempo lo que con PET convencional se lograba en dos sesiones con multiplexing se logra en una. Esto no solamente reduciría el tiempo de adquisición, sino que también la dosis de radiación para el paciente ya que, por ejemplo, en un estudio PET/CT se implica una tomografía computarizada (CT) para la corrección de atenuación y la localización anatómica. Si haces dos estudios separados, el paciente recibe dos dosis de rayos X por el CT. Con multiplexing, haces un solo CT para corregir ambos isótopos.
+
 
 \section{Carácter Académico del Trabajo}
 \label{sec:introduccion:caracter}

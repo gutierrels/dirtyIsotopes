@@ -212,27 +212,78 @@ La complejidad de las interacciones de la radiación con la materia, sumada a la
 
 \subsection{Introducción al método Monte Carlo.}
 
-El método Monte Carlo es una técnica numérica estadística utilizada para resolver problemas matemáticos complejos mediante la generación de variables aleatorias. En el contexto del transporte de radiación, el método simula el transporte individual de cada partícula (fotón, electrón o positrón) a través de la geometría definida, basándose en las distribuciones de probabilidad de las secciones eficaces de interacción \parencite{illana2013metodos}.
+El método Monte Carlo es una técnica numérica estadística utilizada para resolver problemas matemáticos complejos mediante la generación de variables aleatorias. No existe un solo Método de Monte Carlo, sino una familia de algoritmos que comparten el mismo principio fundamental. El funcionamiento se basa en el uso de números pseudoaleatorios para realizar un \textbf{muestreo estadístico} de las leyes físicas que gobiernan la interacción de la radiación con la materia. En lugar de resolver analíticamente las complejas ecuaciones de transporte, el método simula el comportamiento estocástico de partículas individuales basándose en las funciones de densidad de probabilidad (PDF) derivadas de las secciones eficaces atómicas y nucleares \parencite{illana2013metodos,harrison2010introduction}.
 
-El proceso se estructura en \textbf{\enquote{historias}} (\emph{histories}). Una historia comienza con la desintegración de un núcleo radiactivo y sigue la trayectoria de todas las partículas primarias y secundarias generadas hasta que son absorbidas, su energía cae por debajo de un umbral de corte, o abandonan el volumen de simulación.
+En el contexto del transporte de radiación, el método simula el transporte individual de cada partícula (fotón, electrón o positrón) a través de la geometría definida, basándose en las distribuciones de probabilidad de las secciones eficaces de interacción.
 
-El algoritmo determina estocásticamente:
-\begin{itemize}
-    \item La distancia recorrida por la partícula antes de interactuar (camino libre medio).
-    \item El tipo de interacción que ocurre (efecto fotoeléctrico, dispersión Compton, producción de pares, aniquilación).
-    \item La energía depositada en el medio y la dirección de las partículas resultantes.
-\end{itemize}
+%esto creo que es mejor ponerlo después en las definiciones clave de penRed:
+% El proceso se estructura en \textbf{\enquote{historias}} (\emph{histories}). Una historia comienza con la desintegración de un núcleo radiactivo y sigue la trayectoria de todas las partículas primarias y secundarias generadas hasta que son absorbidas, su energía cae por debajo de un umbral de corte, o abandonan el volumen de simulación.
 
-La precisión de la simulación depende del número de historias simuladas ($N$). El error estadístico disminuye proporcionalmente a $1/\sqrt{N}$, lo que implica que para reducir el ruido a la mitad, es necesario cuadruplicar el tiempo de cálculo.
+% El algoritmo determina estocásticamente:
+% \begin{itemize}
+%       \item La distancia recorrida por la partícula antes de interactuar (camino libre medio).
+%       \item El tipo de interacción que ocurre (efecto fotoeléctrico, dispersión Compton, producción de pares, aniquilación).
+%       \item La energía depositada en el medio y la dirección de las partículas resultantes.
+% \end{itemize}
 
-\subsection{El código PENELOPE y el framework penRed.}
+% La precisión de la simulación depende del número de historias simuladas ($N$). El error estadístico disminuye proporcionalmente a $1/\sqrt{N}$, lo que implica que para reducir el ruido a la mitad, es necesario cuadruplicar el tiempo de cálculo.
 
-Para la simulación del transporte de radiación, este trabajo utiliza el código \textbf{PENELOPE} (\emph{Penetration and Energy Loss of Positrons and Electrons}), desarrollado por la Universidad de Barcelona \parencite{Bar1995}. PENELOPE es reconocido mundialmente por su precisión en el transporte acoplado de fotones y electrones/positrones en el rango de energía de \SI{50}{\electronvolt} a \SI{1}{\giga\electronvolt}. Una de sus características distintivas es el uso de un modelo de \textbf{simulación mixta} (clase II) para partículas cargadas, que combina la simulación detallada de colisiones fuertes con teorías de dispersión múltiple para colisiones suaves, optimizando así el tiempo de cómputo sin sacrificar precisión.
+\subsection{PENELOPE y el framework penRed.}
+
+Para la simulación del transporte de radiación, este trabajo utiliza el framework \textbf{penRed} (\emph{Parallel Engine for Radiation Energy Deposition}) \parencite{Gimnez-Alventosa2021}. Se trata de una herramienta de propósito general, modular y extensible basada en el sistema de códigos PENELOPE \parencite{bank2015penelope}, del cual hereda sus modelos físicos y algoritmos de transporte de partículas cargadas. PenRed está implementado en lenguaje C++ (estándar C++14) bajo un paradigma de programación orientada a objetos, lo que facilita su mantenimiento y extensibilidad. Al igual que PENELOPE, penRed está diseñado para simular el transporte de electrones, fotones y positrones, dentro del rango de energía de \SI{50}{\electronvolt} a \SI{1}{\giga\electronvolt}.
+
+En la sección \ref{sec:metodologia:herramientas} se describe en detalle el software y la implementación de penRed para la simulación de PET y se incluyen las definiciones clave de la simulación.
 
 \subsection{Simulación de fuentes complejas (módulo PENNUC).}
+
+Gracias a su modularidad, penRed permite la integración del módulo PENNUC \parencite{Garca-Torao2019}. Esta herramienta permite simular la desintegración de nucleidos radiactivos y posteriormente las partículas resultantes en simulaciones genéricas. Gracias a esta integración, se puede simular la desintegración de isótopos complejos como el \yochoseis.
 
 \section{Imagen PET Multiplexada}
 \label{sec:estado_del_arte_fund_teoricos:multiplexing}
 
+
+La capacidad de obtener imágenes de dos procesos biológicos distintos simultáneamente, con un registro espacial y temporal perfecto, representa uno de los avances más prometedores en la imagen molecular. Esta técnica, conocida como imagen PET multiplexada (mPET) o PET de doble isótopo (Dual-Isotope PET), permite correlacionar in vivo fenómenos fisiológicos complejos, como el metabolismo de la glucosa y la hipoxia tumoral, en una única sesión de adquisición.
+
 \subsection{Concepto y estado actual de la técnica.}
+
+El principio fundamental de la tomografía por emisión de positrones se basa en la detección de dos fotones de aniquilación de \SI{511}{\keV} emitidos en direcciones opuestas. En una adquisición convencional, esta característica física hace que las señales provenientes de diferentes radiotrazadores sean indistinguibles energéticamente. Si se inyectan simultáneamente dos trazadores etiquetados con isótopos emisores de positrones estándar (por ejemplo, $^{18}\text{F}$ y $^{11}\text{C}$), el escáner no puede determinar intrínsecamente de qué núcleo proviene cada par de fotones detectado \parencite{Andreyev2011}.
+
+Sin embargo, cuando se trata de isótopos sucios, como en el caso del \yochoseis, la gran presencia de fotones \textit{gamma prompt} de alta enería, conduce a eventos de detección
+que involucran tanto a los dos fotones de aniquilación de \SI{511}{\keV} como a un fotón gamma adicional, lo que se conoce como coincidencias triples. Estos eventos triples son físicamente imposibles en la imagen PET convencional y pueden ser utilizados para distinguir al isótopo sucio del isótopo limpio.
+
+El estado actual de la técnica ha evolucionado hacia el aprovechamiento de las propiedades de
+desintegración no estándar de ciertos isótopos. La metodología más robusta, y objeto de estudio
+en este trabajo, propone el uso de un par de isótopos con firmas de emisión distintas:
+
+\begin{enumerate}
+      \item Isótopo A (Emisor puro): Se desintegra emitiendo únicamente positrones (ej. \fdiezocho), los cuales se aniquilan produciendo dos fotones de \SI{511}{\keV}.
+      \item Isótopo B (Emisor sucio): Se desintegra emitiendo positrones acompañados de fotones gamma (\textit{prompt gammas}) de alta energía (ej. \yochoseis, \ce{^22Na}, \ce{^60Cu}).
+\end{enumerate}
+
+En el contexto de este TFG, el \yochoseis actúa como el Isótopo B. Aunque tradicionalmente las \textit{prompt gammas} del itrio-86 (principalmente a \SI{1077}{\keV}) se han considerado \enquote{ruido} que degrada la cuantificación y la resolución espacial, en la imagen multiplexada se reinterpretan como una \enquote{etiqueta} o marcador discriminador que permite separar su señal de la del \fdiezocho \parencite{Pratt2023}.
+
 \subsection{Metodologías de separación de isótopos basadas en triples.}
+
+La separación de las distribuciones de actividad de dos isótopos (A y B) en una adquisición simultánea se fundamenta en la detección de coincidencias triples. Según la metodología propuesta originalmente por \citeauthor{Andreyev2011}, el sistema de adquisición genera dos conjuntos de datos (\textit{datasets}) distintos durante el escaneo:
+
+\begin{enumerate}
+      \item \textbf{Dataset Primario ($D_{A+B}$):} Contiene todos los eventos de coincidencia doble (pares de \SI{511}{\keV}). Dado que tanto el isótopo A como el B emiten positrones, este conjunto representa la superposición de ambas distribuciones de actividad.
+      \item \textbf{Dataset Etiquetado ($D_{B'}$):} Contiene únicamente aquellos eventos en los que se detecta una coincidencia triple: el par de aniquilación (\SI{511}{\keV}) más la \textit{prompt gamma} característica del Isótopo B (en este trabajo, gammas $> \SI{650}{\keV}$).
+\end{enumerate}
+
+La detección de la \textit{prompt gamma} sirve como una etiqueta temporal que identifica inequívocamente el origen del evento de aniquilación. Debido a que la vida media del positrón en la materia es despreciable ($< \SI{1}{\ns}$), la emisión de la gamma de desexcitación nuclear y la aniquilación se consideran simultáneas dentro de la ventana de coincidencia temporal del escáner \parencite{Andreyev2011}.
+
+\subsection{Estrategias de reconstrucción y factor de normalización}
+
+Una vez clasificados los eventos, existen dos estrategias principales para separar las imágenes, las cuales hemos implementado en el post-procesado de las simulaciones Monte Carlo:
+
+\begin{itemize}
+      \item \textbf{Método de Sustracción:} Se reconstruye una imagen del isótopo B ($I_B$) usando solo el dataset etiquetado $D_{B'}$ y una imagen total ($I_{A+B}$) usando el dataset primario. La distribución del isótopo A se obtiene restando la contribución de B del total:
+
+            \begin{equation}
+                  I_A = I_{A+B} - F \cdot I_{B'}
+            \end{equation}
+            Donde $F$ es un factor de normalización espacialmente variante que compensa la diferencia de sensibilidad del escáner para detectar dobles frente a triples.
+
+      \item \textbf{Método de Clasificación de LORs (Tagging):} Es una aproximación más avanzada donde la información de las triples se utiliza para estimar la probabilidad de que una Línea de Respuesta (LOR) en el dataset primario pertenezca a A o a B, permitiendo dividir el *sinograma* antes de la reconstrucción.
+\end{itemize}
