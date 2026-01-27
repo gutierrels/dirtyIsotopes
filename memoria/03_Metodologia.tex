@@ -141,9 +141,9 @@ Para garantizar la validez clínica de los resultados, se ha modelado un entorno
 
 \subsection{Modelado del escáner: Geometría del Bruker PET/CT Si78.}
 
-% \begin{wrapfigure}{r}{0.35\textwidth}
+% \begin{wrapfigure}{r}{0.47\textwidth}
 % 	\centering
-% 	\vspace{-20pt}
+% 	\vspace{-10pt}
 % 	\includegraphics[width=\linewidth]{si78--357.png}
 % 	\caption{Imagen comercial del escáner preclínico Bruker PET/CT Si78.}
 % 	\label{fig:bruker_petct_si78}
@@ -152,7 +152,7 @@ Para garantizar la validez clínica de los resultados, se ha modelado un entorno
 
 El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial \textbf{Bruker PET/CT Si78}. La geometría se ha definido en \texttt{penRed} utilizando el módulo de geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}).
 
-El modelo virtual consta de un anillo de detectores con las siguientes características:
+El modelo virtual consta de un tres anillos de detectores con las siguientes características:
 
 \begin{itemize}
 	\item \textbf{Configuración Geométrica:} Disposición octogonal formada por 8 módulos detectores por anillo.
@@ -161,6 +161,13 @@ El modelo virtual consta de un anillo de detectores con las siguientes caracter�
 	\item \textbf{Diámetro del Escáner:} La distancia entre detectores opuestos se ha fijado en $\SI{117.0}{\milli\meter}$.
 	\item \textbf{Material del Centelleador:} Se ha asignado al volumen sensible las propiedades físicas del \textbf{LYSO} (Lutecio-Itrio Oxiortosilicato), definiendo su densidad ($\rho = \SI{7.1}{\gram\per\cubic\centi\meter}$) y composición elemental para simular correctamente la atenuación y la eficiencia de detección de los fotones de \SI{511}{\kilo\electronvolt} y los \emph{prompt gammas}.
 \end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.40\textwidth]{si78--357.png}
+	\caption{Imagen comercial del escáner preclínico Bruker PET/CT Si78.}
+	\label{fig:bruker_petct_si78}
+\end{figure}
 
 
 \subsection{El Fantoma Derenzo: Especificaciones y materiales.}
