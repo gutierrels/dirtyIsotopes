@@ -4,25 +4,165 @@
 \section{Herramientas de Simulación y Procesado}
 \label{sec:metodologia:herramientas}
 
-\subsection{Framework de simulación: penRed.}
+Para llevar a cabo los objetivos propuestos en este trabajo, se han utilizado diversas herramientas para los distintos procesos tanto de simulación como de procesado y análisis de datos.
+
+\subsection{Software de simulación: \penred.}
 % qué es penRed
 % Descripción del software y su relación con PENELOPE (motor físico).
 % Características principales: Modularidad, paralelismo y lenguaje C++.
 % El módulo PENNUC: Justificación de su uso para la simulación de decaimientos complejos (\yochoseis)
+
+Como ya se mencionó en la sección \ref{sec:estado_del_arte_fund_teoricos:penelope_penred}, \penred es un entorno de simulación de Monte Carlo modular, personalizable y totalmente paralelizable para el transporte de radiación en la materia. Desarrollado en C++ por \citeauthor{Gimnez-Alventosa2021}, siguiendo el estándar C++14, este software actúa como una interfaz orientada a objetos sobre el motor físico de PENELOPE, heredando sus modelos de interacción y algoritmos de transporte de partículas.
+
+Su arquitectura destaca por implementar un doble enfoque de paralelismo: mediante el uso de hilos (\textit{threads}) de C++ para sistemas de memoria compartida y a través del estándar MPI para infraestructuras de memoria distribuida. Gracias a su estructura modular, \penred permite extender sus funcionalidades mediante módulos de usuario sin modificar el núcleo del código. En este trabajo resulta fundamental el uso del módulo \texttt{PENNUC}, el cual permite la simulación de esquemas de desintegración nuclear complejos que no están disponibles en los generadores de eventos estándar de PENELOPE, permitiendo modelar con precisión el decaimiento del \yochoseis.
+
 \subsubsection{Definiciones Clave de la Simulación}
 % Concepto de Historia (History): Definición como evento de decaimiento único y su importancia para la validación ("Same History").
 % Concepto de Singles vs. Coincidencias: Diferencia entre el dato crudo (output de penRed) y el dato procesado.
 % Tallies: Explicación del Tally Singles utilizado para la adquisición de datos en modo lista.
 
+Para una correcta comprensión de los resultados obtenidos y del funcionamiento del flujo de trabajo, es necesario establecer una serie de definiciones fundamentales dentro del ecosistema de \penred:
+
+\begin{itemize}
+	\item \textbf{Historia (\textit{History}):} Representa la unidad básica de simulación. Una historia comprende una partícula primaria (generada directamente por la fuente radiactiva) y todas las partículas secundarias derivadas de sus interacciones hasta que son absorbidas o escapan del sistema. En este trabajo, cada historia se identifica unívocamente con un evento de desintegración, lo que permite implementar el algoritmo de validación ideal \textit{Same History}.
+	\item \textbf{\textit{Singles} vs. Coincidencias:} Se denomina \textit{single} a cualquier evento de detección individual (depósito de energía) registrado en los detectores. Este constituye el dato crudo u \textit{output} directo de \penred. Las coincidencias son entidades lógicas generadas durante el post-procesado al agrupar dos o más \textit{singles} que cumplen criterios específicos de tiempo y energía.
+	\item \textbf{\textit{Tallies} y Modo Lista:} Los \textit{tallies} son módulos encargados de recolectar magnitudes físicas durante la simulación. En este proyecto se utiliza el \texttt{Tally Singles}, el cual permite una adquisición en modo lista (\textit{list-mode}). Para cada interacción, se almacena un registro con el estado de la partícula: posición ($X, Y, Z$), energía depositada ($E$), tiempo de llegada (\textit{Age}) e identificador de historia, permitiendo el procesado posterior fuera del entorno de simulación.
+\end{itemize}
+
+\subsubsection{Unidades y Constantes en \penred}
+Internamente, el software opera con un sistema de unidades consistente: la longitud se mide en centímetros (cm), la energía en electronvoltios (eV), el tiempo en segundos (s) y la densidad en g/cm$^3$. Estas unidades son críticas al configurar los archivos de entrada y al interpretar los resultados del post-procesador.
+
+
 \subsection{Entorno de simulación: Cluster UPV}
+
+Las simulaciones de Monte Carlo se han ejecutado, mediante conexión remota vía SSH, en el clúster de computación de alto rendimiento del Departamento de Ingeniería Química y Nuclear (IQN) de la Universitat Politècnica de València. Este entorno proporciona la capacidad de cómputo necesaria para gestionar el elevado número de historias requerido para obtener estadísticas significativas en tiempos de ejecución razonables.
+
+El nodo de cómputo utilizado cuenta con una arquitectura x86\_64 basada en dos procesadores \textit{AMD EPYC 7282} de 16 núcleos cada uno, sumando un total de 32 núcleos físicos operando a una frecuencia de 2,8 GHz. El sistema dispone de una jerarquía de memoria caché que incluye 32 KB de L1, 512 KB de L2 por núcleo y 16 MB de caché L3. La infraestructura está organizada en dos nodos NUMA (16 núcleos por nodo), lo que optimiza el acceso a memoria para las tareas de paralelización masiva mediante MPI y \textit{threads} que requiere \penred.
+
 \subsection{Software de reconstrucción: Bruker RecoServer (Algoritmo MLEM).}
+
+Los sistemas PET preclínicos de Bruker incorporan una cadena de reconstrucción de imagen dedicada, diseñada para procesar los datos en modo lista (\textit{list-mode}) adquiridos por el escáner. El componente central de este flujo de trabajo es el \texttt{RecoServer}, un módulo responsable de transformar los eventos de coincidencia en distribuciones volumétricas de actividad mediante algoritmos de reconstrucción iterativa.
+
+La reconstrucción se fundamenta en el MLEM (ver sección \ref{subsubsec:mlem}), el cual resulta idóneo para la tomografía por emisión de positrones debido a su capacidad para modelar la naturaleza estadística de Poisson del decaimiento radiactivo y la detección. El MLEM actualiza la imagen de forma iterativa comparando las proyecciones medidas con las predichas por la estimación actual de la imagen, ajustando la intensidad de los vóxeles para maximizar la verosimilitud de los datos observados.
+
+La implementación de Bruker incluye opciones para correcciones físicas como la atenuación, la dispersión (\textit{scatter}) y las coincidencias aleatorias (\textit{randoms}). En particular, los eventos aleatorios no se estiman mediante ventanas de coincidencia retardada, sino a través de un modelo basado en \textit{singles}. Este enfoque permite una estimación estadística de los eventos aleatorios utilizando únicamente los datos de \textit{singles} registrados continuamente durante la adquisición. En este trabajo, las imágenes se reconstruyeron utilizando la misma configuración empleada en los protocolos estándar \textit{in vivo}, garantizando la consistencia con el comportamiento esperado del sistema.
+
+
 \subsection{Análisis de imagen: AMIDE.}
 % rois y obtención de la intensidad
+Para la visualización, manipulación y extracción de datos cuantitativos de los volúmenes reconstruidos, se ha utilizado el software \textbf{AMIDE} (\textit{A Medical Image Data Examiner}). Se trata de una herramienta de código abierto multiplataforma diseñada específicamente para el análisis de imagen molecular volumétrica (PET, SPECT, CT).
+
+En el contexto de este trabajo, AMIDE ha desempeñado dos funciones fundamentales: la inspección cualitativa visual y la cuantificación numérica mediante Regiones de Interés (ROIs).
+
+\subsubsection{Definición de Regiones de Interés (ROIs)}
+
+Para evaluar la calidad de la imagen y calcular las métricas de desempeño, es necesario medir la concentración de actividad en zonas específicas del fantoma. Dada la geometría del fantoma Derenzo (formado por varillas cilíndricas), se ha seguido la siguiente metodología:
+
+\begin{enumerate}
+	\item \textbf{Selección de Geometría:} Se han utilizado ROIs volumétricas de tipo \textbf{Cilindro Elíptico} (\textit{Elliptic Cylinder}). Esta geometría se ajusta óptimamente a la forma física de las varillas del fantoma, minimizando la inclusión de vóxeles de borde que podrían introducir errores por volumen parcial.
+	\item \textbf{Estrategia de Posicionamiento Consistente:} Para garantizar que las comparaciones entre diferentes simulaciones (Ideal vs. Realista vs. Optimizada) sean científicamente válidas, se ha aplicadow el siguiente protocolo:
+	      \begin{itemize}
+		      \item Las ROIs se dibujaron inicialmente sobre la imagen de la \textbf{Simulación Ideal} (\texttt{SIM\_IDEAL}), donde la ausencia de ruido y la nitidez de los bordes permiten un posicionamiento perfecto sobre las varillas calientes y el fondo.
+		      \item Una vez definido el conjunto de ROIs (varillas de distintos diámetros y región de fondo), este se copió y aplicó exactamente en las mismas coordenadas espaciales a todas las demás imágenes reconstruidas. Esto asegura que las variaciones medidas se deben exclusivamente a los efectos físicos y de procesado, y no a errores manuales de delimitación.
+	      \end{itemize}
+	\item \textbf{Regiones Definidas:}
+	      \begin{itemize}
+		      \item \textbf{ROIs Calientes ($ROI_{hot}$):} Se definieron cilindros individuales sobre las varillas de los seis sectores del fantoma (\SI{0.8}{\milli\meter} a \SI{2.5}{\milli\meter}) para evaluar la recuperación del contraste en función del tamaño.
+		      \item \textbf{ROI de Fondo ($ROI_{bkg}$):} Se definió una región cilíndrica de gran volumen en una zona uniforme del fantoma, alejada de las varillas activas, para caracterizar el ruido de fondo.
+	      \end{itemize}
+\end{enumerate}
+
+\subsubsection{Obtención de la Intensidad y Estadística}
+
+Para cada ROI definida, AMIDE calcula estadísticas sobre los valores de los vóxeles contenidos en ella. Para este estudio, se han extraído los siguientes parámetros:
+
+\begin{itemize}
+	\item \textbf{Media ($\mu$):} Valor promedio de intensidad en la ROI. Utilizado como estimador de la señal para el cálculo del CRC.
+	\item \textbf{Desviación Estándar ($\sigma$):} Medida de la dispersión de los valores de los vóxeles dentro de la ROI. Utilizada fundamentalmente en la ROI de fondo para calcular el ruido y determinar la SNR.
+\end{itemize}
+
+Los datos estadísticos crudos exportados de AMIDE se procesaron posteriormente en hojas de cálculo para aplicar las fórmulas de las métricas de calidad descritas en la sección \ref{sec:metodologia:metricas}.
+
+
+\section{Métricas de Evaluación de Calidad}
+\label{sec:metodologia:metricas}
+
+Para realizar una comparación objetiva entre las diferentes configuraciones de simulación y evaluar el éxito de la optimización de parámetros, es necesario definir métricas cuantitativas que caractericen la calidad de la imagen.
+
+Basándonos en la literatura estándar de caracterización de equipos PET y en los protocolos NEMA, se han seleccionado dos indicadores fundamentales: el Coeficiente de Recuperación de Contraste (para evaluar la detectabilidad) y la Relación Señal-Ruido (para evaluar la calidad estadística).
+
+\subsection{Coeficiente de Recuperación de Contraste (CRC).}
+
+El contraste es la característica más crítica en la imagen oncológica, ya que determina la capacidad del sistema para distinguir una lesión tumoral (zona caliente) del tejido circundante (fondo).
+
+El Coeficiente de Recuperación de Contraste (CRC) cuantifica la intensidad de la señal en las varillas del fantoma relativa a la actividad de fondo. Se calcula utilizando la siguiente expresión:
+
+\begin{equation}
+	CRC = \frac{\mu_{hot}}{\mu_{bkg}} - 1
+	\label{eq:crc}
+\end{equation}
+
+Donde:
+\begin{itemize}
+	\item $\mu_{hot}$: Es la concentración media de actividad medida en la ROI de la varilla caliente (\textit{Signal}).
+	\item $\mu_{bkg}$: Es la concentración media de actividad medida en la ROI de fondo (\textit{Background}).
+\end{itemize}
+
+\textbf{Interpretación en este trabajo:}
+En un sistema ideal sin ruido de fondo, si el fantoma solo tiene actividad en las varillas, $\mu_{bkg}$ tendería a cero y el CRC tendería a infinito.
+En el caso del $^{86}\text{Y}$, la presencia de coincidencias triples y aleatorias eleva artificialmente el valor de $\mu_{bkg}$, lo que reduce drásticamente el denominador y colapsa el valor del CRC. Por tanto, el objetivo principal de la optimización de la ventana de energía (ver ver Fase 4 en la sección \ref{subsec:fase4}) es reducir $\mu_{bkg}$ para maximizar el CRC.
+
+Adicionalmente, se espera que el CRC varíe en función del diámetro de la varilla debido al \textbf{Efecto de Volumen Parcial (PVE)}. Las varillas más pequeñas (inferiores a 2-3 veces la resolución espacial del sistema) sufrirán una pérdida de señal ($\mu_{hot}$ menor a la real) debido al vertido de cuentas (\textit{spill-out}) hacia el fondo, resultando en CRCs menores que las varillas grandes.
+
+\subsection{Relación Señal-Ruido (SNR).}
+
+la Relación Señal-Ruido (SNR, \textit{Signal-to-Noise Ratio}) evalúa la precisión o la \enquote{limpieza} estadística de la imagen. Un SNR alto indica una imagen suave y uniforme en zonas homogéneas, mientras que un SNR bajo indica una imagen \enquote{granulosa} o ruidosa.
+
+Para este estudio, se ha utilizado la definición de SNR basada en la estadística de la región de fondo, calculada como:
+
+\begin{equation}
+	SNR = \frac{\mu_{bkg}}{\sigma_{bkg}}
+	\label{eq:snr}
+\end{equation}
+
+Donde:
+\begin{itemize}
+	\item $\mu_{bkg}$: Es la concentración media en la ROI de fondo.
+	\item $\sigma_{bkg}$: Es la desviación estándar de los valores de los vóxeles dentro de la misma ROI de fondo.
+\end{itemize}
+
+Esta métrica es fundamental para evaluar el coste de las estrategias de optimización. Al estrechar las ventanas de energía o tiempo para rechazar eventos espurios (mejorando el CRC), inevitablemente también se rechazan algunas coincidencias verdaderas. Esto reduce la estadística total de conteo ($N$), lo que teóricamente aumenta el ruido estadístico (el ruido Poissoniano es proporcional a $1/\sqrt{N}$).
+El SNR permite monitorizar si la estrategia de limpieza de imagen mantiene una calidad estadística aceptable para el diagnóstico.
 
 \section{Definición del Escenario de Simulación}
 \label{sec:metodologia:escenario_sim}
 
+Para garantizar la validez clínica de los resultados, se ha modelado un entorno de simulación que replica fielmente las condiciones de una adquisición preclínica real. Este escenario se compone de tres elementos fundamentales: la geometría del escáner, el objeto a visualizar (fantoma) y la fuente radiactiva.
+
 \subsection{Modelado del escáner: Geometría del Bruker PET/CT Si78.}
+
+% \begin{wrapfigure}{r}{0.35\textwidth}
+% 	\centering
+% 	\vspace{-20pt}
+% 	\includegraphics[width=\linewidth]{si78--357.png}
+% 	\caption{Imagen comercial del escáner preclínico Bruker PET/CT Si78.}
+% 	\label{fig:bruker_petct_si78}
+% 	\vspace{-10pt}
+% \end{wrapfigure}
+
+El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial \textbf{Bruker PET/CT Si78}. La geometría se ha definido en \texttt{penRed} utilizando el módulo de geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}).
+
+El modelo virtual consta de un anillo de detectores con las siguientes características:
+
+\begin{itemize}
+	\item \textbf{Configuración Geométrica:} Disposición octogonal formada por 8 módulos detectores por anillo.
+	\item \textbf{Estructura Axial:} El sistema completo consta de 3 anillos contiguos, cubriendo un Campo de Visión (FOV) axial suficiente para albergar el fantoma completo.
+	\item \textbf{Dimensiones del Módulo:} Cada bloque detector tiene unas dimensiones de superficie activa de $\SI{48.0}{\milli\meter} \times \SI{48.0}{\milli\meter}$ y un espesor de cristal de $\SI{10.0}{\milli\meter}$.
+	\item \textbf{Diámetro del Escáner:} La distancia entre detectores opuestos se ha fijado en $\SI{117.0}{\milli\meter}$.
+	\item \textbf{Material del Centelleador:} Se ha asignado al volumen sensible las propiedades físicas del \textbf{LYSO} (Lutecio-Itrio Oxiortosilicato), definiendo su densidad ($\rho = \SI{7.1}{\gram\per\cubic\centi\meter}$) y composición elemental para simular correctamente la atenuación y la eficiencia de detección de los fotones de \SI{511}{\kilo\electronvolt} y los \emph{prompt gammas}.
+\end{itemize}
+
+
 \subsection{El Fantoma Derenzo: Especificaciones y materiales.}
 \subsection{Configuración de la fuente radiactiva (Archivos .nuc).}
 
@@ -43,11 +183,6 @@
 \subsection{Fase 2: Estudio de Efectos Físicos (Scatter y Atenuación).}
 \subsection{Fase 3: Simulación Realista (Randoms).}
 \subsection{Fase 4: Optimización de Ventanas (Energía y Tiempo).}
+\label{subsec:fase4}
 \subsection{Fase 5: Prueba de concepto de Multiplexado.}
 
-\section{Métricas de Evaluación de Calidad}
-\label{sec:metodologia:metricas}
-
-\subsection{Definición de ROIs.}
-\subsection{Coeficiente de Recuperación de Contraste (CRC).}
-\subsection{Relación Señal-Ruido (SNR).}

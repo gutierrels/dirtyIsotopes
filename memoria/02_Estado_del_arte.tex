@@ -44,6 +44,7 @@ como \textbf{Maximum Likelihood Expectation Maximization} (MLEM) o
 radiotrazador. % para más adelante: insertar figura representando qué es una LOR
 
 \subsection{Física de la Aniquilación y Rango del Positrón.}
+\label{subsec:rango}
 
 El proceso de generación de la señal PET no es instantáneo ni puntual respecto a la ubicación del núcleo radiactivo. Existen dos fenómenos físicos fundamentales que limitan la resolución espacial intrínseca del sistema: el rango del positrón y la no-colinealidad.
 
@@ -124,6 +125,42 @@ El proceso es cíclico:
 \end{enumerate}
 Este ciclo se repite hasta la convergencia. El MLEM permite incorporar correcciones físicas precisas (atenuación, scatter, respuesta del detector) dentro del propio bucle de reconstrucción, resultando en imágenes con mejor relación señal-ruido y menos artefactos que la FBP.
 
+\subsubsection{Maximum Likelihood Expectation Maximization (MLEM)}
+\label{subsubsec:mlem}
+
+El algoritmo MLEM es un método estadístico que estima los parámetros de la imagen basándose en el principio de Máxima Verosimilitud. Este enfoque es especialmente adecuado para PET, ya que preserva las propiedades estadísticas de los datos brutos adquiridos por el escáner \parencite{Reader2007}.
+
+En este marco, el proceso de reconstrucción se formula mediante una relación matricial donde la imagen $\mathbf{f}$ se relaciona con los datos medidos $\mathbf{p}$ a través de una \textbf{matriz de sistema} ($M$), que codifica la probabilidad de detección:
+
+\begin{equation}
+      \bar{p}_j = \langle p_j \rangle = \sum_i M_{ij} f_i
+\end{equation}
+
+Donde $f_i$ es la intensidad en el $i$-ésimo vóxel\footnote{El vóxel es el análogo tridimensional del píxel.} de la imagen, $\bar{p}_j$ es el número esperado de cuentas en el $j$-ésimo elemento de proyección (LOR) y $M_{ij}$ es la probabilidad de que la radiación emitida desde el vóxel $i$ sea detectada en la LOR $j$. La matriz de sistema $M$ descompone diversos efectos físicos y geométricos:
+
+\begin{equation}
+      M = P_{geom} \cdot P_{e^+} \cdot P_{att} \cdot P_{crys} \cdot P_{eff}
+\end{equation}
+
+donde se incluyen la respuesta geométrica ($P_{geom}$), el rango del positrón ($P_{e^+}$), la atenuación ($P_{att}$), la respuesta del cristal ($P_{crys}$) y la eficiencia de los fotodetectores ($P_{eff}$).
+
+Asumiendo que la detección de fotones sigue una estadística de Poisson, la verosimilitud de observar los datos medidos $\mathbf{p}$ dada una distribución de actividad $\mathbf{f}$ es:
+
+\begin{equation}
+      P(\mathbf{p}|\mathbf{f}) = \prod_j \frac{\bar{p}_j^{p_j} e^{-\bar{p}_j}}{p_j!}
+\end{equation}
+
+El algoritmo MLEM busca maximizar esta función de verosimilitud mediante la siguiente ecuación de actualización iterativa:
+
+\begin{equation}
+      f_i^{k+1} = \frac{f_i^k}{\sum_j M_{ij}} \sum_j M_{ij} \frac{p_j}{\sum_l M_{lj} f_l^k}
+\end{equation}
+
+Esta formulación garantiza la no-negatividad de la solución e incorpora las propiedades estadísticas del proceso de emisión. Sin embargo, el algoritmo tiende a amplificar el ruido con el aumento de las iteraciones. Para mitigar esto, se suelen emplear técnicas como la parada temprana (\emph{early stopping}), el filtrado post-reconstrucción (suavizado Gaussiano) o métodos de regularización como \textbf{OSEM} (\emph{Ordered Subsets Expectation Maximization}), que acelera la convergencia dividiendo los datos en subconjuntos.
+
+Es importante destacar que el modelo estándar de MLEM asume que todas las coincidencias detectadas provienen de la aniquilación de positrones. En el caso de isótopos no puros o \enquote{sucios} como el $^{86}\text{Y}$, la presencia de gammas en cascada introduce coincidencias espurias que el modelo no contempla inicialmente, degradando la calidad de la imagen si no se aplican correcciones específicas.
+
+
 
 \subsection{Causas de Degradación de la Imagen}
 
@@ -151,24 +188,41 @@ El \textbf{Itrio-86 (\yochoseis)} es el ejemplo paradigmático de esta categorí
 \subsection{Esquema de desintegración del Itrio-86}
 \label{subsec:esquema_y86}
 
+% \begin{wrapfigure}{r}{0.35\textwidth}
 
-\begin{wrapfigure}{r}{0.35\textwidth}
+%       \centering
+%       \vspace{-20pt}
+%       \includegraphics[width=\linewidth]{esquemaY86.png}
+%       \caption{Esquema simplificado de decaimiento del \yochoseis. Fuente: Adaptado de \cite{Lubberink2011}.}
+%       \label{fig:esquemaY86}
+%       \vspace{-10pt}
+% \end{wrapfigure}
 
-      \centering
-      \vspace{-20pt}
-      \includegraphics[width=\linewidth]{esquemaY86.png}
-      \caption{Esquema simplificado de decaimiento del \yochoseis. Fuente: Adaptado de \cite{Lubberink2011}.}
-      \label{fig:esquemaY86}
-      \vspace{-10pt}
-\end{wrapfigure}
-
-El \yochoseis es un núclido con una vida media de $T_{1/2} = \SI{14.74}{\hour}$, lo que permite el seguimiento de procesos biológicos lentos (como la farmacocinética de anticuerpos monoclonales) que no son observables con isótopos de vida corta. Se desintegra en Estroncio-86 ($^{86}\text{Sr}$) estable mediante dos procesos en competencia \parencite{Conti2016}:
+El \yochoseis es un núclido con una vida media de $T_{1/2} = \SI{14.74}{\hour}$, lo que permite el seguimiento de procesos biológicos lentos (como la farmacocinética de anticuerpos monoclonales) que no son observables con isótopos de vida corta. Como se puede ver en la figura \ref{fig:esquemaY86}, el \yochoseis se desintegra en Estroncio-86 ($^{86}\text{Sr}$) estable mediante dos procesos en competencia \parencite{Conti2016}:
 
 \begin{enumerate}
       \item \textbf{Captura Electrónica (EC):} Es el modo dominante, representando aproximadamente el \SI{68.1}{\percent} de las desintegraciones. En este proceso, no se emite positrón y, por tanto, no contribuye a la señal PET útil, pero sí genera una gran cantidad de rayos gamma y rayos X característicos que aumentan el tiempo muerto y el ruido del detector.
 
-      \item \textbf{Emisión de Positrones ($\beta^+$):} Representa aproximadamente el \SI{31.9}{\percent} de las desintegraciones. Esto implica que la sensibilidad intrínseca (cuentas PET por Becquerelio inyectado) es aproximadamente un tercio de la del $^{18}\text{F}$. Además, el espectro de energía de estos positrones es complejo, con una energía máxima de $E_{max} = \SI{3.15}{\mega\electronvolt}$, considerablemente mayor que la del $^{18}\text{F}$ ($\SI{0.63}{\mega\electronvolt}$), resultando en un mayor rango del positrón y una peor resolución espacial intrínseca.
+      \item \textbf{Emisión de Positrones ($\beta^+$):} Representa aproximadamente el \SI{31.9}{\percent} de las desintegraciones. Esto implica que la sensibilidad intrínseca (cuentas PET por Becquerelio inyectado) es aproximadamente un tercio de la del $^{18}\text{F}$. Además, el espectro de energía de estos positrones es complejo y, como se mencionaba en la sección \ref{subsec:rango}, con una energía máxima de $E_{max} \approx \SI{2.01}{\mega\electronvolt}$, considerablemente mayor que la del $^{18}\text{F}$ ($\SI{0.63}{\mega\electronvolt}$), resultando en un mayor rango del positrón y una peor resolución espacial intrínseca.
 \end{enumerate}
+
+\begin{figure}[htbp]
+      \centering
+      \begin{subfigure}[b]{0.40\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{esquemaf18.png}
+            \caption{Esquema de decaimiento del \fdiezocho. Fuente: \cite{Bergeron2014}}
+            \label{fig:esquemaf18}
+      \end{subfigure}
+      \hfill
+      \begin{subfigure}[b]{0.40\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{esquemaY86.png}
+            \caption{Esquema simplificado de decaimiento del \yochoseis. Fuente: Adaptado de \cite{Lubberink2011}.}
+            \label{fig:esquemaY86}
+      \end{subfigure}
+      \caption{Comparativa de los esquemas de decaimiento de un isótopo \enquote{limpio} (\fdiezocho) con el de un isótopo \enquote{sucio} (\yochoseis).}
+\end{figure}
 
 
 \subsection{Fenómeno de \emph{Prompt Gammas}}
@@ -228,15 +282,16 @@ En el contexto del transporte de radiación, el método simula el transporte ind
 
 % La precisión de la simulación depende del número de historias simuladas ($N$). El error estadístico disminuye proporcionalmente a $1/\sqrt{N}$, lo que implica que para reducir el ruido a la mitad, es necesario cuadruplicar el tiempo de cálculo.
 
-\subsection{PENELOPE y el framework penRed.}
+\subsection{PENELOPE y el framework \penred.}
+\label{sec:estado_del_arte_fund_teoricos:penelope_penred}
 
-Para la simulación del transporte de radiación, este trabajo utiliza el framework \textbf{penRed} (\emph{Parallel Engine for Radiation Energy Deposition}) \parencite{Gimnez-Alventosa2021}. Se trata de una herramienta de propósito general, modular y extensible basada en el sistema de códigos PENELOPE \parencite{bank2015penelope}, del cual hereda sus modelos físicos y algoritmos de transporte de partículas cargadas. PenRed está implementado en lenguaje C++ (estándar C++14) bajo un paradigma de programación orientada a objetos, lo que facilita su mantenimiento y extensibilidad. Al igual que PENELOPE, penRed está diseñado para simular el transporte de electrones, fotones y positrones, dentro del rango de energía de \SI{50}{\electronvolt} a \SI{1}{\giga\electronvolt}.
+Para la simulación del transporte de radiación, este trabajo utiliza el framework \penred (\emph{Parallel Engine for Radiation Energy Deposition}) \parencite{Gimnez-Alventosa2021}. Se trata de una herramienta de propósito general, modular y extensible basada en el sistema de códigos PENELOPE \parencite{bank2015penelope}, del cual hereda sus modelos físicos y algoritmos de transporte de partículas cargadas. \penred está implementado en lenguaje C++ (estándar C++14) bajo un paradigma de programación orientada a objetos, lo que facilita su mantenimiento y extensibilidad. Al igual que PENELOPE, \penred está diseñado para simular el transporte de electrones, fotones y positrones, dentro del rango de energía de \SI{50}{\electronvolt} a \SI{1}{\giga\electronvolt}.
 
-En la sección \ref{sec:metodologia:herramientas} se describe en detalle el software y la implementación de penRed para la simulación de PET y se incluyen las definiciones clave de la simulación.
+En la sección \ref{sec:metodologia:herramientas} se describe en detalle el software y la implementación de \penred para la simulación de PET y se incluyen las definiciones clave de la simulación.
 
 \subsection{Simulación de fuentes complejas (módulo PENNUC).}
 
-Gracias a su modularidad, penRed permite la integración del módulo PENNUC \parencite{Garca-Torao2019}. Esta herramienta permite simular la desintegración de nucleidos radiactivos y posteriormente las partículas resultantes en simulaciones genéricas. Gracias a esta integración, se puede simular la desintegración de isótopos complejos como el \yochoseis.
+Gracias a su modularidad, \penred permite la integración del módulo PENNUC \parencite{Garca-Torao2019}. Esta herramienta permite simular la desintegración de nucleidos radiactivos y posteriormente las partículas resultantes en simulaciones genéricas. Gracias a esta integración, se puede simular la desintegración de isótopos complejos como el \yochoseis.
 
 \section{Imagen PET Multiplexada}
 \label{sec:estado_del_arte_fund_teoricos:multiplexing}
@@ -271,19 +326,36 @@ La separación de las distribuciones de actividad de dos isótopos (A y B) en un
       \item \textbf{Dataset Etiquetado ($D_{B'}$):} Contiene únicamente aquellos eventos en los que se detecta una coincidencia triple: el par de aniquilación (\SI{511}{\keV}) más la \textit{prompt gamma} característica del Isótopo B (en este trabajo, gammas $> \SI{650}{\keV}$).
 \end{enumerate}
 
-La detección de la \textit{prompt gamma} sirve como una etiqueta temporal que identifica inequívocamente el origen del evento de aniquilación. Debido a que la vida media del positrón en la materia es despreciable ($< \SI{1}{\ns}$), la emisión de la gamma de desexcitación nuclear y la aniquilación se consideran simultáneas dentro de la ventana de coincidencia temporal del escáner \parencite{Andreyev2011}.
+La detección de la \textit{prompt gamma} sirve como una etiqueta temporal que identifica inequívocamente el origen del evento de aniquilación. Debido a que la vida media del positrón en la materia es muy corta, inferior a $\SI{1}{\ns}$ \parencite{Bell1953}, la emisión de la gamma de desexcitación nuclear y la aniquilación se consideran simultáneas dentro de la ventana de coincidencia temporal del escáner \parencite{Andreyev2011}.
 
 \subsection{Estrategias de reconstrucción y factor de normalización}
 
-Una vez clasificados los eventos, existen dos estrategias principales para separar las imágenes, las cuales hemos implementado en el post-procesado de las simulaciones Monte Carlo:
+Una vez clasificados los eventos, se reconstruye una imagen del isótopo B ($I_B$) usando solo el dataset etiquetado $D_{B'}$ y una imagen total ($I_{A+B}$) usando el dataset primario. La distribución del isótopo A se obtiene restando la contribución de B del total:
 
-\begin{itemize}
-      \item \textbf{Método de Sustracción:} Se reconstruye una imagen del isótopo B ($I_B$) usando solo el dataset etiquetado $D_{B'}$ y una imagen total ($I_{A+B}$) usando el dataset primario. La distribución del isótopo A se obtiene restando la contribución de B del total:
+\begin{equation}
+      I_A = I_{A+B} - F \cdot I_{B'}
+\end{equation}
 
-            \begin{equation}
-                  I_A = I_{A+B} - F \cdot I_{B'}
-            \end{equation}
-            Donde $F$ es un factor de normalización espacialmente variante que compensa la diferencia de sensibilidad del escáner para detectar dobles frente a triples.
+Donde $F$ es un factor de normalización. Dado que la eficiencia de detección de cualquier detector no es perfecta, la \textit{prompt gamma} adicional solo se detectará para una fracción de los pares de positrones emitidos. El factor $F$ permite corregir este hecho, escalando la señal de las triples para que coincida con la contribución del isótopo B en el dataset de dobles.
+En términos generales, el contenido de cada vóxel $i$ de la imagen del isótopo B ($I_B$) se obtiene a partir de la imagen reconstruida del dataset etiquetado ($I_{B'}$) mediante la expresión:
 
-      \item \textbf{Método de Clasificación de LORs (Tagging):} Es una aproximación más avanzada donde la información de las triples se utiliza para estimar la probabilidad de que una Línea de Respuesta (LOR) en el dataset primario pertenezca a A o a B, permitiendo dividir el *sinograma* antes de la reconstrucción.
-\end{itemize}
+\begin{equation}
+      I_B(i) = F(i) \cdot I_{B'}(i)
+\end{equation}
+
+donde $F(i)$ es un factor de normalización con variante espacial definido como:
+
+\begin{equation}
+      F(i) = \frac{p_D(i)}{p_T(i)}
+\end{equation}
+
+En esta expresión, $p_D(i)$ representa la probabilidad de detección únicamente del par de aniquilación, mientras que $p_T(i)$ es la probabilidad de detección de la coincidencia triple (par de aniquilación más fotón gamma) para una desintegración del isótopo B ocurrida en el vóxel $i$.
+
+Si se aplican las correcciones estándar de PET (incluyendo la eficiencia de detección de dobles) a ambos datasets antes de la reconstrucción, la dependencia espacial de la eficiencia para coincidencias dobles se elimina. En este caso, el factor de normalización se simplifica a:
+
+\begin{equation}
+      F(i) = \frac{p_D(i)}{p_T(i)} = \frac{p_D(i)}{p_D(i) \cdot \epsilon(i)} = \frac{1}{\epsilon(i)}
+\end{equation}
+
+donde $\epsilon(i)$ es la eficiencia intrínseca del sistema para detectar el fotón gamma adicional de alta energía. De este modo, el factor $F$ se convierte en el inverso de la eficiencia de detección de la \textit{prompt gamma}. Este mapa de factores de normalización puede determinarse experimentalmente o mediante simulación, teniendo en cuenta que en objetos de gran tamaño, la atenuación de la \textit{prompt gamma} en el medio también influye en su probabilidad de detección y debe ser considerada. No obstante, debido al ruido en los datos, este procedimiento puede generar valores negativos que afectarían a la cuantificación y a la separación de los isótopos; por ello, en este trabajo, los valores negativos resultantes de la resta se fijan a cero \parencite{Andreyev2011}.
+
