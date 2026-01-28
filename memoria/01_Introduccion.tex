@@ -55,10 +55,10 @@ puesta en práctica de las competencias adquiridas a lo largo del Grado en Ingen
 la capacidad para:
 
 \begin{itemize}
-      \item Aplicar fundamentos de física de radiaciones y tecnología de imagen médica a problemas reales de la industria tecnológica sanitaria.
-      \item Utilizar herramientas de ingeniería computacional (simulación Monte Carlo, C++, Python) en un entorno de desarrollo profesional.
-      \item Diseñar una metodología experimental rigurosa para la validación de equipos médicos de alta tecnología (\textbf{Bruker Si78}).
-      \item Elaborar documentación técnica y científica siguiendo los estándares de la ingeniería.
+	\item Aplicar fundamentos de física de radiaciones y tecnología de imagen médica a problemas reales de la industria tecnológica sanitaria.
+	\item Utilizar herramientas de ingeniería computacional (simulación Monte Carlo, C++, Python) en un entorno de desarrollo profesional.
+	\item Diseñar una metodología experimental rigurosa para la validación de equipos médicos de alta tecnología (\textbf{Bruker Si78}).
+	\item Elaborar documentación técnica y científica siguiendo los estándares de la ingeniería.
 \end{itemize}
 
 En definitiva, este trabajo constituye un ejercicio de ingeniería aplicada a la salud, donde se combinan conocimientos
@@ -78,12 +78,12 @@ El proyecto comprende la configuración y ejecución de simulaciones Monte Carlo
 \parencite{Gimnez-Alventosa2021}.
 
 \begin{itemize}
-      \item Se incluye el modelado geométrico preciso mediante el software
-            \textbf{Blender} del escáner preclínico comercial Bruker PET/CT Si78.
-      \item Se abarca la simulación de la física de desintegración compleja del \yochoseis (emisión de positrones y cascadas de prompt gammas)
-            mediante el módulo PENNUC, así como la simulación de un isótopo de referencia (\fdiezocho) para estudios comparativos.
-      \item El escenario de simulación se limita al uso del fantoma éstandar de calidad de imagen (Derenzo), permitiendo estudios
-            reproducibles de resolución y contraste.
+	\item Se incluye el modelado geométrico preciso mediante el software
+	      \textbf{Blender} del escáner preclínico comercial Bruker PET/CT Si78.
+	\item Se abarca la simulación de la física de desintegración compleja del \yochoseis (emisión de positrones y cascadas de prompt gammas)
+	      mediante el módulo PENNUC, así como la simulación de un isótopo de referencia (\fdiezocho) para estudios comparativos.
+	\item El escenario de simulación se limita al uso del fantoma éstandar de calidad de imagen (Derenzo), permitiendo estudios
+	      reproducibles de resolución y contraste.
 \end{itemize}
 
 \subsection{Desarrollo de software de Post-procesado}
@@ -104,9 +104,9 @@ de isótopos de \cite{Andreyev2011}, implementado en C++.
 El trabajo incluye un análisis cuantitativo para determinar los parámetros de adquisición óptimos.
 El alcance de este estudio incluye:
 \begin{itemize}
-      \item Un barrido sistemático de Ventanas de Energía (EW) y Ventanas de Coincidencia (CW).
-      \item La evaluación de la calidad de imagen mediante métricas estandarizadas: Coeficiente de Recuperación de Contraste (CRC) y Relación Señal-Ruido (SNR).
-      \item La reconstrucción de imágenes utilizando el software comercial Bruker RecoServer bajo el algoritmo estándar MLEM.
+	\item Un barrido sistemático de Ventanas de Energía (EW) y Ventanas de Coincidencia (CW).
+	\item La evaluación de la calidad de imagen mediante métricas estandarizadas: Coeficiente de Recuperación de Contraste (CRC) y Relación Señal-Ruido (SNR).
+	\item La reconstrucción de imágenes utilizando el software comercial Bruker RecoServer bajo el algoritmo estándar MLEM.
 \end{itemize}
 % esto lo hice previo a desarrollar el algoritmo de separación de isótopos, realmente
 
@@ -135,13 +135,13 @@ El código fuente desarrollado para el post-procesado y los scripts de análisis
 disponibles en: \url{https://github.com/gutierrels/dirtyIsotopes/}. Más iformación en el \hyperref[anx:repo]{Anejo A}.
 
 \begin{parrafoDestacado}
-      ¿Qué SÍ subir?
-      \begin{itemize}
-            \item Tus scripts de C++ (createCoincidences.cpp, etc.).
-            \item Los archivos de configuración de \penred (config.in) genéricos.
-            \item Los scripts de Python para generar gráficas.
-            \item El archivo .geo del fantoma Derenzo.
-      \end{itemize}
+	¿Qué SÍ subir?
+	\begin{itemize}
+		\item Tus scripts de C++ (createCoincidences.cpp, etc.).
+		\item Los archivos de configuración de \penred (config.in) genéricos.
+		\item Los scripts de Python para generar gráficas.
+		\item El archivo .geo del fantoma Derenzo.
+	\end{itemize}
 \end{parrafoDestacado}
 
 

@@ -30,8 +30,21 @@ Para una correcta comprensión de los resultados obtenidos y del funcionamiento 
 \end{itemize}
 
 \subsubsection{Unidades y Constantes en \penred}
+
 Internamente, el software opera con un sistema de unidades consistente: la longitud se mide en centímetros (cm), la energía en electronvoltios (eV), el tiempo en segundos (s) y la densidad en g/cm$^3$. Estas unidades son críticas al configurar los archivos de entrada y al interpretar los resultados del post-procesador.
 
+\subsubsection{Plugin de \penred para Blender}
+
+La definición manual de geometrías complejas mediante archivos de texto (geometría constructiva de cuádricas) es propensa a errores humanos y difícil de verificar. Para superar esta limitación, en este trabajo se ha utilizado el software de modelado 3D de código abierto \textbf{Blender}, integrado con el \textbf{plugin específico de \penred}.
+
+Esta herramienta permite:
+\begin{itemize}
+	\item \textbf{Modelado Visual:} Construir y visualizar en 3D los volúmenes del escáner y del fantoma, asegurando la correcta alineación y evitando solapamientos físicos imposibles (\textit{overlaps}) entre los materiales.
+	\item \textbf{Asignación de Materiales:} Vincular directamente los objetos 3D con los archivos de materiales de la simulación (\texttt{.mat}) y definir sus propiedades (detectores sensibles, blindajes, fantomas).
+	\item \textbf{Exportación Automática:} El plugin traduce los objetos de la escena de Blender al formato de archivo de geometría (\texttt{.geo}) basado en cuádricas que utiliza \penred.
+\end{itemize}
+
+Gracias a este flujo de trabajo, se han podido generar modelos de alta fidelidad del escáner y el fantoma, como se muestra en la Sección \ref{subsec:metodologia:escenario_sim:geometria_bruker}.
 
 \subsection{Entorno de simulación: Cluster UPV}
 
@@ -46,7 +59,6 @@ Los sistemas PET preclínicos de Bruker incorporan una cadena de reconstrucción
 La reconstrucción se fundamenta en el MLEM (ver sección \ref{subsubsec:mlem}), el cual resulta idóneo para la tomografía por emisión de positrones debido a su capacidad para modelar la naturaleza estadística de Poisson del decaimiento radiactivo y la detección. El MLEM actualiza la imagen de forma iterativa comparando las proyecciones medidas con las predichas por la estimación actual de la imagen, ajustando la intensidad de los vóxeles para maximizar la verosimilitud de los datos observados.
 
 La implementación de Bruker incluye opciones para correcciones físicas como la atenuación, la dispersión (\textit{scatter}) y las coincidencias aleatorias (\textit{randoms}). En particular, los eventos aleatorios no se estiman mediante ventanas de coincidencia retardada, sino a través de un modelo basado en \textit{singles}. Este enfoque permite una estimación estadística de los eventos aleatorios utilizando únicamente los datos de \textit{singles} registrados continuamente durante la adquisición. En este trabajo, las imágenes se reconstruyeron utilizando la misma configuración empleada en los protocolos estándar \textit{in vivo}, garantizando la consistencia con el comportamiento esperado del sistema.
-
 
 \subsection{Análisis de imagen: AMIDE.}
 % rois y obtención de la intensidad
@@ -139,18 +151,17 @@ El SNR permite monitorizar si la estrategia de limpieza de imagen mantiene una c
 
 Para garantizar la validez clínica de los resultados, se ha modelado un entorno de simulación que replica fielmente las condiciones de una adquisición preclínica real. Este escenario se compone de tres elementos fundamentales: la geometría del escáner, el objeto a visualizar (fantoma) y la fuente radiactiva.
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.45\textwidth]{si78--357.png}
+	\caption{Imagen comercial del escáner preclínico Bruker PET/CT Si78.}
+	\label{fig:geometria_bruker}
+\end{figure}
+
 \subsection{Modelado del escáner: Geometría del Bruker PET/CT Si78.}
+\label{subsec:metodologia:escenario_sim:geometria_bruker}
 
-% \begin{wrapfigure}{r}{0.47\textwidth}
-% 	\centering
-% 	\vspace{-10pt}
-% 	\includegraphics[width=\linewidth]{si78--357.png}
-% 	\caption{Imagen comercial del escáner preclínico Bruker PET/CT Si78.}
-% 	\label{fig:bruker_petct_si78}
-% 	\vspace{-10pt}
-% \end{wrapfigure}
-
-El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial \textbf{Bruker PET/CT Si78}. La geometría se ha definido en \texttt{penRed} utilizando el módulo de geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}).
+El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial \textbf{Bruker PET/CT Si78}. La geometría se ha definido en Blender y se ha exportado a geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}) gracias al plugin para Blender de \penred.
 
 El modelo virtual consta de un tres anillos de detectores con las siguientes características:
 
@@ -164,19 +175,84 @@ El modelo virtual consta de un tres anillos de detectores con las siguientes car
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.40\textwidth]{si78--357.png}
-	\caption{Imagen comercial del escáner preclínico Bruker PET/CT Si78.}
-	\label{fig:bruker_petct_si78}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{pet_geo.png}
+		\caption{Modelo 3D del escáner Bruker Si78.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{derenzo.png}
+		\caption{Modelo 3D del fantoma Derenzo.}
+	\end{subfigure}
+
+	\vspace{0.5cm}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{geometria_completa2.png}
+		\caption{Modelo 3D del fantoma Derenzo situado dentro del escáner.}
+	\end{subfigure}
+	\caption{Visualización en Blender de las geometrías modeladas para la simulación. El plugin de \penred permite exportar estos modelos directamente al archivo de configuración de la simulación.}
+	\label{fig:modelos_3d}
 \end{figure}
 
+Esta configuración permite reproducir efectos geométricos realistas, como la variación de la sensibilidad en el FOV y las pérdidas por espacios muertos (\emph{gaps}) entre módulos.
 
 \subsection{El Fantoma Derenzo: Especificaciones y materiales.}
+
+Para evaluar la resolución espacial y el contraste, se ha utilizado un modelo digital del \textbf{Fantoma de Calidad de Imagen (IQ) tipo Derenzo}. El fantoma consiste en un cilindro de PMMA (Poli-metacrilato de metilo) de $\SI{35}{\milli\meter}$ de radio, que contiene perforaciones cilíndricas (varillas) de $\SI{10}{\centi\meter}$ de largo que se rellenan con la disolución radiactiva. Las varillas están agrupadas en seis sectores, variando su diámetro para evaluar distintos niveles de resolución espacial.
+
+Los diámetros de las varillas simuladas son:
+\begin{itemize}
+	\item $\SI{0.8}{\milli\meter}$, $\SI{1.0}{\milli\meter}$, $\SI{1.2}{\milli\meter}$, $\SI{1.5}{\milli\meter}$, $\SI{2.0}{\milli\meter}$ y $\SI{2.5}{\milli\meter}$.
+\end{itemize}
+
+La distancia entre los centros de las varillas en cada sector es igual al doble de su diámetro, lo que permite evaluar la capacidad del sistema para separar fuentes puntuales cercanas.
+
+En cuanto a los materiales, se han definido dos configuraciones para las distintas fases del estudio:
+\begin{enumerate}
+	\item \textbf{Configuración Ideal:} Tanto el cuerpo del fantoma como las varillas se definen como "vacío" (\texttt{void.mat}) para eliminar la atenuación y el \emph{scatter}.
+	\item \textbf{Configuración Realista:} Tanto el cuerpo del fantoma (material de atenuación) como las varillas activas se han definido como \textbf{agua} (\texttt{water.mat}). Esto simula un entorno de dispersión y atenuación equivalente a tejido blando, siendo una aproximación estándar en física médica.
+\end{enumerate}
+
 \subsection{Configuración de la fuente radiactiva (Archivos .nuc).}
+
+La fuente radiactiva se ha simulado utilizando el módulo \textbf{PENNUC} de \penred, el cual requiere archivos de datos nucleares (\texttt{.nuc}) que describen el esquema de desintegración completo.
+
+Estos archivos se han generado a partir de los datos obtenidos de la base de datos de referencia \textbf{NuDat 3} del National Nuclear Data Center \parencite{bnlNuDat}. Se han empleado dos archivos:
+
+\begin{itemize}
+	\item \textbf{\texttt{F18.nuc}:} Simula el decaimiento del $^{18}\text{F}$, generando pares de aniquilación puros como referencia.
+	\item \textbf{\texttt{Y86.nuc}:} Simula el decaimiento complejo del $^{86}\text{Y}$ con sus probabilidades de ramificación correctas. Gracias a los datos de NuDat 3, este archivo incluye el espectro completo de \emph{prompt gammas} (ej. \SI{1077}{\kilo\electronvolt}, \SI{628}{\kilo\electronvolt}) emitidos en coincidencia con el positrón, permitiendo la simulación realista de coincidencias triples.
+\end{itemize}
+
+
 
 \section{Desarrollo del Algoritmo de Post-Procesado (C++)}
 \label{sec:metodologia:postprocess}
 
-\subsection{Arquitectura del Software processs singles}
+La simulación Monte Carlo con \texttt{penRed} genera como salida archivos de datos en modo lista que contienen eventos individuales o \textit{singles}. Cada entrada registra la posición, el tiempo, la energía depositada y, crucialmente para la validación, el identificador de la historia (\textit{EventID}) de cada interacción en el detector.
+
+Para reconstruir imágenes PET, es necesario procesar estos eventos individuales para identificar pares de fotones que correspondan a una aniquilación. Dado que este proceso requiere una lógica específica no disponible en las herramientas de reconstrucción estándar, se ha utilizado un software de post-procesado escrito en \textbf{C++}\footnote{\textbf{Nota sobre la autoría del software:}
+	La base del código de post-procesado (\texttt{createCoincidences}) es una herramienta de investigación interna desarrollada en \textbf{Bruker} (autoría original del Dr. V. Giménez). Sobre esta arquitectura base, en el marco de este TFG, se han desarrollado e implementado extensiones específicas para incorporar la lógica de detección de triples y separación de isótopos (Multiplexing), adaptando la metodología descrita en la literatura \parencite{Andreyev2011}.}.
+
+\subsection{Arquitectura y flujo de datos.}
+
+El software de post-procesado ha sido diseñado como una aplicación de consola en \textbf{C++} de alto rendimiento, capaz de procesar flujos masivos de datos (del orden de gigabytes de información binaria) correspondientes a los millones de fotones individuales (\textit{singles}) generados por la simulación Monte Carlo.
+
+La arquitectura del software actúa como un \textbf{puente} entre los datos físicos crudos generados por \texttt{penRed} y el formato de datos estructurado (List-Mode) requerido por el reconstruidor \textit{Bruker RecoServer}. Su funcionamiento se estructura en tres bloques funcionales principales:
+
+\subsubsection{1. Ingesta y Sincronización de Datos}
+
+La simulación \texttt{penRed} genera archivos de salida independientes para cada módulo detector del escáner PET. Dado que las coincidencias temporales ocurren entre módulos distintos, el primer reto del software es unificar estos flujos de datos.
+
+\begin{itemize}
+	\item \textbf{Lectura de Archivos Binarios:} El software abre simultáneamente los archivos de datos (\texttt{.dat}) correspondientes a los 24 módulos del escáner (8 módulos $\times$ 3 anillos).
+	\item \textbf{Ordenación Temporal (\textit{Time Sorting}):} Utiliza un algoritmo de ordenación para fusionar los múltiples flujos de entrada en un único \textit{stream} de eventos, garantizando que los fotones se procesen en estricto orden cronológico. Esto es fundamental para la correcta aplicación de la ventana de coincidencia temporal.
+\end{itemize}
+
 \subsection{Modelado de la respuesta del detector (Energy Blurring).}
 \subsection{Implementación de algoritmos de coincidencia:}
 \subsection{Same History (Validación ideal).}
