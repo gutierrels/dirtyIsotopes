@@ -213,8 +213,8 @@ La distancia entre los centros de las varillas en cada sector es igual al doble 
 
 En cuanto a los materiales, se han definido dos configuraciones para las distintas fases del estudio:
 \begin{enumerate}
-	\item \textbf{Configuración Ideal:} Tanto el cuerpo del fantoma como las varillas se definen como "vacío" (\texttt{void.mat}) para eliminar la atenuación y el \emph{scatter}.
-	\item \textbf{Configuración Realista:} Tanto el cuerpo del fantoma (material de atenuación) como las varillas activas se han definido como \textbf{agua} (\texttt{water.mat}). Esto simula un entorno de dispersión y atenuación equivalente a tejido blando, siendo una aproximación estándar en física médica.
+	\item \textbf{Configuración Ideal:} Tanto el cuerpo del fantoma como las varillas se definen como \enquote{vacío} (\texttt{void.mat}) para eliminar la atenuación y el \emph{scatter}.
+	\item \textbf{Configuración Realista:} Tanto el cuerpo del fantoma (material de atenuación) como las varillas activas se han definido como \enquote{agua} (\texttt{water.mat}). Esto simula un entorno de dispersión y atenuación equivalente a tejido blando, siendo una aproximación estándar en física médica.
 \end{enumerate}
 
 \subsection{Configuración de la fuente radiactiva (Archivos .nuc).}
@@ -230,42 +230,72 @@ Estos archivos se han generado a partir de los datos obtenidos de la base de dat
 
 
 
-\section{Desarrollo del Algoritmo de Post-Procesado (C++)}
+\section{Algoritmo de Post-Procesado (C++)}
 \label{sec:metodologia:postprocess}
 
 La simulación Monte Carlo con \texttt{penRed} genera como salida archivos de datos en modo lista que contienen eventos individuales o \textit{singles}. Cada entrada registra la posición, el tiempo, la energía depositada y, crucialmente para la validación, el identificador de la historia (\textit{EventID}) de cada interacción en el detector.
 
-Para reconstruir imágenes PET, es necesario procesar estos eventos individuales para identificar pares de fotones que correspondan a una aniquilación. Dado que este proceso requiere una lógica específica no disponible en las herramientas de reconstrucción estándar, se ha utilizado un software de post-procesado escrito en \textbf{C++}\footnote{\textbf{Nota sobre la autoría del software:}
-	La base del código de post-procesado (\texttt{createCoincidences}) es una herramienta de investigación interna desarrollada en \textbf{Bruker} (autoría original del Dr. V. Giménez). Sobre esta arquitectura base, en el marco de este TFG, se han desarrollado e implementado extensiones específicas para incorporar la lógica de detección de triples y separación de isótopos (Multiplexing), adaptando la metodología descrita en la literatura \parencite{Andreyev2011}.}.
+Para reconstruir imágenes PET, es necesario procesar estos eventos individuales para identificar pares de fotones que correspondan a una aniquilación. Dado que este proceso requiere una lógica específica no disponible en las herramientas de reconstrucción estándar, se ha utilizado un software de post-procesado escrito en \textbf{C++}
+
+La base del código de post-procesado (\texttt{createCoincidences}) es una herramienta de investigación interna desarrollada en \textbf{Bruker}. Sobre esta arquitectura base, en el marco de este TFG, se han desarrollado e implementado extensiones específicas para incorporar la lógica de detección de triples y separación de isótopos (Multiplexing), adaptando la metodología descrita en la literatura \parencite{Andreyev2011}.
 
 \subsection{Arquitectura y flujo de datos.}
 
-El software de post-procesado ha sido diseñado como una aplicación de consola en \textbf{C++} de alto rendimiento, capaz de procesar flujos masivos de datos (del orden de gigabytes de información binaria) correspondientes a los millones de fotones individuales (\textit{singles}) generados por la simulación Monte Carlo.
+La arquitectura del software sigue un modelo de procesamiento secuencial basado en ventanas de tiempo, optimizado para manejar eficientemente grandes volúmenes de datos provenientes de múltiples módulos detectores. El flujo de ejecución se estructura en las siguientes etapas:
 
-La arquitectura del software actúa como un \textbf{puente} entre los datos físicos crudos generados por \texttt{penRed} y el formato de datos estructurado (List-Mode) requerido por el reconstruidor \textit{Bruker RecoServer}. Su funcionamiento se estructura en tres bloques funcionales principales:
+\begin{enumerate}
+	\item \textbf{Entrada y Configuración:}
+	      El programa lee un archivo de configuración que define la geometría del escáner (tamaño de detectores, anillos, módulos), parámetros físicos del isótopo y la configuración de la adquisición. Además, carga una lista de pares permitidos (\texttt{detectorList.txt}) que define qué módulos detectores están en coincidencia geométrica válida (\textit{Field of View}). Los datos de eventos individuales (\textit{singles}) se leen desde archivos binarios separados (\texttt{.dat}), uno por cada módulo detector.
+	\item \textbf{Gestión de Buffer Temporal:}
+	      Para evitar cargar la totalidad de los datos en memoria, el programa utiliza un búfer dinámico (\texttt{nextSingles}). El sistema carga iterativamente eventos de todos los archivos de módulo, manteniéndolos ordenados cronológicamente. Se define una ventana de tiempo de coincidencia (\textit{coincidenceWindow}) y, en cada iteración, el programa analiza los eventos dentro de esta ventana deslizante para identificar pares válidos, descartando los eventos antiguos una vez procesados.
+	\item \textbf{Modelado de la Respuesta del Detector (\textit{Energy Blurring}):}
+	      Dado que la simulación Monte Carlo registra la energía depositada exacta ($E_{dep}$), el post-procesado es responsable de introducir el modelado realista de la resolución energética. Esta funcionalidad se implementa en la función de lectura \texttt{readPenRed}. Para cada evento individual, se aplica un desenfoque gaussiano basado en la resolución energética ($R_E$, definida como FWHM a \SI{511}{\kilo\electronvolt}). La desviación estándar $\sigma$ se calcula como:
 
-\subsubsection{1. Ingesta y Sincronización de Datos}
+	      \begin{equation}
+		      \sigma = \frac{E_{dep} \cdot R_E}{2.355}
+	      \end{equation}
+	      y se suma un valor aleatorio de una distribución normal $\mathcal{N}(0, \sigma)$ a la energía original. Este paso es fundamental para simular la respuesta real del cristal centelleador y evaluar el rechazo de eventos dispersos (\textit{scatter}).
 
-La simulación \texttt{penRed} genera archivos de salida independientes para cada módulo detector del escáner PET. Dado que las coincidencias temporales ocurren entre módulos distintos, el primer reto del software es unificar estos flujos de datos.
+	\item \textbf{Salida:}
+	      Los eventos de coincidencia identificados se proyectan sobre la superficie de los detectores y se escriben en formato List-Mode (LM), soportando estándares como Bruker LM y CASToR.
+\end{enumerate}
+
+\subsection{Algoritmos de coincidencia:}
+
+El núcleo del programa evalúa los eventos en el búfer temporal para formar pares. El algoritmo toma el evento más antiguo del búfer (evento de referencia) y busca una pareja entre los siguientes eventos que cumpla dos condiciones básicas: estar dentro de la ventana de coincidencia temporal y pertenecer a un módulo detector opuesto válido.
+Se han utilizado tres modos distintos para cubrir las diferentes fases del estudio. Mientras que los dos primeros ya estaban presentes en la implementación original de Bruker, el tercero (multiplexado) ha sido desarrollado íntegramente en este trabajo:
+
+\textbf{Modo Ideal (\textit{Take Same History})}: Este modo, activado con el flag \texttt{TAKE\_SAME\_HISTORY}, aprovecha la información \enquote{ground truth} de la simulación Monte Carlo para validación. Cada evento registrado por penRed incluye un identificador único de la desintegración original (\textit{EventID} o historia). El algoritmo busca un segundo evento que tenga exactamente el mismo identificador de historia (\texttt{hist}) que el evento de referencia. Permite separar coincidencias \enquote{verdaderas} ideales de cualquier coincidencia aleatoria (\textit{random}) o espuria. Es esencial para validar la geometría y la normalización en condiciones ideales (\ref{subsec:fase1} y \ref{subsec:fase2}).
+
+\textbf{Modo Realista (\textit{Take Closest})}: Este modo se activa con el flag \texttt{TAKE\_CLOSEST}, emula el comportamiento de la electrónica de coincidencias de un escáner PET real. Dado que el búfer de eventos está ordenado temporalmente, el algoritmo selecciona como pareja al primer evento válido que encuentra en el búfer (que cumpla los criterios de energía y geometría). Al estar ordenados por tiempo, este evento es intrínsecamente el que tiene la menor diferencia de tiempo ($\Delta t$) con respecto al evento de referencia. Es el modo estándar para generar datos realistas (secciones \ref{subsec:fase3} y \ref{subsec:fase4}). Introduce naturalmente coincidencias aleatorias (\textit{randoms}) si la tasa de cuentas es alta, tal como ocurriría en un detector físico.
+
+\textbf{Modo Multiplexado (\textit{Take Closest Multiplexing})}: Este modo avanzado, activado con el flag \texttt{TAKE\_CLOSEST\_MULTIPLEXING}, está diseñado específicamente para simulaciones con isótopos emisores de gammas rápidos en cascada, permitiendo la detección de coincidencias triples (sección \ref{subsec:fase5}).
 
 \begin{itemize}
-	\item \textbf{Lectura de Archivos Binarios:} El software abre simultáneamente los archivos de datos (\texttt{.dat}) correspondientes a los 24 módulos del escáner (8 módulos $\times$ 3 anillos).
-	\item \textbf{Ordenación Temporal (\textit{Time Sorting}):} Utiliza un algoritmo de ordenación para fusionar los múltiples flujos de entrada en un único \textit{stream} de eventos, garantizando que los fotones se procesen en estricto orden cronológico. Esto es fundamental para la correcta aplicación de la ventana de coincidencia temporal.
+	\item \textbf{Lectura Ampliada:} A diferencia de los otros modos, se cargan eventos en un rango de energía extendido que incluye tanto los fotones de aniquilación (\SI{511}{\kilo\electronvolt}) como los gammas de alta energía (\textit{prompt gammas}, hasta \texttt{promptGammaMax}).
+	\item \textbf{Identificación de Par PET:} Primero, el algoritmo busca una coincidencia estándar tipo \textit{Closest Time}, restringiendo la búsqueda de la pareja a la ventana de energía de \SI{511}{\kilo\electronvolt} (\texttt{energy <= emax}) para definir la Línea de Respuesta (LOR).
+	\item \textbf{Detección de Triple:} Una vez encontrado un par PET válido, el algoritmo escanea el búfer actual en busca de un tercer evento (en cualquier posición temporal relativa válida) cuya energía supere el umbral de gammas rápidos (\texttt{promptGammaThreshold}).
+	\item \textbf{Salida Dual:} El software genera dos archivos de salida:
+	      \begin{itemize}
+		      \item \texttt{data\_AB.lm}: Contiene todas las coincidencias detectadas (para reconstrucción estándar de la mezcla).
+		      \item \texttt{data\_B\_prime.lm}: Contiene exclusivamente aquellas coincidencias donde se detectó el tercer gamma (triple), lo que permite estudiar técnicas de reconstrucción multiplexada para la separación de isótopos.
+	      \end{itemize}
 \end{itemize}
 
-\subsection{Modelado de la respuesta del detector (Energy Blurring).}
-\subsection{Implementación de algoritmos de coincidencia:}
-\subsection{Same History (Validación ideal).}
-\subsection{Closest Time (Simulación realista).}
-\subsection{Multiplexing Mode (Detección de triples).}
+En el Anejo \ref{anx:codigo} se incluyen fragmentos de código (\textit{snippets}) y se detalla con mayor profundidad el funcionamiento técnico de estos algoritmos.
+
 
 \section{Diseño Experimental: Fases de Simulación}
 \label{sec:metodologia:fases}
 
 \subsection{Fase 1: Validación Ideal (Ground Truth).}
+\label{subsec:fase1}
 \subsection{Fase 2: Estudio de Efectos Físicos (Scatter y Atenuación).}
+\label{subsec:fase2}
 \subsection{Fase 3: Simulación Realista (Randoms).}
+\label{subsec:fase3}
 \subsection{Fase 4: Optimización de Ventanas (Energía y Tiempo).}
 \label{subsec:fase4}
 \subsection{Fase 5: Prueba de concepto de Multiplexado.}
+\label{subsec:fase5}
 
