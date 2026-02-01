@@ -44,7 +44,7 @@ Esta herramienta permite:
 	\item \textbf{Exportación Automática:} El plugin traduce los objetos de la escena de Blender al formato de archivo de geometría (\texttt{.geo}) basado en cuádricas que utiliza \penred.
 \end{itemize}
 
-Gracias a este flujo de trabajo, se han podido generar modelos de alta fidelidad del escáner y el fantoma, como se muestra en la Sección \ref{subsec:metodologia:escenario_sim:geometria_bruker}.
+Gracias a este flujo de trabajo, se han podido generar modelos de alta fidelidad del escáner y el fantoma, como se muestra en la figura \ref{fig:modelos_3d}.
 
 \subsection{Entorno de simulación: Cluster UPV}
 
@@ -122,7 +122,7 @@ Donde:
 
 \textbf{Interpretación en este trabajo:}
 En un sistema ideal sin ruido de fondo, si el fantoma solo tiene actividad en las varillas, $\mu_{bkg}$ tendería a cero y el CRC tendería a infinito.
-En el caso del $^{86}\text{Y}$, la presencia de coincidencias triples y aleatorias eleva artificialmente el valor de $\mu_{bkg}$, lo que reduce drásticamente el denominador y colapsa el valor del CRC. Por tanto, el objetivo principal de la optimización de la ventana de energía (ver ver Fase 4 en la sección \ref{subsec:fase4}) es reducir $\mu_{bkg}$ para maximizar el CRC.
+En el caso del $^{86}\text{Y}$, la presencia de coincidencias triples y aleatorias eleva artificialmente el valor de $\mu_{bkg}$, lo que reduce drásticamente el denominador y colapsa el valor del CRC. Por tanto, el objetivo principal de la optimización de la ventana de energía (ver sección \ref{subsec:fase4}) es reducir $\mu_{bkg}$ para maximizar el CRC.
 
 Adicionalmente, se espera que el CRC varíe en función del diámetro de la varilla debido al \textbf{Efecto de Volumen Parcial (PVE)}. Las varillas más pequeñas (inferiores a 2-3 veces la resolución espacial del sistema) sufrirán una pérdida de señal ($\mu_{hot}$ menor a la real) debido al vertido de cuentas (\textit{spill-out}) hacia el fondo, resultando en CRCs menores que las varillas grandes.
 
@@ -267,9 +267,76 @@ Se han utilizado tres modos distintos para cubrir las diferentes fases del estud
 
 \textbf{Modo Ideal (\textit{Take Same History})}: Este modo, activado con el flag \texttt{TAKE\_SAME\_HISTORY}, aprovecha la información \enquote{ground truth} de la simulación Monte Carlo para validación. Cada evento registrado por penRed incluye un identificador único de la desintegración original (\textit{EventID} o historia). El algoritmo busca un segundo evento que tenga exactamente el mismo identificador de historia (\texttt{hist}) que el evento de referencia. Permite separar coincidencias \enquote{verdaderas} ideales de cualquier coincidencia aleatoria (\textit{random}) o espuria. Es esencial para validar la geometría y la normalización en condiciones ideales (\ref{subsec:fase1} y \ref{subsec:fase2}).
 
+\begin{lstlisting}[language=C++, caption={Implementación de la lógica de detección basada en tomar como pareja solo si proviene de la misma historia.}, label={lst:take_closest}]
+	case COINCIDENCE_METHOD::TAKE_SAME_HISTORY:
+
+      for (size_t i = 1; i < nextSingles.size(); ++i) {
+        // Get pair
+        localPair = getPair(pairIndexes, nextSingDevMod,
+                            sim2devModule(modPerRing, nextSingles[i].module));
+        if (localPair >= pairIndexes.size())
+          continue;
+
+        // Check if can be considered as the next coincidence
+        if (hist == nextSingles[i].hist) {
+          iCoincidence = i;
+          iPair = localPair;
+          break;
+        }
+      }
+	  break;
+\end{lstlisting}
+
 \textbf{Modo Realista (\textit{Take Closest})}: Este modo se activa con el flag \texttt{TAKE\_CLOSEST}, emula el comportamiento de la electrónica de coincidencias de un escáner PET real. Dado que el búfer de eventos está ordenado temporalmente, el algoritmo selecciona como pareja al primer evento válido que encuentra en el búfer (que cumpla los criterios de energía y geometría). Al estar ordenados por tiempo, este evento es intrínsecamente el que tiene la menor diferencia de tiempo ($\Delta t$) con respecto al evento de referencia. Es el modo estándar para generar datos realistas (secciones \ref{subsec:fase3} y \ref{subsec:fase4}). Introduce naturalmente coincidencias aleatorias (\textit{randoms}) si la tasa de cuentas es alta, tal como ocurriría en un detector físico.
 
+\begin{lstlisting}[language=C++, caption={Implementación de la lógica de detección basada en tomar el primer evento válido dentro de la ventana de coincidencia.}, label={lst:take_closest}]
+	case COINCIDENCE_METHOD::TAKE_CLOSEST:
+    default:
+      for (size_t i = 1; i < nextSingles.size(); ++i) {
+        // Get pair
+        localPair = getPair(pairIndexes, nextSingDevMod,
+                            sim2devModule(modPerRing, nextSingles[i].module));
+        if (localPair >= pairIndexes.size())
+          continue;
+
+        iCoincidence = i;
+        iPair = localPair;
+        break;
+      }
+      break;
+\end{lstlisting}
+
 \textbf{Modo Multiplexado (\textit{Take Closest Multiplexing})}: Este modo avanzado, activado con el flag \texttt{TAKE\_CLOSEST\_MULTIPLEXING}, está diseñado específicamente para simulaciones con isótopos emisores de gammas rápidos en cascada, permitiendo la detección de coincidencias triples (sección \ref{subsec:fase5}).
+
+\begin{lstlisting}[language=C++, caption={Implementación de la lógica de detección de eventos triples (Multiplexing).}, label={lst:triple_logic}]
+    case COINCIDENCE_METHOD::TAKE_CLOSEST_MULTIPLEXING:
+      for (size_t i = 1; i < nextSingles.size(); ++i) {
+        localPair = getPair(pairIndexes, nextSingDevMod,
+                            sim2devModule(modPerRing, nextSingles[i].module));
+        if (localPair >= pairIndexes.size())
+          continue;
+
+        // Filter standard singles by emax (ensure they are 511 candidates)
+        if (nextSingles[i].e > emax)
+          continue;
+
+        // Found the valid pair (Closest in time)
+        iCoincidence = i;
+        iPair = localPair;
+
+        // Scan for Prompt Gamma (Triple) anywhere in the current buffer
+        for (size_t k = 0; k < nextSingles.size(); ++k) {
+          if (k == 0 || k == i)
+            continue;
+          if (nextSingles[k].e >= promptGammaThreshold) {
+            isTriple = true;
+            break;
+          }
+        }
+        break;
+      }
+      break;
+\end{lstlisting}
 
 \begin{itemize}
 	\item \textbf{Lectura Ampliada:} A diferencia de los otros modos, se cargan eventos en un rango de energía extendido que incluye tanto los fotones de aniquilación (\SI{511}{\kilo\electronvolt}) como los gammas de alta energía (\textit{prompt gammas}, hasta \texttt{promptGammaMax}).
@@ -282,20 +349,170 @@ Se han utilizado tres modos distintos para cubrir las diferentes fases del estud
 	      \end{itemize}
 \end{itemize}
 
-En el Anejo \ref{anx:codigo} se incluyen fragmentos de código (\textit{snippets}) y se detalla con mayor profundidad el funcionamiento técnico de estos algoritmos.
+\begin{lstlisting}[language=C++, caption={Escritura condicional de los archivos de salida para la separación de isótopos.}, label={lst:writing_logic}]
+// Save bruker format
+    if (outputFormat != OUTPUT_FORMAT::CASTOR) {
+      if (outputFormat != OUTPUT_FORMAT::BRUKER_LM_ONLY_COINCIDENCES ||
+          acceptedCoincidence) {
+        if (fLM != nullptr)
+          fwrite(&c, sizeof(coincidence), 1, fLM);
 
+        if (coinMethod == COINCIDENCE_METHOD::TAKE_CLOSEST_MULTIPLEXING &&
+            acceptedCoincidence) {
+          // Write all doubles to A+B
+          if (fLM_AB)
+            fwrite(&c, sizeof(coincidence), 1, fLM_AB);
+
+          // Write only triples to B'
+          if (isTriple && fLM_B_prime)
+            fwrite(&c, sizeof(coincidence), 1, fLM_B_prime);
+        }
+      }
+    }
+\end{lstlisting}
+
+En el Anejo \ref{anx:codigo} se incluyen fragmentos de código y se detalla con mayor profundidad el funcionamiento técnico de estos algoritmos.
 
 \section{Diseño Experimental: Fases de Simulación}
 \label{sec:metodologia:fases}
 
-\subsection{Fase 1: Validación Ideal (Ground Truth).}
+Para aislar y cuantificar los diferentes factores que degradan la imagen PET del \yochoseis, se ha diseñado una metodología experimental incremental. En lugar de simular directamente un escenario complejo, se han definido cinco fases sucesivas, añadiendo en cada una un grado más de complejidad física o de procesamiento.
+
+Esto permite identificar qué parte de la degradación de la imagen se debe a la física fundamental del isótopo, qué parte a la interacción con el fantoma y qué parte a las limitaciones de la electrónica de detección.
+
+\subsection{Validación Ideal (Ground Truth).}
 \label{subsec:fase1}
-\subsection{Fase 2: Estudio de Efectos Físicos (Scatter y Atenuación).}
+
+El objetivo de esta fase es establecer la referencia absoluta o \textit{Ground Truth} del sistema. Se busca obtener una imagen que dependa exclusivamente de la geometría del escáner y de la distribución de la fuente, eliminando cualquier artefacto por interacción con la materia o ruido aleatorio.
+
+\begin{itemize}
+	\item \textbf{Configuración de Materiales:} Se definen todos los volúmenes del fantoma (varillas y cuerpo) y del entorno como \textbf{vacío} (\texttt{void.mat}). Esto elimina por completo la \textbf{atenuación} y la \textbf{dispersión Compton (\textit{scatter})}. Los fotones viajan en línea recta desde la emisión hasta el detector.
+	\item \textbf{Configuración del Detector:} Se define el material del cristal detector como un absorbente perfecto (\texttt{eabs = \SI{1e30}{\electronvolt}}) para asegurar una eficiencia de detección del \SI{100}{\percent} sin dispersión inter-cristal.
+	\item \textbf{Post-Procesado:} Se utiliza el modo \textbf{\textit{Take Same History}}. Esto garantiza que solo se reconstruyen pares de fotones que provienen de la misma desintegración nuclear, eliminando matemáticamente el 100\% de las \textbf{coincidencias aleatorias}.
+\end{itemize}
+
+Se simulan un total de \SI{2e8} historias en un tiempo de adquisición de 2 horas lo que resulta en una actividad de \SI{27.77}{\kilo\becquerel}.
+
+\subsection{Estudio de Efectos Físicos (Scatter y Atenuación).}
 \label{subsec:fase2}
-\subsection{Fase 3: Simulación Realista (Randoms).}
+
+En esta fase se activa la física de transporte completa en el fantoma y el detector.
+
+\begin{itemize}
+    \item \textbf{Configuración de Simulación:} Se utilizan los materiales descritos en la figura \ref{fig:materiales}: fantoma de agua, entorno de aire y detectores realistas.
+    \item \textbf{Post-Procesado:} Se utiliza el modo \textbf{\textit{Take Same History}}.
+\end{itemize}
+
+Aunque la simulación incluye ahora la física completa (interacción en el agua, dispersión en el aire y respuesta intrínseca del cristal), el uso del filtro por historial en el post-procesado elimina las coincidencias aleatorias. Esto permite aislar y visualizar los efectos de la atenuación y el \textit{scatter} (tanto en el objeto como en el propio detector) antes de introducir el ruido aleatorio.
+
+
+\subsection{Simulación Realista (Randoms).}
 \label{subsec:fase3}
-\subsection{Fase 4: Optimización de Ventanas (Energía y Tiempo).}
+
+Esta fase representa la adquisición clínica real.
+
+\begin{itemize}
+    \item \textbf{Configuración de Simulación:} Se utilizan \textbf{exactamente los mismos archivos de datos} generados en la Fase 2 (misma configuración de materiales y fuentes). No es necesario realizar una nueva simulación Monte Carlo.
+    \item \textbf{Post-Procesado:} La diferencia radica exclusivamente en el algoritmo de clasificación. Se cambia al modo \textbf{\textit{Take Closest}}.
+\end{itemize}
+
+Al ignorar la información del historial y emparejar eventos basándose únicamente en la ventana temporal ($2\tau = \SI{5}{\nano\second}$), se introducen las \textbf{coincidencias aleatorias}. Dado que el $^{86}\text{Y}$ genera una alta tasa de \textit{singles} debido a los \textit{prompt gammas}, y que los materiales realistas (agua/aire) generan \textit{scatter} que también contribuye a los \textit{singles}, esta fase captura la degradación máxima de la imagen: atenuación + scatter + randoms.
+
+
+\subsection{ Optimización de Ventanas (Energía y Tiempo).}
 \label{subsec:fase4}
-\subsection{Fase 5: Prueba de concepto de Multiplexado.}
+
+Partiendo de la simulación realista, se diseñó un estudio paramétrico para determinar la configuración de adquisición que maximiza el compromiso entre contraste y ruido. El post-procesado se ejecutó iterativamente sobre los mismos datos crudos de \textit{singles}, modificando los filtros de aceptación.
+
+Se evaluaron dos variables fundamentales:
+
+\begin{enumerate}
+    \item \textbf{Ventana de Energía (EW):} El objetivo es rechazar los fotones que han sufrido \textit{scatter} y, específicamente para el $^{86}\text{Y}$, filtrar los \textit{prompt gammas} de menor energía (como el de \SI{628}{\kilo\electronvolt}) que contaminan la ventana estándar. Se definieron tres ventanas centradas en el fotolípico de \SI{511}{\kilo\electronvolt}, progresivamente más estrechas:
+    \begin{itemize}
+        \item \textbf{EW 20\%:} [\SI{409}{\kilo\electronvolt}, \SI{613}{\kilo\electronvolt}]. Ventana estándar comercial, utilizada como referencia.
+        \item \textbf{EW 15\%:} [\SI{434}{\kilo\electronvolt}, \SI{588}{\kilo\electronvolt}]. Ventana intermedia.
+        \item \textbf{EW 10\%:} [\SI{460}{\kilo\electronvolt}, \SI{562}{\kilo\electronvolt}]. Ventana muy restrictiva, diseñada para maximizar el rechazo de eventos espurios a costa de sensibilidad.
+    \end{itemize}
+
+    \item \textbf{Ventana de Coincidencia (CW):} El objetivo es reducir la tasa de coincidencias aleatorias, la cual es crítica en el $^{86}\text{Y}$. Se probaron reducciones respecto al valor estándar:
+    \begin{itemize}
+        \item \textbf{CW = \SI{4}{\nano\second}:} Valor estándar ajustado para detectores LYSO rápidos.
+        \item \textbf{CW = \SI{3}{\nano\second}:} Valor agresivo para minimizar la ventana temporal de integración de ruido.
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Simulación de Alta Estadística (Convergencia):}
+Una vez identificados los parámetros óptimos mediante el barrido anterior (realizado con $1.5\cdot10^9$ historias), se ejecutó una simulación final (\texttt{SIM\_FINAL}) con una estadística masiva de $6\cdot10^9$ historias. El objetivo de esta simulación es obtener una imagen con el mínimo ruido estadístico posible para validar que el contraste recuperado es real y robusto, y no un artefacto de las fluctuaciones estadísticas del fondo.
+
+
+\subsection{ Prueba de concepto de Multiplexado.}
 \label{subsec:fase5}
 
+En esta fase final, se diseñó un experimento para validar la capacidad de separar señales de dos isótopos diferentes adquiridos simultáneamente, explotando la física de los \textit{prompt gammas}.
+
+\textbf{Configuración del Escenario:}
+Se modificó el fantoma para contener dos fuentes radiactivas distintas en regiones separadas espacialmente:
+\begin{itemize}
+    \item \textbf{Región A:} Varillas llenas exclusivamente con $^{18}\text{F}$ (isótopo puro).
+    \item \textbf{Región B:} Varillas llenas exclusivamente con $^{86}\text{Y}$ (isótopo sucio).
+\end{itemize}
+
+\textbf{Metodología de Separación:}
+El flujo de trabajo aplicado consta de tres etapas:
+
+\begin{enumerate}
+    \setcounter{enumi}{1} % Para que empiece en el número 2 si continúas una lista previa
+    \item \textbf{Estimación de la Contaminación:} Dado que la sensibilidad de detección de triples es mucho menor que la de dobles, la imagen $B'$ representa la distribución espacial del $^{86}\text{Y}$ pero con menor intensidad. Se asume que la contribución del $^{86}\text{Y}$ a los dobles ($I_{\text{Y86}}^{\text{D}}$) es proporcional a la imagen de triples ($I_{\text{Y86}}^{\text{T}}$) mediante un factor de escalado $\beta$:
+    
+    \begin{equation}
+        I_{\text{Y86}}^{\text{D}} \approx \beta \cdot I_{\text{Y86}}^{\text{T}}
+        \label{eq:estimacion_beta}
+    \end{equation}
+    
+    \item \textbf{Sustracción de Imágenes:} Se aplicó un post-procesado en Python para recuperar la imagen del isótopo puro ($^{18}\text{F}$) sustraendo la contaminación estimada de la imagen total:
+    
+    \begin{equation}
+        I_{\text{F18}} = I_{\text{total}} - \beta \cdot I_{\text{Y86}}^{\text{T}} 
+        \label{eq:sustraccion}
+    \end{equation}
+    
+    El factor $\beta$ se determinó experimentalmente comparando la intensidad en las regiones conocidas de solo $^{86}\text{Y}$ en ambas imágenes.
+\end{enumerate}
+
+
+\subsection*{Asignacion de materiales }
+
+\begin{figure}[htbp]
+    \centering
+    % --- BLOQUE IZQUIERDO: TABLA COMPARATIVA ---
+    \begin{minipage}[c]{0.58\textwidth}
+        \centering
+        \scriptsize % Texto un poco más pequeño para que quepa la tabla
+        \renewcommand{\arraystretch}{1.5} % Más espacio entre filas
+        \setlength{\tabcolsep}{3pt} % Menos espacio entre columnas
+        
+        \begin{tabular}{l | l | l}
+            \hline
+            \textbf{Región (Color)} & \textbf{Fase 1 (Ideal)} & \textbf{Fases 2-5 (Realista)} \\
+            \hline
+            \textbf{Mundo} \textcolor{teal}{$\blacksquare$} & Vacío (\texttt{void}) & Aire (\texttt{air}) \\
+            \hline
+            \textbf{Detectores} \textcolor{gray}{$\blacksquare$} & \shortstack[l]{Abs. Perfecto\\($E_{abs}=\SI{1e30}{eV}$)} & \shortstack[l]{LYSO\\($E_{abs}=\SI{1}{keV}$)} \\
+            \hline
+            \textbf{Fantoma} \textcolor{pink}{$\blacksquare$} & Vacío (\texttt{void}) & Agua (\texttt{water}) \\
+            \hline
+            \textbf{Varillas} \textcolor{magenta}{$\blacksquare$} & Vacío (\texttt{void}) & Agua (\texttt{water}) \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+    \hfill
+    % --- BLOQUE DERECHO: VISUALIZACIÓN ---
+    \begin{minipage}[c]{0.38\textwidth}
+        \centering
+        % Asegúrate de tener la captura de pantalla con estos colores
+        \includegraphics[width=\linewidth]{materiales_colores.png} 
+    \end{minipage}
+    
+    \caption{Resumen de la asignación de materiales en la geometría de simulación según la fase experimental. Los colores (cuadrados) se corresponden con la visualización gráfica de la derecha. En la fase realista se introducen materiales físicos (agua, aire) y física detallada en el detector para evaluar el \textit{scatter} y la atenuación.}
+    \label{fig:materiales}
+\end{figure}

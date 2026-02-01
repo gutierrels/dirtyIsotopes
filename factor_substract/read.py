@@ -23,7 +23,7 @@ image_sliceA = dataA[slice_z, :, :]
 
 # gráficas
 
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(10, 8))
 plt.subplot(2, 2, 1)
 plt.imshow(image_slice, cmap="gnuplot") 
 plt.title(f'Image Slice AB (z={slice_z})')
@@ -43,6 +43,11 @@ plt.subplot(2, 2, 4)
 plt.imshow(image_sliceA, cmap="gnuplot") 
 plt.title(f'Image Slice A (z={slice_z})')
 plt.colorbar(label='Intensity')
-plt.show()
+plt.savefig('mp.png')
 
+# Guardar solo la imagen A
+plt.imsave('solo_A.png', image_sliceA, cmap="gnuplot")
+
+# Guardar solo la imagen B_prime
+plt.imsave('solo_B_prime.png', image_sliceB_prime, cmap="gnuplot")
 
