@@ -17,7 +17,7 @@ precisa previa al tratamiento. Su isótopo análogo, el \yochoseis es un emisor 
 biodistribución del fármaco mediante Tomografía por Emisión de Positrones (PET).
 
 A pesar de su utilidad, la imagen cuantitativa con \yochoseis presenta desafíos físicos significativos. Se clasifica como un
-\textbf{isótopo \enquote{sucio}}, ya que ya que su desintegración conlleva la emisión simultánea de una cascada de rayos gamma de alta
+\textbf{isótopo \enquote{sucio}}, ya que su desintegración conlleva la emisión simultánea de una cascada de rayos gamma de alta
 energía (\textit{prompt gammas}). La literatura científica (\cite{Lubberink2011,Conti2016}) señala que estos gammas generan
 coincidencias triples y aumentan la tasa de eventos aleatorios, lo que los escáneres comerciales estándar malinterpretan,
 degradando severamente el contraste y la exactitud cuantitativa (\cite{Buchholz2003}).
@@ -44,7 +44,7 @@ herramienta dosimétrica fiable.
 Además, en este trabajo se explora una motivación innovadora que va más allá de la corrección: el cambio de paradigma hacia la imagen
 \textbf{multiplexada}. Se plantea la base para utilizar los \emph{prompt gammas} no como ruido, sino como una
 \enquote{firma} para distinguir el \yochoseis de otros isótopos, abriendo la puerta a adquisiciones simultáneas duales (mPET) (\cite{Pratt2023}).
-La adquisición simultánea de dos trazadores permitiría una correlación espacio-temporal perfecta, observando la interacción dinámica de dos procesos biológicos. Al introducir dos trazadores al mismo tiempo lo que con PET convencional se lograba en dos sesiones con multiplexing se logra en una. Esto no solamente reduciría el tiempo de adquisición, sino que también la dosis de radiación para el paciente ya que, por ejemplo, en un estudio PET/CT se implica una tomografía computarizada (CT) para la corrección de atenuación y la localización anatómica. Si haces dos estudios separados, el paciente recibe dos dosis de rayos X por el CT. Con multiplexing, haces un solo CT para corregir ambos isótopos.
+La adquisición simultánea de dos trazadores ofrece una correlación espacio-temporal óptima, permitiendo la observación dinámica de la interacción entre dos procesos biológicos distintos. Frente a la metodología PET convencional, que requeriría dos sesiones independientes para obtener esta información, la técnica de multiplexado consolida el estudio en una única adquisición. Esta optimización no solo reduce significativamente el tiempo de ocupación del escáner, sino que también disminuye la dosis de radiación recibida por el paciente. En un protocolo estándar PET/CT, cada sesión conlleva una tomografía computarizada (CT) necesaria para la corrección de atenuación y la referencia anatómica; mediante la adquisición simultánea, se evita la duplicidad de esta exposición a rayos X.
 
 
 \section{Carácter Académico del Trabajo}
@@ -108,39 +108,26 @@ El alcance de este estudio incluye:
 	\item La evaluación de la calidad de imagen mediante métricas estandarizadas: Coeficiente de Recuperación de Contraste (CRC) y Relación Señal-Ruido (SNR).
 	\item La reconstrucción de imágenes utilizando el software comercial Bruker RecoServer bajo el algoritmo estándar MLEM.
 \end{itemize}
-% esto lo hice previo a desarrollar el algoritmo de separación de isótopos, realmente
+
 
 \subsection{Prueba de Concepto de Imagen Multiplexada}
 
 Finalmente, el proyecto alcanza la implementación de una prueba de concepto para la técnica de PET
 mutliplexado (mPET).
 
-Se modeló en Blender, un fantoma basado en el de \cite{Andreyev2011}, el cual contenía diferentes
-varillas con diferente concentración de dos isótopos, uno sucio (\yochoseis) y otro limpio (\fdiezocho).
+Se modeló en Blender, un fantoma que contiene varillas con diferente concentración de dos isótopos, uno sucio (\yochoseis) y otro limpio (\fdiezocho).
 
-Se realizaron simulaciones con \penred, simulando altas energías para incluir todos los
-gammas. Luego se usó el algoritmo de postProcess modificado con el nuevo metodo mutliplexing,
-aprovechando estos gammas de alta energía , para generar los distintos datasets, y finalmente se
-usaron unos scripts de python para leer las imágenes crudas tras el proceso de
-reconstrucción y sustraer la imagen ($A+B - F*B'$). %esto es un borrador, hay que cambiarlo y pulirlo
+Se llevaron a cabo simulaciones con \penred, configurando el transporte de altas energías para incluir el espectro de gammas completo. Posteriormente, se aplicó el algoritmo de post-procesado modificado para generar los conjuntos de datos discriminados. Finalmente, mediante scripts desarrollados en Python, se procesaron las imágenes reconstruidas para aplicar la sustracción lineal ($I_A = I_{\text{Total}} - F \cdot I_{B'}$), aislando así la señal del isótopo de interés.
 
 \section{Estructura de la memoria}
 
-% Terminar más adelante cuando tenga la memoria hecha??
+La presente memoria se estructura en seis capítulos. Tras esta introducción, el Capítulo \ref{cap:estado_del_arte_fund_teoricos} revisa los fundamentos físicos del PET y el estado del arte de los isótopos no convencionales. El Capítulo \ref{cap:metodologia} detalla la metodología empleada, describiendo las herramientas de simulación y los algoritmos desarrollados. En el Capítulo \ref{cap:resultados_discusion} se presentan y discuten los resultados obtenidos en las distintas fases del proyecto. El Capítulo \ref{cap:ods} analiza la alineación del trabajo con los Objetivos de Desarrollo Sostenible. Finalmente, el Capítulo \ref{cap:conclusiones} recoge las conclusiones principales y propone líneas de trabajo futuro. Se incluye asimismo información complementaria en los Anejos.
 
 
 \section{Repositorio}
 
-\url{https://github.com/gutierrels/dirtyIsotopes/}. Más iformación en el Anejo \ref{anx:repo}.
+\url{https://github.com/gutierrels/dirtyIsotopes/}. Más información en el Anejo \ref{anx:repo}.
 
-\begin{parrafoDestacado}
-	¿Qué SÍ subir?
-	\begin{itemize}
-		\item Tus scripts de C++ (createCoincidences.cpp, etc.).
-		\item Los archivos de configuración de \penred (config.in) genéricos.
-		\item Los scripts de Python para generar gráficas.
-		\item El archivo .geo del fantoma Derenzo.
-	\end{itemize}
-\end{parrafoDestacado}
+
 
 

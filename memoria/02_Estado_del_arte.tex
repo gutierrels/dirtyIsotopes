@@ -104,7 +104,7 @@ espurias adicionales (triples) que degradan severamente la cuantificación.
 El objetivo de la reconstrucción es estimar la distribución tridimensional de actividad $f(x,y,z)$ a partir de los datos de proyección (sinogramas o datos en modo lista). Existen dos grandes familias de algoritmos:
 
 \textbf{1. Métodos Analíticos:}
-Se basan en utilizar la transformada inversa de Radon,la cual modela el proceso de adquisición de datos como un conjunto de integrales de línea de la distribución espacial del objeto $f(x,y)$.
+Se basan en utilizar la transformada inversa de Radon, la cual modela el proceso de adquisición de datos como un conjunto de integrales de línea de la distribución espacial del objeto $f(x,y)$.
 
 $$R\{f\}(\rho, \theta) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x, y) \, \delta(x \cos \theta + y \sin \theta - \rho) \, dx \, dy$$
 
@@ -303,7 +303,7 @@ La capacidad de obtener imágenes de dos procesos biológicos distintos simultá
 
 El principio fundamental de la tomografía por emisión de positrones se basa en la detección de dos fotones de aniquilación de \SI{511}{\keV} emitidos en direcciones opuestas. En una adquisición convencional, esta característica física hace que las señales provenientes de diferentes radiotrazadores sean indistinguibles energéticamente. Si se inyectan simultáneamente dos trazadores etiquetados con isótopos emisores de positrones estándar (por ejemplo, $^{18}\text{F}$ y $^{11}\text{C}$), el escáner no puede determinar intrínsecamente de qué núcleo proviene cada par de fotones detectado \parencite{Andreyev2011}.
 
-Sin embargo, cuando se trata de isótopos sucios, como en el caso del \yochoseis, la gran presencia de fotones \textit{gamma prompt} de alta enería, conduce a eventos de detección
+Sin embargo, cuando se trata de isótopos sucios, como en el caso del \yochoseis, la gran presencia de fotones \textit{gamma prompt} de alta energía, conduce a eventos de detección
 que involucran tanto a los dos fotones de aniquilación de \SI{511}{\keV} como a un fotón gamma adicional, lo que se conoce como coincidencias triples. Estos eventos triples son físicamente imposibles en la imagen PET convencional y pueden ser utilizados para distinguir al isótopo sucio del isótopo limpio.
 
 El estado actual de la técnica ha evolucionado hacia el aprovechamiento de las propiedades de

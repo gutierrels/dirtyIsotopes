@@ -4,44 +4,17 @@
 Este Trabajo de Fin de Grado se propuso abordar los desafíos inherentes a la imagen cuantitativa con el isótopo no convencional Itrio-86 ($^{86}\text{Y}$), utilizando un enfoque sistemático basado en simulación Monte Carlo. A través de la validación del entorno de simulación, la caracterización de los artefactos y la optimización de parámetros, se ha desarrollado una metodología robusta que culmina en una exitosa prueba de concepto para la imagen PET multiplexada.
 
 \section{Conclusiones}
-\label{sec:conclusiones}
+\label{sec:conclusiones:conclusiones}
 
-Del análisis de los resultados obtenidos a lo largo de las diferentes fases experimentales, se extraen las siguientes conclusiones principales:
+El primer hito fundamental de este trabajo ha sido la validación exitosa de un entorno de simulación completo para isótopos complejos. Se ha demostrado que la combinación del framework \texttt{penRed}, junto con su módulo \texttt{PENNUC} y un software de post-procesado desarrollado a medida, es capaz de reproducir fielmente la compleja física de desintegración del $^{86}\text{Y}$. Esta capacidad incluye la simulación precisa de la emisión de \textit{prompt gammas} y la generación de coincidencias triples, lo cual ha sido corroborado por la excelente concordancia entre el espectro energético simulado y los datos nucleares de referencia (ENSDF).
 
-\begin{enumerate}
-    \item Se ha validado con éxito un entorno de simulación completo para isótopos complejos.
-          Se ha demostrado que la combinación del framework \texttt{penRed} (con su módulo \texttt{PENNUC}) y un software de post-procesado a medida es capaz de reproducir fielmente la compleja física de desintegración del $^{86}\text{Y}$, incluyendo la emisión de \textit{prompt gammas} y la generación de coincidencias triples. La concordancia del espectro energético simulado con los datos de referencia (ENSDF) valida la fiabilidad del modelo.
+Una vez validada la herramienta, el estudio permitió cuantificar la degradación de la imagen y aislar el impacto específico de los \textit{prompt gammas}. La metodología incremental reveló que la combinación de efectos físicos, como la atenuación y el \textit{scatter}, sumada a una respuesta electrónica realista con coincidencias aleatorias, provoca una pérdida de contraste (CRC) superior al \SI{93}{\percent} en comparación con un escenario ideal. La comparativa directa con un isótopo \enquote{limpio} como el $^{18}\text{F}$ probó de manera concluyente que la fuente primaria de esta degradación no es el \textit{scatter} convencional, sino el masivo fondo de ruido inducido por las cascadas gamma del $^{86}\text{Y}$.
 
-    \item Se ha cuantificado la degradación de imagen y aislado el impacto de los \textit{prompt gammas}.
-          La metodología incremental ha permitido demostrar que la combinación de efectos físicos (atenuación, \textit{scatter}) y la electrónica realista (coincidencias aleatorias) provoca una \textbf{pérdida de contraste (CRC) superior al 93\%} en comparación con un escenario ideal. La comparativa directa con el isótopo "limpio" $^{18}\text{F}$ prueba concluyentemente que la principal fuente de esta degradación no es el \textit{scatter} convencional, sino el masivo fondo de ruido inducido por los \textit{prompt gammas} del $^{86}\text{Y}$.
+En respuesta a esta problemática, la optimización paramétrica identificó que el ajuste de la Ventana de Energía (EW) es la estrategia más eficaz para la recuperación del contraste. El barrido experimental demostró que una configuración con una EW del \SI{10}{\percent} es óptima, logrando no solo recuperar la señal perdida, sino mejorar el contraste en un \SI{63}{\percent} respecto a la línea base realista, manteniendo al mismo tiempo una excelente Relación Señal-Ruido (SNR). Por otro lado, se observó que la Ventana de Coincidencia (CW) tiene un impacto secundario, contribuyendo principalmente a la mejora de la SNR mediante la reducción de aleatorias.
 
-    \item La optimización de la Ventana de Energía es la estrategia más eficaz para la recuperación del contraste.
-          El barrido paramétrico ha demostrado que estrechar la Ventana de Energía (EW) es el factor dominante para mejorar la calidad de la imagen. La configuración óptima, con una \textbf{EW del 10\%}, no solo recupera, sino que mejora el contraste en un 63\% sobre la línea base realista, mientras mantiene una excelente Relación Señal-Ruido (SNR). La Ventana de Coincidencia (CW), en cambio, tiene un impacto secundario, principalmente en la mejora del SNR.
-
-    \item Se ha demostrado la viabilidad de la imagen PET multiplexada mediante la separación de eventos triples.
-          La prueba de concepto ha sido un éxito. El algoritmo de post-procesado implementado ha logrado identificar y aislar las coincidencias triples, generando un \textit{dataset} exclusivo del $^{86}\text{Y}$. La posterior sustracción de esta señal de la imagen mixta ha permitido recuperar la distribución espacial del $^{18}\text{F}$ con una contaminación cruzada mínima. Esto valida el principio de utilizar los \textit{prompt gammas} no como ruido, sino como una firma para la separación de isótopos.
-\end{enumerate}
-
-En conjunto, este trabajo no solo proporciona una "receta" optimizada para mejorar la cuantificación del $^{86}\text{Y}$ en escáneres preclínicos, sino que sienta las bases metodológicas para el desarrollo de aplicaciones de imagen PET dual-isótopo.
+Finalmente, se ha demostrado la viabilidad técnica de la imagen PET multiplexada. La prueba de concepto ha sido exitosa gracias al algoritmo de post-procesado implementado, que logró identificar y aislar las coincidencias triples para generar un \textit{dataset} exclusivo del $^{86}\text{Y}$. La posterior sustracción de esta señal permitió recuperar la distribución espacial del $^{18}\text{F}$ con una contaminación cruzada mínima, validando así el principio de utilizar los \textit{prompt gammas} no como una fuente de ruido, sino como una firma física única para la separación de isótopos en adquisiciones simultáneas.
 
 \section{Líneas Futuras}
-\label{sec:conclusiones:futuro}
+\label{sec:conclusiones:lineas_futuras}
 
-Los resultados y la metodología desarrollados en este TFG abren diversas vías de investigación y desarrollo futuro:
 
-\begin{itemize}
-    \item Implementación de un Algoritmo de Separación Iterativo.
-          La prueba de concepto actual utiliza una sustracción lineal simple. El siguiente paso natural es implementar un algoritmo de separación iterativo, como los basados en Expectación-Maximización (EM), que refinen progresivamente las estimaciones de cada isótopo para mejorar la precisión cuantitativa y reducir el \textit{crosstalk}, siguiendo la línea de trabajos como el de \textcite{Pratt2023}.
-
-    \item Validación Experimental con el Escáner Físico.
-          El siguiente paso crucial es validar los hallazgos de esta simulación en el escáner físico \textbf{Bruker Si78}. Se propone realizar una adquisición real con un fantoma Derenzo que contenga ambos isótopos ($^{86}\text{Y}$ y $^{18}\text{F}$) para comprobar si la configuración de ventanas óptima y el algoritmo de separación funcionan en datos experimentales.
-
-    \item Extensión a Otros Isótopos Multiplexables.
-          La metodología desarrollada es directamente aplicable a otros pares de isótopos "limpio-sucio" de interés clínico, como por ejemplo $^{18}\text{F}$ / $^{124}\text{I}$ o $^{68}\text{Ga}$ / $^{44}\text{Sc}$. Se podría extender el estudio para caracterizar el factor $\beta$ (ratio dobles/triples) para estos isótopos y adaptar el algoritmo.
-
-    \item Modelado Avanzado de la Respuesta del Detector.
-          Para aumentar aún más el realismo de la simulación, se podría implementar un modelo de incertidumbre temporal no gaussiano (convolución exp-gaussiana), como los descritos por \textcite{Seifert2012}, para reflejar con mayor precisión la respuesta del cristal centelleador y la electrónica del SiPM.
-
-    \item Aplicación a Fantomas Antropomórficos y Estudios Preclínicos.
-          Una vez validado el método, el paso final sería aplicarlo a simulaciones de fantomas más complejos (ej. NEMA NU 4 o MOBY) o a datos de estudios preclínicos reales para evaluar su rendimiento en presencia de distribuciones de actividad heterogéneas.
-\end{itemize}

@@ -14,7 +14,6 @@ Para validar la fuente radiactiva, se extrajo el histograma de energía de los e
 
 \begin{figure}[htbp]
     \centering
-    % Inserta aquí tu gráfica del espectro (la que tenía picos morados nítidos)
     \includegraphics[width=0.8\textwidth]{espectroy86.png}
     \caption{Espectro de energía de emisión del $^{86}\text{Y}$ obtenido mediante simulación Monte Carlo. Se observa el pico de aniquilación (\SI{511}{\kilo\electronvolt}) y las múltiples líneas de \textit{prompt gammas}.}
     \label{fig:espectro_y86}
@@ -34,16 +33,16 @@ La Tabla \ref{tab:validacion_espectro} compara las energías de los picos observ
     \caption{Comparación entre las energías de emisión simuladas y los datos nucleares de referencia para el $^{86}\text{Y}$.}
     \label{tab:validacion_espectro}
     \begin{tabular}{c c c c}
-    \hline
-    \textbf{Origen} & \textbf{Energía Teórica (keV)} & \textbf{Energía Simulada (keV)} & \textbf{Intensidad Relativa (\%)} \\
-    \hline
-    Aniquilación $\beta^+$ & 511.0 & 511 & - \\
-    Prompt $\gamma_1$ & 627.7 & $\sim 628$ & 32.6 \\
-    Prompt $\gamma_2$ & 1076.6 & $\sim 1077$ & 82.5 \\
-    Prompt $\gamma_3$ & 1153.1 & $\sim 1153$ & 30.5 \\
-    Prompt $\gamma_4$ & 1854.4 & $\sim 1854$ & 17.2 \\
-    Prompt $\gamma_5$ & 1920.7 & $\sim 1921$ & 20.8 \\
-    \hline
+        \hline
+        \textbf{Origen}        & \textbf{Energía Teórica (keV)} & \textbf{Energía Simulada (keV)} & \textbf{Intensidad Relativa (\%)} \\
+        \hline
+        Aniquilación $\beta^+$ & 511.0                          & 511                             & -                                 \\
+        Prompt $\gamma_1$      & 627.7                          & $\sim 628$                      & 32.6                              \\
+        Prompt $\gamma_2$      & 1076.6                         & $\sim 1077$                     & 82.5                              \\
+        Prompt $\gamma_3$      & 1153.1                         & $\sim 1153$                     & 30.5                              \\
+        Prompt $\gamma_4$      & 1854.4                         & $\sim 1854$                     & 17.2                              \\
+        Prompt $\gamma_5$      & 1920.7                         & $\sim 1921$                     & 20.8                              \\
+        \hline
     \end{tabular}
 \end{table}
 
@@ -56,7 +55,6 @@ En la Fase 1 del diseño experimental, se realizó la reconstrucción de la imag
 
 \begin{figure}[htbp]
     \centering
-    % Inserta aquí la imagen del fantoma perfecto (la que tenía fondo negro puro)
     \includegraphics[width=0.6\textwidth]{IMG_IDEAL_Y86.png}
     \caption{Imagen reconstruida de la simulación ideal (\textit{Ground Truth}). Se observa una definición geométrica perfecta de las varillas del fantoma Derenzo y una ausencia total de ruido de fondo.}
     \label{fig:imagen_ideal}
@@ -66,9 +64,9 @@ El análisis visual y cuantitativo de esta imagen establece la referencia de má
 
 \begin{itemize}
     \item \textbf{Geometría:} La distribución espacial de la actividad reproduce fielmente la geometría del fantoma Derenzo modelado. Se distinguen claramente los seis sectores de varillas, incluyendo las de menor diámetro (\SI{0.8}{\milli\meter}), confirmando la correcta definición del voxelizado y la proyección en el software de reconstrucción.
-    
+
     \item \textbf{Ausencia de Ruido:} El fondo de la imagen presenta una intensidad nula o despreciable. Esto valida el algoritmo de post-procesado en modo \textit{Same History}, demostrando que es capaz de filtrar el 100\% de las coincidencias aleatorias y los eventos espurios generados por los \textit{prompt gammas} no correlacionados.
-    
+
     \item \textbf{Métricas de Referencia:} El análisis de ROIs arrojó un \textbf{Coeficiente de Recuperación de Contraste (CRC) de 185.27}. Este valor extremadamente alto (técnicamente infinito si el fondo fuera cero absoluto) sirve como el estándar de oro (\textit{Gold Standard}) contra el cual se comparará la degradación en las fases realistas.
 \end{itemize}
 
@@ -149,21 +147,21 @@ El análisis cuantitativo de esta comparación es concluyente:
     \caption{Comparación de métricas de calidad entre $^{86}\text{Y}$ y $^{18}\text{F}$ en condiciones realistas.}
     \label{tab:comparativa_metricas}
     \begin{tabular}{c c c}
-    \hline
-    \textbf{Isótopo} & \textbf{CRC} & \textbf{SNR} \\
-    \hline
-    $^{18}\text{F}$ & 31.09 & 3.86 \\
-    $^{86}\text{Y}$ & 11.73 & 2.74 \\
-    \hline
-    \textbf{Diferencia} & \textbf{2.6x Menos Contraste} & \textbf{29\% Menos SNR} \\
-    \hline
+        \hline
+        \textbf{Isótopo}    & \textbf{CRC}                  & \textbf{SNR}            \\
+        \hline
+        $^{18}\text{F}$     & 31.09                         & 3.86                    \\
+        $^{86}\text{Y}$     & 11.73                         & 2.74                    \\
+        \hline
+        \textbf{Diferencia} & \textbf{2.6x Menos Contraste} & \textbf{29\% Menos SNR} \\
+        \hline
     \end{tabular}
 \end{table}
 
 \textbf{Conclusión de la caracterización:}
 La dramática diferencia en calidad de imagen, con una reducción del contraste en un factor de 2.6, no puede explicarse únicamente por el \textit{scatter} o los \textit{randoms} convencionales, ya que ambos afectan a los dos isótopos.
 Esta evidencia demuestra que el principal factor de degradación en la imagen de $^{86}\text{Y}$ es el fondo masivo de coincidencias espurias (aleatorias y correlacionadas) generado por la alta emisión de \textit{prompt gammas}, justificando la necesidad de las estrategias de optimización que se presentan a continuación.
-Una vez caracterizada la degradación de la imagen en condiciones realistas, el siguiente paso fue implementar y evaluar estrategias para mitigarla. Esta sección presenta los resultados de la optimización de los parámetros de post-procesado (Ventanas de Energía y Tiempo) sobre la imagen de referencia realista del $^{86}\text{Y}$ (Fase 3), utilizando como base una simulación de $1.5 \cdot 10^9$ historias para asegurar una estadística robusta.
+Una vez caracterizada la degradación de la imagen en condiciones realistas, el siguiente paso fue implementar y evaluar estrategias para mitigarla. Esta sección presenta los resultados de la optimización de los parámetros de post-procesado (Ventanas de Energía y Tiempo) sobre la imagen de referencia realista del $^{86}\text{Y}$, utilizando como base una simulación de $1.5 \cdot 10^9$ historias (\SI{208.333}{\kilo\becquerel}) para asegurar una estadística robusta.
 
 \subsection{Efecto de la Ventana de Energía (EW)}
 \label{subsec:resultados_ew}
@@ -198,14 +196,14 @@ El principal mecanismo para rechazar eventos espurios es el filtrado energético
     \caption{Métricas de calidad de imagen en función de la Ventana de Energía (CW = \SI{4}{\nano\second}).}
     \label{tab:resultados_ew}
     \begin{tabular}{c c c}
-    \hline
-    \textbf{Ventana de Energía} & \textbf{CRC} & \textbf{SNR} \\
-    \hline
-    30\% (Línea Base) & 11.73 & 2.74 \\
-    20\% & 10.19 & 6.89 \\
-    15\% & 13.06 & 6.32 \\
-    10\% & 19.17 & 6.64 \\
-    \hline
+        \hline
+        \textbf{Ventana de Energía} & \textbf{CRC} & \textbf{SNR} \\
+        \hline
+        30\% (Línea Base)           & 11.73        & 2.74         \\
+        20\%                        & 10.19        & 6.89         \\
+        15\%                        & 13.06        & 6.32         \\
+        10\%                        & 19.17        & 6.64         \\
+        \hline
     \end{tabular}
 \end{table}
 
@@ -223,14 +221,14 @@ Los resultados (Tabla \ref{tab:resultados_cw_comparativa}) muestran que acortar 
     \caption{Comparación de métricas al reducir la Ventana de Coincidencia (CW).}
     \label{tab:resultados_cw_comparativa}
     \begin{tabular}{c | c c | c c}
-    \hline
-    \textbf{Ventana de Energía} & \multicolumn{2}{c|}{\textbf{CW = 4 ns}} & \multicolumn{2}{c}{\textbf{CW = 3 ns}} \\
-     & \textbf{CRC} & \textbf{SNR} & \textbf{CRC} & \textbf{SNR} \\
-    \hline
-    20\% & 10.19 & 6.89 & 9.99 & 6.87 \\
-    15\% & 13.06 & 6.32 & 13.75 & 6.72 \\
-    10\% & 19.17 & 6.64 & 18.04 & 6.72 \\
-    \hline
+        \hline
+        \textbf{Ventana de Energía} & \multicolumn{2}{c|}{\textbf{CW = 4 ns}} & \multicolumn{2}{c}{\textbf{CW = 3 ns}}                               \\
+                                    & \textbf{CRC}                            & \textbf{SNR}                           & \textbf{CRC} & \textbf{SNR} \\
+        \hline
+        20\%                        & 10.19                                   & 6.89                                   & 9.99         & 6.87         \\
+        15\%                        & 13.06                                   & 6.32                                   & 13.75        & 6.72         \\
+        10\%                        & 19.17                                   & 6.64                                   & 18.04        & 6.72         \\
+        \hline
     \end{tabular}
 \end{table}
 
@@ -239,13 +237,12 @@ Los resultados (Tabla \ref{tab:resultados_cw_comparativa}) muestran que acortar 
 
 Para determinar la mejor configuración global, se deben analizar conjuntamente el CRC y el SNR. La Figura \ref{fig:tradeoff} representa el \enquote{trade-off} entre el contraste recuperado y el ruido de la imagen para todas las configuraciones realistas.
 
-% \begin{figure}[htbp]
-%     \centering
-%     % Inserta aquí tu gráfico de dispersión CRC vs SNR
-%     \includegraphics[width=0.7\textwidth]{grafico_tradeoff.png}
-%     \caption{Gráfico de compromiso (trade-off) CRC vs. SNR. Cada punto representa una configuración de optimización. El objetivo es alcanzar el punto más alto y a la derecha posible.}
-     \label{fig:tradeoff}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{tradeoff.png}
+    \caption{CRC vs. SNR. Cada par de barras representa una configuración de optimización.}
+    \label{fig:tradeoff}
+\end{figure}
 
 El análisis del gráfico revela que la configuración \textbf{EW 10\% / CW 4ns} (\texttt{IMG\_OPT\_EW3\_CW1}) ofrece el mejor compromiso. Alcanza el máximo valor de CRC (19.17), fundamental para la detectabilidad de lesiones pequeñas, mientras mantiene un SNR excelente (6.64), muy superior a la línea base. Aunque otras configuraciones ofrecen un SNR marginalmente superior, lo hacen a costa de una pérdida significativa de contraste.
 
@@ -309,13 +306,13 @@ El resultado final del proceso se muestra en la Figura \ref{fig:multiplexing_fin
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=0.8\textwidth]{subplot_A.png} % Tu subplot de la imagen A recuperada
+        \includegraphics[width=0.8\textwidth]{subplot_A.png}
         \caption{Imagen Recuperada del $^{18}\text{F}$ (A).}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=0.8\textwidth]{subplot_B_prime.png} % Tu subplot de la imagen B_prime
+        \includegraphics[width=0.8\textwidth]{subplot_B_prime.png}
         \caption{Imagen Aislada del $^{86}\text{Y}$ (B').}
     \end{subfigure}
     \caption{Imágenes finales separadas. El algoritmo ha logrado aislar la distribución espacial de cada isótopo a partir de una única adquisición simultánea.}
