@@ -4,7 +4,7 @@ from scipy.ndimage import gaussian_filter
 
 x, y, z = 180, 180, 300
 dtype = np.float32 
-F = 75.86 # IMPORTANTE: explicar de dónde sale este factor
+F = 75.86 
 
 dataAB = np.fromfile('phantom1_AB.img', dtype=dtype)
 dataB_prime = np.fromfile('phantom1_B_prime.img', dtype=dtype)

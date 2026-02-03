@@ -71,6 +71,17 @@ El análisis visual y cuantitativo de esta imagen establece la referencia de má
 \end{itemize}
 
 Estos resultados confirman que la cadena completa de simulación —desde la generación de partículas en \texttt{penRed} hasta la reconstrucción en \texttt{RecoServer}— funciona correctamente y que cualquier degradación observada en fases posteriores será consecuencia directa de los fenómenos físicos introducidos y no de errores de software.
+
+En la Figura \ref{fig:espectro_energia} se muestra el espectro de energía resultante en un detector para esta fase.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{espectro_det10_SIM_IDEAL.png}
+    \caption{Espectro de energía detectado con una resolución del 14\%. }
+    \label{fig:espectro_energia}
+\end{figure}
+
+
 \section{Caracterización de la Degradación de la Imagen}
 \label{sec:resultados_discusion:scater_randoms}
 
@@ -79,7 +90,7 @@ Una vez establecida la referencia ideal, las siguientes fases del estudio introd
 \subsection{Impacto aislado del Scatter y la Atenuación}
 \label{subsec:resultados_scatter}
 
-En la Fase 2, se activó la física de interacción con la materia al definir el fantoma como agua, pero se mantuvo el filtro ideal de coincidencias (\textit{Take Same History}). La Figura \ref{fig:imagen_scatter} compara la imagen resultante con la de la fase ideal.
+En esta fase, se activó la física de interacción con la materia al definir el fantoma como agua, pero se mantuvo el filtro ideal de coincidencias (\textit{Take Same History}). La Figura \ref{fig:imagen_scatter} compara la imagen resultante con la de la fase ideal.
 
 \begin{figure}[htbp]
     \centering
@@ -96,7 +107,7 @@ En la Fase 2, se activó la física de interacción con la materia al definir el
         \caption{Imagen con Scatter y Atenuación (Fase 2).}
         \label{fig:scatter_vs_ideal_b}
     \end{subfigure}
-    \caption{Comparación visual del impacto del \textit{scatter} y la atenuación. La imagen de la derecha muestra una pérdida de resolución (halos) y un fondo elevado que reduce el contraste.}
+    \caption{Comparación visual del impacto del \textit{scatter} y la atenuación.}
     \label{fig:imagen_scatter}
 \end{figure}
 
@@ -108,6 +119,23 @@ El análisis revela dos efectos principales:
 
 Cuantitativamente, el CRC se desplomó de \textbf{185.27} en la fase ideal a \textbf{11.57} en esta fase. Esto representa una pérdida de contraste del 93.7\% atribuible exclusivamente a la física de interacción en el objeto y a los \textit{prompt gammas} no filtrados por el procesado ideal.
 
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{espectro_det10_SIM_SCATTER_F18.png}
+        \caption{Espectro $^{18}\text{F}$ (Fase 2).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{espectro_det10_SIM_SCATTER.png}
+        \caption{Espectro $^{86}\text{Y}$ (Fase 2).}
+    \end{subfigure}
+    \caption{Comparación de espectros de energía detectados en la Fase 2 (Scatter y Atenuación). La resolución energética es del 14\%.}
+    \label{fig:espectro_scatter}
+\end{figure}
+
 \subsection{Impacto de las Coincidencias Aleatorias}
 \label{subsec:resultados_randoms}
 
@@ -115,6 +143,23 @@ En la Fase 3, se introdujo el comportamiento de un detector realista, desactivan
 
 El resultado es la imagen de referencia realista (IMG\_CLOSEST\_TIME-Y86), que representa la calidad de imagen obtenida en un escáner estándar sin correcciones avanzadas. Visualmente, el fondo de la imagen se vuelve significativamente más ruidoso y elevado, degradando aún más el contraste.
 Cuantitativamente, el CRC se mantuvo en un valor similar de \textbf{11.73}, mientras que el SNR empeoró ligeramente a \textbf{2.74}, confirmando que el mayor daño al contraste proviene de los eventos de \textit{scatter} y \textit{prompt gammas} correlacionados, y que los \textit{randoms} contribuyen principalmente al ruido estadístico general.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{espectro_det10_SIM_RANDOMS_F18.png}
+        \caption{Espectro $^{18}\text{F}$ (Fase 3).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{espectro_det10_SIM_RANDOMS.png}
+        \caption{Espectro $^{86}\text{Y}$ (Fase 3).}
+    \end{subfigure}
+    \caption{Comparación de espectros de energía en la Fase 3 (Realista).}
+    \label{fig:espectro_randoms}
+\end{figure}
 
 \subsection{Comparativa crítica: \yochoseis vs \fdiezocho}
 \label{subsec:resultados_comparativa}

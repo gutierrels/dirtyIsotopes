@@ -1,0 +1,33 @@
+#LMFile=\\127.0.0.1\nmi_data\TCFiles\shared\dataAnnulus.lm
+#OutputImageName=\\127.0.0.1\nmi_data\TCFiles\shared\dataAnnulus.img
+#LMFile=\\127.0.0.1\nmi_data\TCFiles\dataNormCyl.lm
+#OutputImageName=\\127.0.0.1\nmi_data\TCFiles\dataCyl.img
+#LMFile=\\127.0.0.1\nmi_data\TCFiles\shared\dataPoint.lm
+#OutputImageName=\\127.0.0.1\nmi_data\TCFiles\shared\dataPoint.img
+#LMFile=\\127.0.0.1\nmi_data\TCFiles\shared\data.lm
+#OutputImageName=\\127.0.0.1\nmi_data\TCFiles\shared\data.img
+
+# Cyl
+#LMFile=\\127.0.0.1\nmi_data\TCFiles\shared\dataCyl2h.lm
+#OutputImageName=\\127.0.0.1\nmi_data\TCFiles\shared\dataCyl2h.img
+
+# Data
+LMFile=\\127.0.0.1\nmi_data\TCFiles\shared\data.lm
+OutputImageName=\\127.0.0.1\nmi_data\TCFiles\shared\data.img
+
+# Annulus 10h
+#LMFile=\\127.0.0.1\nmi_data\TCFiles\shared\dataAnnulus10h.lm
+#OutputImageName=\\127.0.0.1\nmi_data\TCFiles\shared\dataAnnulus10h.img
+
+Iterations=16
+Subsets=1
+StartTime=0
+IsotopeCalibWindow=0.3
+IsotopeRecWindow=0.2
+#NormalizationFile=Normalization-11700-30-32-108.bin
+#NormalizationFile=Geo-11700-15-32-108_A.bin
+#NormalizationFile=norm.bin
+NormalizationFile=None
+Gate0Number=1
+Gate1Number=1
+CalibrationId=1

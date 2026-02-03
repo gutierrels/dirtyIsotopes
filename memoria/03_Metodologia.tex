@@ -60,6 +60,10 @@ La reconstrucción se fundamenta en el MLEM (ver sección \ref{subsubsec:mlem}),
 
 La implementación de Bruker incluye opciones para correcciones físicas como la atenuación, la dispersión (\textit{scatter}) y las coincidencias aleatorias (\textit{randoms}). En particular, los eventos aleatorios no se estiman mediante ventanas de coincidencia retardada, sino a través de un modelo basado en \textit{singles}. Este enfoque permite una estimación estadística de los eventos aleatorios utilizando únicamente los datos de \textit{singles} registrados continuamente durante la adquisición. En este trabajo, las imágenes se reconstruyeron utilizando la misma configuración empleada en los protocolos estándar \textit{in vivo}, garantizando la consistencia con el comportamiento esperado del sistema.
 
+Específicamente, para la configuración de referencia utilizada en este estudio, se empleó el algoritmo MLEM con 16 iteraciones y 1 único subset. El volumen de reconstrucción se definió como una matriz de $180 \times 180 \times 300$ vóxeles, con un tamaño de vóxel isotrópico de \SI{0.50}{\milli\meter}. Esta discretización espacial permite una resolución suficiente para resolver las varillas más finas del fantoma Derenzo sin comprometer excesivamente la estadística por vóxel.
+
+Es importante destacar que, para aislar los efectos de las estrategias de post-procesado propuestas en este trabajo (ventanas de energía y tiempo), se desactivaron las correcciones estándar del software de reconstrucción: Scatter, Randoms y Atenuación se establecieron a 0 o \enquote{None}. Únicamente se mantuvo activo el modelado de la respuesta del sistema (\textit{Point Spread Function}) con un valor de PSF = 1.0. Estos parámetros de reconstrucción —tanto el algoritmo MLEM como configuración de filtros— se mantuvieron constantes para todas las fases experimentales (desde la ideal hasta la optimizada). De este modo, cualquier variación en la calidad de imagen final es atribuible exclusivamente a los cambios en los parámetros del post-procesado (\textit{input data}) y no al algoritmo de reconstrucción.
+
 \subsection{Análisis de imagen: AMIDE.}
 % rois y obtención de la intensidad
 Para la visualización, manipulación y extracción de datos cuantitativos de los volúmenes reconstruidos, se ha utilizado el software \textbf{AMIDE} (\textit{A Medical Image Data Examiner}). Se trata de una herramienta de código abierto multiplataforma diseñada específicamente para el análisis de imagen molecular volumétrica (PET, SPECT, CT).
@@ -254,7 +258,7 @@ La arquitectura del software sigue un modelo de procesamiento secuencial basado 
         \begin{equation}
           \sigma = \frac{E_{dep} \cdot R_E}{2.355}
         \end{equation}
-        y se suma un valor aleatorio de una distribución normal $\mathcal{N}(0, \sigma)$ a la energía original. Este paso es fundamental para simular la respuesta real del cristal centelleador y evaluar el rechazo de eventos dispersos (\textit{scatter}).
+        y se suma un valor aleatorio de una distribución normal $\mathcal{N}(0, \sigma)$ a la energía original. Este paso es fundamental para simular la respuesta real del cristal centelleador y evaluar el rechazo de eventos dispersos (\textit{scatter}). En este trabajo, se estableció una resolución energética del 14\% (FWHM a \SI{511}{\kilo\electronvolt}) y una resolución espacial intrínseca de \SI{0.08}{cm}, valores típicos para este tipo de escáner.
 
   \item \textbf{Salida:}
         Los eventos de coincidencia identificados se proyectan sobre la superficie de los detectores y se escriben en formato List-Mode (LM), soportando estándares como Bruker LM y CASToR.
@@ -429,56 +433,17 @@ Se evaluaron dos variables fundamentales:
 \begin{enumerate}
   \item \textbf{Ventana de Energía (EW):} El objetivo es rechazar los fotones que han sufrido \textit{scatter} y, específicamente para el $^{86}\text{Y}$, filtrar los \textit{prompt gammas} de menor energía (como el de \SI{628}{\kilo\electronvolt}) que contaminan la ventana estándar. Se definieron tres ventanas centradas en el fotolípico de \SI{511}{\kilo\electronvolt}, progresivamente más estrechas:
         \begin{itemize}
-          \item \textbf{EW 20\%:} [\SI{409}{\kilo\electronvolt}, \SI{613}{\kilo\electronvolt}]. Ventana estándar comercial, utilizada como referencia.
-          \item \textbf{EW 15\%:} [\SI{434}{\kilo\electronvolt}, \SI{588}{\kilo\electronvolt}]. Ventana intermedia.
-          \item \textbf{EW 10\%:} [\SI{460}{\kilo\electronvolt}, \SI{562}{\kilo\electronvolt}]. Ventana muy restrictiva, diseñada para maximizar el rechazo de eventos espurios a costa de sensibilidad.
+          \item \textbf{EW 20\%:} [\SI{409}{\kilo\electronvolt}, \SI{613}{\kilo\electronvolt}]
+          \item \textbf{EW 15\%:} [\SI{434}{\kilo\electronvolt}, \SI{588}{\kilo\electronvolt}].
+          \item \textbf{EW 10\%:} [\SI{460}{\kilo\electronvolt}, \SI{562}{\kilo\electronvolt}].
         \end{itemize}
 
   \item \textbf{Ventana de Coincidencia (CW):} El objetivo es reducir la tasa de coincidencias aleatorias, la cual es crítica en el $^{86}\text{Y}$. Se probaron reducciones respecto al valor estándar:
         \begin{itemize}
-          \item \textbf{CW = \SI{4}{\nano\second}:} Valor estándar ajustado para detectores LYSO rápidos.
-          \item \textbf{CW = \SI{3}{\nano\second}:} Valor agresivo para minimizar la ventana temporal de integración de ruido.
+          \item \textbf{CW = \SI{4}{\nano\second}:}
+          \item \textbf{CW = \SI{3}{\nano\second}:}
         \end{itemize}
 \end{enumerate}
-
-\textbf{Simulación de Alta Estadística (Convergencia):}
-Una vez identificados los parámetros óptimos mediante el barrido anterior (realizado con $1.5\cdot10^9$ historias), se ejecutó una simulación final (\texttt{SIM\_FINAL}) con una estadística masiva de $6\cdot10^9$ historias. El objetivo de esta simulación es obtener una imagen con el mínimo ruido estadístico posible para validar que el contraste recuperado es real y robusto, y no un artefacto de las fluctuaciones estadísticas del fondo.
-
-
-\subsection{ Prueba de concepto de Multiplexado.}
-\label{subsec:fase5}
-
-En esta fase final, se diseñó un experimento para validar la capacidad de separar señales de dos isótopos diferentes adquiridos simultáneamente, explotando la física de los \textit{prompt gammas}.
-
-\textbf{Configuración del Escenario:}
-Se modificó el fantoma para contener dos fuentes radiactivas distintas en regiones separadas espacialmente:
-\begin{itemize}
-  \item \textbf{Región A:} Varillas llenas exclusivamente con $^{18}\text{F}$ (isótopo puro).
-  \item \textbf{Región B:} Varillas llenas exclusivamente con $^{86}\text{Y}$ (isótopo sucio).
-\end{itemize}
-
-\textbf{Metodología de Separación:}
-El flujo de trabajo aplicado consta de tres etapas:
-
-\begin{enumerate}
-  \setcounter{enumi}{1} % Para que empiece en el número 2 si continúas una lista previa
-  \item \textbf{Estimación de la Contaminación:} Dado que la sensibilidad de detección de triples es mucho menor que la de dobles, la imagen $B'$ representa la distribución espacial del $^{86}\text{Y}$ pero con menor intensidad. Se asume que la contribución del $^{86}\text{Y}$ a los dobles ($I_{\text{Y86}}^{\text{D}}$) es proporcional a la imagen de triples ($I_{\text{Y86}}^{\text{T}}$) mediante un factor de escalado $\beta$:
-
-        \begin{equation}
-          I_{\text{Y86}}^{\text{D}} \approx \beta \cdot I_{\text{Y86}}^{\text{T}}
-          \label{eq:estimacion_beta}
-        \end{equation}
-
-  \item \textbf{Sustracción de Imágenes:} Se aplicó un post-procesado en Python para recuperar la imagen del isótopo puro ($^{18}\text{F}$) sustraendo la contaminación estimada de la imagen total:
-
-        \begin{equation}
-          I_{\text{F18}} = I_{\text{total}} - \beta \cdot I_{\text{Y86}}^{\text{T}}
-          \label{eq:sustraccion}
-        \end{equation}
-
-        El factor $\beta$ se determinó experimentalmente comparando la intensidad en las regiones conocidas de solo $^{86}\text{Y}$ en ambas imágenes.
-\end{enumerate}
-
 
 \subsection*{Asignación de materiales }
 
@@ -515,3 +480,106 @@ El flujo de trabajo aplicado consta de tres etapas:
   \caption{Resumen de la asignación de materiales en la geometría de simulación según la fase experimental. Los colores (cuadrados) se corresponden con la visualización gráfica de la derecha. En la fase realista se introducen materiales físicos (agua, aire) y física detallada en el detector para evaluar el \textit{scatter} y la atenuación.}
   \label{fig:materiales}
 \end{figure}
+
+\subsection{ Prueba de concepto de Multiplexado.}
+\label{subsec:fase5}
+
+En esta fase final, se diseñó un experimento para validar la capacidad de separar señales de dos isótopos diferentes adquiridos simultáneamente, explotando la física de los \textit{prompt gammas}.
+
+\textbf{Configuración del Escenario:}
+
+Se modificó el fantoma para contener dos fuentes radiactivas distintas en regiones separadas espacialmente:
+
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{materiales_mp.png}
+  \caption{Configuración de materiales para la prueba de concepto de multiplexado. Gris: Detectores, Azul: Agua, Negro: Aire. Las varillas centrales corresponden al isótopo limpio ($^{18}\text{F}$) y al isótopo sucio ($^{86}\text{Y}$).}
+  \label{fig:materiales_mp}
+\end{figure}
+
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{modelo_fantoma_mp.png}
+  \caption{Configuración del fantoma para el estudio de multiplexado.}
+  \label{fig:multiplexado}
+\end{figure}
+\begin{itemize}
+  \item \textbf{Región A:} Varilla llena exclusivamente con $^{18}\text{F}$ (isótopo puro).
+  \item \textbf{Región B:} Varilla llena exclusivamente con $^{86}\text{Y}$ (isótopo sucio).
+\end{itemize}
+
+\textbf{Metodología de Separación:}
+El flujo de trabajo aplicado consta de tres etapas:
+
+\begin{enumerate}
+  \setcounter{enumi}{1} % Para que empiece en el número 2 si continúas una lista previa
+  \item \textbf{Estimación de la Contaminación:} Dado que la sensibilidad de detección de triples es mucho menor que la de dobles, la imagen $B'$ representa la distribución espacial del $^{86}\text{Y}$ pero con menor intensidad. Se asume que la contribución del $^{86}\text{Y}$ a los dobles ($I_{\text{Y86}}^{\text{D}}$) es proporcional a la imagen de triples ($I_{\text{Y86}}^{\text{T}}$) mediante un factor de escalado $\beta$:
+
+        \begin{equation}
+          I_{\text{Y86}}^{\text{D}} \approx \beta \cdot I_{\text{Y86}}^{\text{T}}
+          \label{eq:estimacion_beta}
+        \end{equation}
+
+  \item \textbf{Sustracción de Imágenes:} Se aplicó un post-procesado en Python \ref{lst:python_post} para recuperar la imagen del isótopo puro ($^{18}\text{F}$) sustraendo la contaminación estimada de la imagen total:
+
+        \begin{equation}
+          I_{\text{F18}} = I_{\text{total}} - \beta \cdot I_{\text{Y86}}^{\text{T}}
+          \label{eq:sustraccion}
+        \end{equation}
+
+        El factor $\beta$ se determinó experimentalmente comparando la intensidad en las regiones conocidas de solo $^{86}\text{Y}$ en ambas imágenes.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python, caption={Post-procesado para la separación de imágenes.}, label={lst:python_post}]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.ndimage import gaussian_filter
+
+x, y, z = 180, 180, 300
+dtype = np.float32 
+F = 75.86 
+
+dataAB = np.fromfile('phantom1_AB.img', dtype=dtype)
+dataB_prime = np.fromfile('phantom1_B_prime.img', dtype=dtype)
+
+dataAB, dataB_prime = dataAB.reshape((z, y, x)), dataB_prime.reshape((z, y, x))
+dataB_prime = gaussian_filter(dataB_prime, sigma=1.5)
+dataB = F * dataB_prime
+dataA = np.maximum(0, dataAB - dataB)
+
+slice_z = z // 2
+image_slice = dataAB[slice_z, :, :]
+image_sliceB_prime = dataB_prime[slice_z, :, :]
+
+image_sliceB = dataB[slice_z, :, :]
+image_sliceA = dataA[slice_z, :, :]
+
+# graficas
+
+plt.figure(figsize=(10, 8))
+plt.subplot(2, 2, 1)
+plt.imshow(image_slice, cmap="gnuplot") 
+plt.title(f'Image Slice AB (z={slice_z})')
+plt.colorbar(label='Intensity')
+
+plt.subplot(2, 2, 2)
+plt.imshow(image_sliceB_prime, cmap="gnuplot") 
+plt.title(f'Image Slice B_prime (z={slice_z})')
+plt.colorbar(label='Intensity')
+
+plt.subplot(2, 2, 3)
+plt.imshow(image_sliceB, cmap="gnuplot") 
+plt.title(f'Image Slice B (z={slice_z})')
+plt.colorbar(label='Intensity')
+
+plt.subplot(2, 2, 4)
+plt.imshow(image_sliceA, cmap="gnuplot") 
+plt.title(f'Image Slice A (z={slice_z})')
+plt.colorbar(label='Intensity')
+plt.savefig('mp.png')
+
+plt.imsave('solo_A.png', image_sliceA, cmap="gnuplot")
+
+plt.imsave('solo_B_prime.png', image_sliceB_prime, cmap="gnuplot")
+\end{lstlisting}
+

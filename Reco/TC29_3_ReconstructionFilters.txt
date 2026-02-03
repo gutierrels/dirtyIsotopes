@@ -1,0 +1,9 @@
+ScatterDW=1
+Randoms=1
+Decay=0
+Attenuation=""
+SSS=0
+PVC=0
+PSF=0
+MAPBeta0=0
+MAPBeta1=0

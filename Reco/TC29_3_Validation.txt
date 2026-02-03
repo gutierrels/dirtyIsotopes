@@ -1,0 +1,3 @@
+imgFile=\\127.0.0.1\nmi_data\TCFiles\shared\dataCyl2.img
+imgFileSize=5529600
+
