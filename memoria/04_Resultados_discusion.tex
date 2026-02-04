@@ -244,7 +244,7 @@ El principal mecanismo para rechazar eventos espurios es el filtrado energético
         \hline
         \textbf{Ventana de Energía} & \textbf{CRC} & \textbf{SNR} \\
         \hline
-        30\% (Línea Base)           & 11.73        & 2.74         \\
+        30\% (Línea Base)           & 10.73        & 7.53         \\
         20\%                        & 10.19        & 6.89         \\
         15\%                        & 13.06        & 6.32         \\
         10\%                        & 19.17        & 6.64         \\
@@ -252,7 +252,7 @@ El principal mecanismo para rechazar eventos espurios es el filtrado energético
     \end{tabular}
 \end{table}
 
-El análisis de estos resultados revela que estrechar la ventana de energía es una estrategia altamente efectiva. Al pasar de una ventana del 30\% a una del 10\%, se logra un incremento del 63\% en el Contraste (CRC), superando incluso el valor de la línea base. Es notable que el SNR también mejora masivamente, indicando que el rechazo de eventos de fondo es tan significativo que compensa la pérdida de cuentas verdaderas.
+El análisis de estos resultados revela que estrechar la ventana de energía es una estrategia altamente efectiva. Al pasar de una ventana del 30\% a una del 10\%, se logra un incremento del 79\% en el Contraste (CRC). Aunque el SNR experimenta una leve disminución (de 7.53 a 6.64) debido a la menor estadística de cuentas, el rechazo de eventos de fondo compensa este efecto, permitiendo una recuperación mucho más clara de las estructuras de interés.
 
 \subsection{Efecto de la Ventana de Coincidencia (CW)}
 \label{subsec:resultados_cw}
@@ -289,16 +289,16 @@ Para determinar la mejor configuración global, se deben analizar conjuntamente 
     \label{fig:tradeoff}
 \end{figure}
 
-El análisis del gráfico revela que la configuración \textbf{EW 10\% / CW 4ns} (\texttt{IMG\_OPT\_EW3\_CW1}) ofrece el mejor compromiso. Alcanza el máximo valor de CRC (19.17), fundamental para la detectabilidad de lesiones pequeñas, mientras mantiene un SNR excelente (6.64), muy superior a la línea base. Aunque otras configuraciones ofrecen un SNR marginalmente superior, lo hacen a costa de una pérdida significativa de contraste.
+El análisis del gráfico revela que la configuración \textbf{EW 10\% / CW 4ns} (\texttt{IMG\_OPT\_EW3\_CW1}) ofrece el mejor compromiso. Alcanza el máximo valor de CRC (19.17), fundamental para la detectabilidad de lesiones pequeñas, mientras mantiene un SNR aceptable (6.64), comparable a las otras configuraciones optimizadas aunque ligeramente inferior a la línea base (7.53). La gran ganancia en contraste compensa esta leve reducción de SNR.
 
-\subsection{Convergencia y Resultados de Alta Estadística}
-\label{subsec:resultados_convergencia}
+% \subsection{Convergencia y Resultados de Alta Estadística}
+% \label{subsec:resultados_convergencia}
 
-Finalmente, para validar la robustez de la configuración óptima y obtener una imagen de máxima calidad, se realizó una simulación final (\texttt{SIM\_FINAL}) con una estadística 4 veces superior ($6 \cdot 10^9$ historias). Se aplicaron los parámetros óptimos de la configuración \texttt{IMG\_OPT\_EW2\_CW1} (EW 15\% / CW 4ns).
+% Finalmente, para validar la robustez de la configuración óptima y obtener una imagen de máxima calidad, se realizó una simulación final (\texttt{SIM\_FINAL}) con una estadística 4 veces superior ($6 \cdot 10^9$ historias). Se aplicaron los parámetros óptimos de la configuración \texttt{IMG\_OPT\_EW2\_CW1} (EW 15\% / CW 4ns).
 
-Los resultados de esta simulación de alta estadística (CRC = 8.13, SNR = 7.91) muestran una mejora del 25\% en el SNR en comparación con su homóloga de baja estadística (SNR = 6.32), confirmando que el ruido estadístico se reduce con el aumento de cuentas.
+% Los resultados de esta simulación de alta estadística (CRC = 8.13, SNR = 7.91) muestran una mejora del 25\% en el SNR en comparación con su homóloga de baja estadística (SNR = 6.32), confirmando que el ruido estadístico se reduce con el aumento de cuentas.
 
-La aparente disminución del CRC (de 13.06 a 8.13) no debe interpretarse como un empeoramiento, sino como una convergencia hacia el valor de contraste real del sistema. En simulaciones con menos estadística, el ruido puede inflar o desinflar artificialmente el valor del CRC. La simulación de alta estadística proporciona una medida más precisa y fiable, estableciendo el verdadero rendimiento cuantitativo de la configuración optimizada.
+% La aparente disminución del CRC (de 13.06 a 8.13) no debe interpretarse como un empeoramiento, sino como una convergencia hacia el valor de contraste real del sistema. En simulaciones con menos estadística, el ruido puede inflar o desinflar artificialmente el valor del CRC. La simulación de alta estadística proporciona una medida más precisa y fiable, estableciendo el verdadero rendimiento cuantitativo de la configuración optimizada.
 
 \section{Implementación de Imagen Multiplexada}
 \label{sec:resultados_discusion:multiplexing}
@@ -330,7 +330,7 @@ Las imágenes reconstruidas a partir de estos dos \textit{datasets} se muestran 
     \label{fig:multiplexing_inicial}
 \end{figure}
 
-Para recuperar la imagen pura del $^{18}\text{F}$, se aplicó un algoritmo de sustracción lineal en Python. Primero, se estimó la contribución de dobles del $^{86}\text{Y}$ (Imagen B) escalando la imagen de triples (B') con un factor $\beta$ determinado experimentalmente. El factor $\beta$, que representa el ratio de dobles a triples para el $^{86}\text{Y}$ en este sistema, se calculó en 75.8.
+Para recuperar la imagen pura del $^{18}\text{F}$, se aplicó un algoritmo \ref{lst:python_post} de sustracción lineal en Python. Primero, se estimó la contribución de dobles del $^{86}\text{Y}$ (Imagen B) escalando la imagen de triples (B') con un factor $\beta$ determinado experimentalmente. El factor $\beta$, que representa el ratio de dobles a triples para el $^{86}\text{Y}$ en este sistema, se calculó en 75.8.
 
 \begin{equation}
     I_{Y86}^{\text{D}} = \beta \cdot I_{Y86}^{\text{T}}

@@ -490,17 +490,70 @@ En esta fase final, se diseñó un experimento para validar la capacidad de sepa
 
 Se modificó el fantoma para contener dos fuentes radiactivas distintas en regiones separadas espacialmente:
 
-\begin{figure}[hbtp]
+\begin{enumerate}
+  \item \textbf{Ventana de Energía (EW):} El objetivo es rechazar los fotones que han sufrido \textit{scatter} y, específicamente para el $^{86}\text{Y}$, filtrar los \textit{prompt gammas} de menor energía (como el de \SI{628}{\kilo\electronvolt}) que contaminan la ventana estándar. Se definieron tres ventanas centradas en el fotolípico de \SI{511}{\kilo\electronvolt}, progresivamente más estrechas:
+        \begin{itemize}
+          \item \textbf{EW 20\%:} [\SI{409}{\kilo\electronvolt}, \SI{613}{\kilo\electronvolt}]
+          \item \textbf{EW 15\%:} [\SI{434}{\kilo\electronvolt}, \SI{588}{\kilo\electronvolt}].
+          \item \textbf{EW 10\%:} [\SI{460}{\kilo\electronvolt}, \SI{562}{\kilo\electronvolt}].
+        \end{itemize}
+
+  \item \textbf{Ventana de Coincidencia (CW):} El objetivo es reducir la tasa de coincidencias aleatorias, la cual es crítica en el $^{86}\text{Y}$. Se probaron reducciones respecto al valor estándar:
+        \begin{itemize}
+          \item \textbf{CW = \SI{4}{\nano\second}:}
+          \item \textbf{CW = \SI{3}{\nano\second}:}
+        \end{itemize}
+\end{enumerate}
+
+\subsection*{Asignación de materiales }
+
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.6\textwidth]{materiales_mp.png}
-  \caption{Configuración de materiales para la prueba de concepto de multiplexado. Gris: Detectores, Azul: Agua, Negro: Aire. Las varillas centrales corresponden al isótopo limpio ($^{18}\text{F}$) y al isótopo sucio ($^{86}\text{Y}$).}
+  % --- BLOQUE IZQUIERDO: TABLA COMPARATIVA ---
+  \begin{minipage}[c]{0.58\textwidth}
+    \centering
+    \scriptsize % Texto un poco más pequeño para que quepa la tabla
+    \renewcommand{\arraystretch}{1.5} % Más espacio entre filas
+    \setlength{\tabcolsep}{3pt} % Menos espacio entre columnas
+
+    \begin{tabular}{l | l}
+      \hline
+      \textbf{Región (Color)}                                & \textbf{Material}                       \\
+      \hline
+      \textbf{Mundo} \textcolor{black}{$\blacksquare$}       & Aire (\texttt{air})                     \\
+      \hline
+      \textbf{Detectores} \textcolor{gray}{$\blacksquare$}   & \shortstack[l]{LYSO                     \\($E_{abs}=\SI{1}{keV}$)} \\
+      \hline
+      \textbf{Fantoma} \textcolor{blue}{$\blacksquare$}      & Agua (\texttt{water})                   \\
+      \hline
+      \textbf{Varilla A} \textcolor{magenta}{$\blacksquare$} & Agua (\texttt{water}) ($^{18}\text{F}$) \\
+      \hline
+      \textbf{Varilla B} \textcolor{pink}{$\blacksquare$}    & Agua (\texttt{water}) ($^{86}\text{Y}$) \\
+      \hline
+    \end{tabular}
+  \end{minipage}
+  \hfill
+  % --- BLOQUE DERECHO: VISUALIZACIÓN ---
+  \begin{minipage}[c]{0.38\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{materiales_mp.png}
+  \end{minipage}
+
+  \caption{Resumen de la asignación de materiales en la geometría de simulación según la fase experimental. Los colores (cuadrados) se corresponden con la visualización gráfica de la derecha. En la fase realista se introducen materiales físicos (agua, aire) y física detallada en el detector para evaluar el \textit{scatter} y la atenuación.}
   \label{fig:materiales_mp}
 \end{figure}
+
+% \begin{figure}[hbtp]
+%   \centering
+%   \includegraphics[width=0.6\textwidth]{materiales_mp.png}
+%   \caption{Configuración de materiales para la prueba de concepto de multiplexado. Gris: Detectores, Azul: Agua, Negro: Aire. Las varillas centrales corresponden al isótopo limpio ($^{18}\text{F}$) y al isótopo sucio ($^{86}\text{Y}$).}
+%   \label{fig:materiales_mp}
+% \end{figure}
 
 \begin{figure}[hbtp]
   \centering
   \includegraphics[width=0.5\textwidth]{modelo_fantoma_mp.png}
-  \caption{Configuración del fantoma para el estudio de multiplexado.}
+  \caption{Modelo 3D del fantoma para el estudio de multiplexado.}
   \label{fig:multiplexado}
 \end{figure}
 \begin{itemize}
