@@ -5,9 +5,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{csquotes}
-\ifcastellano\usepackage[spanish,es-tabla]{babel}\fi
-\ifvalencia\usepackage[catalan]{babel}\fi
-\ifenglish\usepackage[english]{babel}\fi
+% Carga de idiomas: se cargan todos para los resúmenes, pero el último es el principal.
+\ifcastellano
+	\usepackage[catalan, english, spanish, es-tabla]{babel}
+\fi
+\ifvalencia
+	\usepackage[english, spanish, catalan]{babel}
+\fi
+\ifenglish
+	\usepackage[catalan, spanish, english]{babel}
+\fi
 \newcommand{\sen}{\on{sen}}
 
 

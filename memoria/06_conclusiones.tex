@@ -17,4 +17,14 @@ Finalmente, se ha demostrado la viabilidad técnica de la imagen PET multiplexad
 \section{Líneas Futuras}
 \label{sec:conclusiones:lineas_futuras}
 
+Aunque los resultados obtenidos en este trabajo son prometedores, abren la puerta a nuevas vías de investigación que podrían consolidar el uso del $^{86}\text{Y}$ en la práctica clínica y extender las capacidades de la imagen mPET.
+
+En primer lugar, la continuación natural de este estudio sería la \textbf{validación experimental} de los hallazgos mediante adquisiciones con un escáner PET preclínico o clínico real. El uso de maniquíes físicos (phantoms) permitiría confirmar si las mejoras de contraste observadas con la optimización de la ventana de energía se mantienen en un entorno con detectores reales, donde factores instrumentales adicionales podrían influir.
+
+En el ámbito del procesado de imagen, se propone el desarrollo de \textbf{algoritmos de reconstrucción avanzados} que incorporen explícitamente el modelo de emisión de \textit{prompt gammas}. En lugar de tratar estas emisiones como ruido o separarlas a posteriori, un algoritmo iterativo (tipo MLEM/OSEM) podría incluir las coincidencias triples en la matriz del sistema, utilizándolas para mejorar la estadística de la imagen o para corregir cuantitativamente las coincidencias verdaderas en tiempo de reconstrucción.
+
+Asimismo, la metodología de separación de isótopos desarrollada para el par $^{86}\text{Y}$/$^{18}\text{F}$ tiene el potencial de extenderse a \textbf{otros isótopos no convencionales} de interés médico que también presentan emisiones gamma en cascada, como el Iodo-124 ($^{124}\text{I}$), el Bromo-76 ($^{76}\text{Br}$) o el Zirconio-89 ($^{89}\text{Zr}$). Validar la robustez del algoritmo mPET con estos radionúclidos ampliaría significativamente el abanico de trazadores disponibles para estudios simultáneos de procesos biológicos.
+
+Finalmente, sería interesante evaluar el impacto de las nuevas generaciones de escáneres, como los \textbf{PET de cuerpo total} (Total Body PET). Su altísima sensibilidad geométrica aumentaría drásticamente la tasa de detección de coincidencias triples, lo que podría transformar la imagen mPET de una técnica de nicho a una herramienta clínica viable con estadísticas de conteo comparables a las de adquisiciones estándar.
+
 

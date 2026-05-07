@@ -2,49 +2,35 @@
 % ---------------------------------------------------------------------
 % ---------------------------------------------------------------------
 
-\chapter*{\abstractname}
+\begin{otherlanguage}{spanish}
+	\chapter*{Resumen}
+	El presente trabajo aborda los desafíos de la imagen cuantitativa con el isótopo no convencional Itrio-86 ($^{86}\text{Y}$) mediante simulación Monte Carlo. Se ha validado un entorno de simulación completo utilizando el framework \texttt{penRed}, caracterizando la degradación de la imagen asociada a la emisión de \textit{prompt gammas}. Los resultados sugieren que estos gammas de alta energía contribuyen significativamente al ruido de fondo, afectando al contraste. El estudio de optimización indica que el ajuste adecuado de la Ventana de Energía podría favorecer la recuperación del contraste. Finalmente, se explora la viabilidad de la imagen PET multiplexada (mPET), implementando un algoritmo orientado a aislar las coincidencias triples para separar las señales del $^{86}\text{Y}$ y el $^{18}\text{F}$ en adquisiciones simultáneas.
 
-% ---------------------------------------------------------------------
-% ---------------------------------------------------------------------
-% ---------------------------------------------------------------------
+	\vspace{0.5cm}
+	\textbf{Palabras Clave:} Física Médica, PET, Simulación Monte Carlo, Itrio-86, Imagen Multiplexada, Prompt Gammas.
+\end{otherlanguage}
 
-\ifcastellano
-	Este Trabajo de Fin de Grado aborda los desafíos de la imagen cuantitativa con el isótopo no convencional Itrio-86 ($^{86}\text{Y}$) mediante simulación Monte Carlo. Se ha validado un entorno de simulación completo utilizando el framework \texttt{penRed}, caracterizando la degradación de la imagen asociada a la emisión de \textit{prompt gammas}. Los resultados sugieren que estos gammas de alta energía contribuyen significativamente al ruido de fondo, afectando al contraste. El estudio de optimización indica que el ajuste adecuado de la Ventana de Energía podría favorecer la recuperación del contraste. Finalmente, se explora la viabilidad de la imagen PET multiplexada (mPET), implementando un algoritmo orientado a aislar las coincidencias triples para separar las señales del $^{86}\text{Y}$ y el $^{18}\text{F}$ en adquisiciones simultáneas.
+\vfill
 
+\begin{otherlanguage}{catalan}
+	\chapter*{Resum}
+	Aquest Treball de Fi de Grau aborda els desafiaments de la imatge quantitativa amb l'isòtop no convencional Itri-86 ($^{86}\text{Y}$) mitjançant simulació Monte Carlo. S'ha validat un entorn de simulació complet utilitzant el framework \texttt{penRed}, caracteritzant la degradació de la imatge associada a l'emissió de \textit{prompt gammas}. Els resultats suggereixen que aquests gammas d'alta energia contribueixen significativament al soroll de fons, afectant el contrast. L'estudi d'optimització indica que l'ajust adequat de la Finestra d'Energia podria afavorir la recuperació del contrast. Finalment, s'explora la viabilitat de la imatge PET multiplexada (mPET), implementant un algorisme orientat a aïllar les coincidències triples per separar els senyals de l'$^{86}\text{Y}$ i el $^{18}\text{F}$ en adquisicions simultànies.
 
-	% Pendiente de cambiar por la web de la ETSII
-	{\small\href
-	{http://www.upv.es/entidades/AEUPV/info/Plantilla_LaTeX_UPV_2016.zip}
-	{\url{http://www.upv.es/entidades/AEUPV/info/Plantilla_LaTeX_UPV_2016.zip}}}
+	\vspace{0.5cm}
+	\textbf{Paraules clau:} Física Mèdica, PET, Simulació Monte Carlo, Itri-86, Imatge Multiplexada, Prompt Gammas.
+\end{otherlanguage}
 
+\vfill
 
-\fi
-
-\ifvalencia
-	Aquest Treball de Fi de Grau aborda els desafiaments de la imatge quantitativa amb l'isòtop no convencional Itri-86 ($^{86}\text{Y}$) mitjançant simulació Monte Carlo. S'ha validat un entorn de simulació complet utilitzant el framework \texttt{penRed}, caracteritzant la degradació de la imatge associada a l'emissió de \textit{prompt gammas}. Els resultats suggereixen que aquests gammas d'alta energia contribueixen significativament al soroll de fons, afectant el contrast. L'estudi d'optimització indica que l'ajust adequat de la Finestra d'Energia podria afavorir la recuperació del contrast. Finalment, s'explora la viabilitat de la imatge PET multiplexada (mPET), implementant un algorisme orientat a aïllar les coincidències triples per separar els senyals de l'$^{86}\text{Y}$ i l'$^{18}\text{F}$ en adquisicions simultànies.
-
-	% Pendiente de cambiar por la web de la ETSII
-	{\small\href
-	{http://www.upv.es/entidades/AEUPV/info/Plantilla_LaTeX_UPV_2016.zip}
-	{\url{http://www.upv.es/entidades/AEUPV/info/Plantilla_LaTeX_UPV_2016.zip}}}
-
-
-\fi
-
-\ifenglish
+\begin{otherlanguage}{english}
+	\chapter*{Abstract}
 	This Bachelor's Thesis addresses the challenges of quantitative imaging with the non-conventional isotope Yttrium-86 ($^{86}\text{Y}$) using Monte Carlo simulation. A comprehensive simulation framework was validated using \texttt{penRed}, characterizing the image degradation associated with \textit{prompt gamma} emission. Results suggest that these high-energy gammas contribute significantly to background noise, affecting contrast. The optimization study indicates that proper adjustment of the Energy Window could improve contrast recovery. Finally, the feasibility of multiplexed PET (mPET) imaging is explored, implementing an algorithm aimed at isolating triple coincidences to separate $^{86}\text{Y}$ and $^{18}\text{F}$ signals in simultaneous acquisitions.
 
-		% Pendiente de cambiar por la web de la ETSII
-		{\small\href
-			{http://www.upv.es/entidades/AEUPV/info/Plantilla_LaTeX_UPV_2016.zip}
-			{\url{http://www.upv.es/entidades/AEUPV/info/Plantilla_LaTeX_UPV_2016.zip}}}
+	\vspace{0.5cm}
+	\textbf{Keywords:} Medical Physics, PET, Monte Carlo Simulation, Yttrium-86, Multiplexed Imaging, Prompt Gammas.
+\end{otherlanguage}
 
-
-\fi
-
-
-%\vfill
-
+\vfill
 
 \begin{center}
 	\begin{tabular}{ccc}
@@ -56,28 +42,12 @@
 		\\
 		\href{mailto:ggutcar@etsii.upv.es}{\small ggutcar@etsii.upv.es}
 		 &
-		\href{mailto:vicent.gimenez@bruker.com}{\small vicent.gimenez@bruker.com}
+		\href{mailto:vigial@upv.es}{\small vigial@upv.es}
 		 &
 		\href{mailto:sanolgi@upvnet.upv.es}{\small sanolgi@upvnet.upv.es}
 	\end{tabular}
 \end{center}
 
-\ifcastellano
-
-	\textbf{Palabras Clave:} Física Médica, PET, Simulación Monte Carlo, Itrio-86, Imagen Multiplexada, Prompt Gammas.
-
-\fi
-
-\ifvalencia
-
-	\textbf{Paraules clau:} Física Mèdica, PET, Simulació Monte Carlo, Itri-86, Imatge Multiplexada, Prompt Gammas.
-\fi
-
-\ifenglish
-
-	\textbf{Keywords:} Medical Physics, PET, Monte Carlo Simulation, Yttrium-86, Multiplexed Imaging, Prompt Gammas.
-
-\fi
 
 % ---------------------------------------------------------------------
 
