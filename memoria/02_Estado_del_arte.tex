@@ -1,47 +1,82 @@
 \chapter{Estado del Arte y Fundamentos Teóricos}
 \label{cap:estado_del_arte_fund_teoricos}
 
-\section{Fundamentos de la Tomografía por Emisión de Positrones (PET)}
+\section{Fundamentos de la Tomografía por Emisión de Positrones}
 \label{sec:estado_del_arte_fund_teoricos:fundamentos_PET}
+
+\subsection{Proceso de desintegración radiactiva}
+La Medicina Nuclear es una especialidad médica que utiliza sustancias radiactivas con fines diagnósticos. Estas sustancias, denominadas radiofármacos o radiotrazadores, alcanzan estabilidad mediante la emisión de partículas elementales y ondas electromagnéticas, dando lugar a la aparición de nuevos nucleidos que pueden ser estables o inestables, en este último caso dan a lugar a nuevos procesos de desintegración.
+
+Los procesos básicos de desintegración son: desintegración alfa, desintegración beta, desintegración gamma y captura eletrónica. Aunque en el contexto de este trabajo abordaremos los procesos de desintegración beta y gamma, a continuación se presenta una breve descripción de cada uno de ellos.
+
+\subsubsection{Desintegración beta}
+
+Existen dos tipos de desintegración beta, la desintegración beta menos ($\beta^{-}$) y la desintegración beta más ($\beta^{+}$), según que se produzca la emisión de un electrón o un positrón. El positrón es la antipartícula del electrón, tiene su misma masa pero con una carga eléctrica positiva del mismo valor que la del electrón.
+
+Las partículas  $\beta$ se emiten con velocidades distintas en cada tipo de desintegración y como la energía de una partícula material depende de su velocidad, se dice que se emiten con energías variables. Desde un punto de vista práctico, se consideran la energía máxima y la energía media.
+
+La desintegración $\beta^{+}$ se produce cuando un protón se transforma en un positrón y un neutrón, según la ecuación:
+
+\begin{equation}
+      ^{A}_{Z}X \rightarrow ^{A}_{Z-1}Y + \beta^{+} + \nu \label{eq:desintegracion_beta_mas}
+\end{equation}
+
+Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $\beta^{+}$ es el positrón emitido y $\nu$ es el neutrino emitido. Un neutrino es una partícula sin carga elétrica y con masa en reposo casi nula. Por lo tanto, no tiene importancia desde el punto de vista radio-biológico.
+
+\subsubsection{Desintegración gamma}
+
+Este proceso se produce cuando el núcleo se encuentra con un exceso de energía respecto a la de su estado fundamental. En este caso el exceso de energía se emite en forma de radiación electromagnética que recibe el nombre de fotones gamma. Se puede representar según la siguiente ecuación:
+
+\begin{equation}
+      ^{A}_{Z}X^{*} \rightarrow ^{A}_{Z}X + \gamma \label{eq:desintegracion_gamma}
+\end{equation}
+
+Donde $X^{*}$ es el núcleo en estado excitado, $X$ es el núcleo en estado fundamental y $\gamma$ es el fotón gamma emitido.
+
+\subsubsection{Captura Eletrónica}
+
+La captura electrónica es un proceso en el que el núcleo atómico captura uno de los electrones de su corteza electrónica y se transforma en un neutrón, según el proceso:
+
+\begin{equation}
+      ^{A}_{Z}X + e^{-} \rightarrow ^{A}_{Z-1}Y + \nu \label{eq:captura_eletronica}
+\end{equation}
+
+Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $e^{-}$ es el electrón capturado y $\nu$ es el neutrino emitido.
+
 
 La Tomografía por Emisión de Positrones (PET) es una técnica de imagen
 que permite la visualización cuantitativa de procesos fisiológicos y
-metabólicos \emph{in vivo}. Se basa en la detección de pares de fotones
-gamma producidos por la \textbf{aniquilación de los positrones}. Cuando un
-radiotrazador emisor de positrones (radionúclido $\beta^+$ unido a una molécula
-biológicamente activa) es administrado al sujeto, se distribuye en el organismo
-en función de su afinidad biológica.
+metabólicos \emph{in vivo}. Para la obrención de imágenes PET se utiliza como radiotrazador un emisor de positrones (radionúclido $\beta^+$ unido a una molécula biológicamente activa), este se administra al sujeto y se distribuye en el organismo en función de su afinidad biológica \cite{heiss2012positron}. Un positrón emitido por el núcleo recorre una distancia denominada rango del positrón, normalmente submilimétrica, durante la que pierde su energía cinética mediante colisiones con los átomos de su entorno hasta que que se recombina con un electrón para dar lugar a una reacción de aniquilación, dando lugar a dos fotones gamma simultáneos de \SI{511}{\kilo\electronvolt} cada uno que se emiten en direcciones opuestas formando un ángulo de aproximadamente \SI{180}{\degree} entre si (Ver Figura \ref{fig:reaccion_aniquilacion}).
 
-El núcleo inestable del radionúclido busca la estabilidad emitiendo un positrón
-($e^+$) y un neutrino ($\nu_e$). El positrón viaja una corta distancia a través
-del tejido, perdiendo su energía cinética mediante colisiones inelásticas, hasta
-casi detenerse. Esta distancia media recorrida se denomina \textbf{rango del positrón}
-y representa el límite físico fundamental de la resolución espacial de la técnica
-\parencite{heiss2012positron}.
-
-Una vez el positrón ha perdido suficiente energía cinética, interactúa con un
-electrón del medio ($e^-$). En este encuentro, la masa de ambas partículas se
-convierte íntegramente en energía, siguiendo la ecuación de Einstein $E=mc^2$.
-Como resultado, se emiten dos fotones gamma ($\gamma$) de \SI{511}{\kilo\electronvolt}
-cada uno. Debido al principio de conservación del momento lineal, estos fotones
-son emitidos en direcciones opuestas, es decir, con un ángulo de aproximadamente
-\SI{180}{\degree} entre sí.
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{figuras/reaccion_aniquilacion.png}
+      \caption{Reacción de aniquilación}
+      \label{fig:reaccion_aniquilacion}
+\end{figure}
 
 \subsection{Principio de Detección por Coincidencia.}
 
 El escáner PET consta de uno o varios anillos de detectores de centelleo que rodean
-al paciente. La base de la formación de la imagen reside en la \textbf{detección en
-      coincidencia}. Cuando dos detectores opuestos registran la llegada de un fotón
-dentro de una ventana de tiempo muy corta (denominada ventana de coincidencia, $2\tau$,
-típicamente de \SI{4}{} a \SI{12}{\nano\second}), el sistema asume que ambos fotones provienen
-de la misma aniquilación.
+al paciente (Figura \ref{fig:deteccion_coincidencia}). La base de la formación de la imagen reside en la detección en coincidencia. Puede definirse un evento como coincidencia cuando se detectan los dos fotones producidos por la aniquilación de un positrón, para ello se debe cumplir:
+
+\begin{enumerate}
+      \item Cada uno de los fotones detectados tiene una energía de \SI{511}{\kilo\electronvolt}
+      \item El intervalo de de tiempo entre las dos detecciones es inferior al tiempo definido en la ventana de coincidencia (del orden de varios nanosegundos).
+\end{enumerate}
+
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{figuras/deteccion_coincidencia.png}
+      \caption{Detección por coincidencia}
+      \label{fig:deteccion_coincidencia}
+\end{figure}
+
 
 Este evento define una línea virtual que une ambos detectores, conocida como
-\textbf{Línea de Respuesta} o LOR (\emph{Line of Response}). La acumulación de
-millones de LORs, mediante algoritmos de reconstrucción tomográfica
-como \textbf{Maximum Likelihood Expectation Maximization} (MLEM) o
-\textbf{Ordered Subset Expectation Maximization} (OSEM), permite generar una imagen tridimensional de la distribución del
-radiotrazador. % para más adelante: insertar figura representando qué es una LOR
+Línea de Respuesta o LOR (\emph{Line of Response}), que es la línea recta que contiene el punto en donde se ha producido la aniquilación y resulta definida por su distancia $d$ con respecto al origen y el ángulo $\alpha$ que forma con el eje horizontal. La acumulación de
+millones de LORs, mediante algoritmos de reconstrucción tomográfica, permite generar una imagen tridimensional de la distribución del
+radiotrazador.
 
 \subsection{Física de la Aniquilación y Rango del Positrón.}
 \label{subsec:rango}
@@ -54,18 +89,20 @@ El escáner detecta la aniquilación, no el núcleo. Por tanto, existe un error 
 Cuanto menor sea el rango del positrón, mejores resoluciones espaciales se podrán alcanzar.
 \begin{itemize}
       \item Para el $^{18}\text{F}$ ($E_{max} = \SI{0.634}{\mega\electronvolt}$), el
-            rango medio es muy corto alrededor de $\SI{0.6}{\milli\meter}$ en agua \parencite{Conti2016}.
+            rango medio es muy corto alrededor de $\SI{0.6}{\milli\meter}$ en agua.\cite{Conti2016}
       \item Para el $^{86}\text{Y}$ ($E_{max} \approx \SI{2.01}{\mega\electronvolt}$),
             el rango es significativamente mayor ($\sim \SI{2.5}{\milli\meter}$ en agua),
-            lo que introduce un emborronamiento (\emph{blurring}) natural en la imagen \parencite{Jdal2014}.
+            lo que introduce un emborronamiento (\emph{blurring}) natural en la imagen.\cite{Jdal2014}
 \end{itemize}
 
 \textbf{No-colinealidad:}
-En el momento de la aniquilación, el par positrón-electrón no está completamente en reposo; posee un pequeño momento residual. Para conservar el momento lineal, los dos fotones no se emiten a exactamente \SI{180}{\degree}, sino con una desviación de $\pm \SI{0.25}{\degree}$. Esto provoca que la LOR reconstruida no pase exactamente por el punto de aniquilación, introduciendo un error que aumenta linealmente con el diámetro del anillo del escáner.
+En el momento de la aniquilación, el par positrón-electrón no está completamente en reposo; posee un pequeño momento residual. Para conservar el momento lineal, los dos fotones no se emiten a exactamente \SI{180}{\degree}, sino con una desviación de $\pm \SI{0.25}{\degree}$ \cite{BUDINGER1998247}. Esto provoca que la LOR reconstruida no pase exactamente por el punto de aniquilación, introduciendo un error que aumenta linealmente con el diámetro del anillo del escáner.
 % no se si hace falta incluir alguna figura aquí
 
 \subsection{Tipos de Eventos de Coincidencia}
 \label{subsec:tipos_eventos}
+
+Cada detección de un fotón individual se denomina suceso \enquote{sencillo} o \emph{single}.
 
 En una adquisición PET ideal, solo se registrarían pares de fotones que no han
 sufrido interacciones en su camino hacia los detectores. Sin embargo, en la
@@ -211,14 +248,14 @@ El \yochoseis es un núclido con una vida media de $T_{1/2} = \SI{14.74}{\hour}$
       \begin{subfigure}[b]{0.40\textwidth}
             \centering
             \includegraphics[width=\textwidth]{esquemaf18.png}
-            \caption{Esquema de decaimiento del \fdiezocho. Fuente: \cite{Bergeron2014}}
+            \caption{Esquema de decaimiento del \fdiezocho. Fuente: \citeauthor{Bergeron2014} (2014).}
             \label{fig:esquemaf18}
       \end{subfigure}
       \hfill
       \begin{subfigure}[b]{0.40\textwidth}
             \centering
             \includegraphics[width=\textwidth]{esquemaY86.png}
-            \caption{Esquema simplificado de decaimiento del \yochoseis. Fuente: Adaptado de \cite{Lubberink2011}.}
+            \caption{Esquema simplificado de decaimiento del \yochoseis. Fuente: Adaptado de \citeauthor{Lubberink2011} (2011).}
             \label{fig:esquemaY86}
       \end{subfigure}
       \caption{Comparativa de los esquemas de decaimiento de un isótopo \enquote{limpio} (\fdiezocho) con el de un isótopo \enquote{sucio} (\yochoseis).}
