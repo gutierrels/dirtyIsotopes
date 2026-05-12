@@ -92,18 +92,18 @@ Esta herramienta permite:
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{figuras/blender.png}
+  \includegraphics[width=0.90\textwidth]{figuras/blender.png}
   \caption{Interfaz del entorno de modelado Blender utilizando el plugin específico de \penred. A través de este complemento, es posible diseñar las geometrías y asignar los materiales directamente sobre el modelo 3D \cite{PenredBlender}.}
   \label{fig:blender_plugin}
 \end{figure}
 
 Gracias a este flujo de trabajo, se han podido generar modelos de alta fidelidad del escáner y el fantoma, como se muestra en la figura \ref{fig:modelos_3d}.
 
-\subsection{Entorno de simulación: Cluster UPV}
+\subsection{Entorno de simulación: Cluster Quasar (ISIRYM)}
 
-Las simulaciones de Monte Carlo se han ejecutado, mediante conexión remota vía SSH, en el clúster de computación de alto rendimiento del Departamento de Ingeniería Química y Nuclear (IQN) de la Universitat Politècnica de València. Este entorno proporciona la capacidad de cómputo necesaria para gestionar el elevado número de historias requerido para obtener estadísticas significativas en tiempos de ejecución razonables.
+Las simulaciones de Monte Carlo se han ejecutado, mediante conexión remota vía SSH, en el clúster de computación de alto rendimiento Quasar, perteneciente al Instituto de Seguridad Industrial, Radiofísica y Medioambiental (ISIRYM) de la Universitat Politècnica de València. Este entorno proporciona la capacidad de cómputo necesaria para gestionar el elevado número de historias requerido para obtener estadísticas significativas en tiempos de ejecución razonables, ya que permite realizar simulaciones en paralelo.
 
-El nodo de cómputo utilizado cuenta con una arquitectura x86\_64 basada en dos procesadores \textit{AMD EPYC 7282} de 16 núcleos cada uno, sumando un total de 32 núcleos físicos operando a una frecuencia de 2,8 GHz. El sistema dispone de una jerarquía de memoria caché que incluye 32 KB de L1, 512 KB de L2 por núcleo y 16 MB de caché L3. La infraestructura está organizada en dos nodos NUMA (16 núcleos por nodo), lo que optimiza el acceso a memoria para las tareas de paralelización masiva mediante MPI y \textit{threads} que requiere \penred.
+La infraestructura técnica del clúster Quasar consta de un total de 182 núcleos de procesamiento distribuidos en 6 nodos de arquitectura AMD (5 nodos de 32 núcleos y 1 nodo de 24 núcleos). En lo referente a la memoria, cinco de estos nodos están equipados con 128 GB de RAM, mientras que el nodo restante dispone de 512 GB de RAM. Además, el sistema cuenta con una capacidad de almacenamiento de 33 TB. Esta configuración de altas prestaciones resulta idónea para optimizar los recursos en las tareas de paralelización masiva mediante MPI y \textit{threads} que requiere \penred.
 
 \subsection{Software de reconstrucción: Bruker RecoServer (Algoritmo MLEM).}
 
