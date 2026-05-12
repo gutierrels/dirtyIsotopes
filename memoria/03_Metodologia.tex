@@ -7,42 +7,95 @@
 Para llevar a cabo los objetivos propuestos en este trabajo, se han utilizado diversas herramientas para los distintos procesos tanto de simulación como de procesado y análisis de datos.
 
 \subsection{Software de simulación: \penred.}
-% qué es penRed
-% Descripción del software y su relación con PENELOPE (motor físico).
-% Características principales: Modularidad, paralelismo y lenguaje C++.
-% El módulo PENNUC: Justificación de su uso para la simulación de decaimientos complejos (\yochoseis)
 
 Como ya se mencionó en la sección \ref{sec:estado_del_arte_fund_teoricos:penelope_penred}, \penred es un entorno de simulación de Monte Carlo modular, personalizable y totalmente paralelizable para el transporte de radiación en la materia. Desarrollado en C++ por \citeauthor{Gimnez-Alventosa2021}, siguiendo el estándar C++14, este software actúa como una interfaz orientada a objetos sobre el motor físico de PENELOPE, heredando sus modelos de interacción y algoritmos de transporte de partículas.
 
-Su arquitectura destaca por implementar un doble enfoque de paralelismo: mediante el uso de hilos (\textit{threads}) de C++ para sistemas de memoria compartida y a través del estándar MPI para infraestructuras de memoria distribuida. Gracias a su estructura modular, \penred permite extender sus funcionalidades mediante módulos de usuario sin modificar el núcleo del código. En este trabajo resulta fundamental el uso del módulo \texttt{PENNUC}, el cual permite la simulación de esquemas de desintegración nuclear complejos que no están disponibles en los generadores de eventos estándar de PENELOPE, permitiendo modelar con precisión el decaimiento del \yochoseis.
+Su arquitectura destaca por implementar un doble enfoque de paralelismo: mediante el uso de hilos (\textit{threads}) de C++ para sistemas de memoria compartida y a través del estándar MPI (\emph{Message Passing Interface}) para infraestructuras de memoria distribuida. Gracias a su estructura modular, \penred permite extender sus funcionalidades mediante módulos de usuario sin modificar el núcleo del código. En este trabajo resulta fundamental el uso del módulo \texttt{PENNUC}, el cual permite la simulación de esquemas de desintegración nuclear complejos que no están disponibles en los generadores de eventos estándar de PENELOPE, permitiendo modelar con precisión el decaimiento del \yochoseis.
 
 \subsubsection{Definiciones Clave de la Simulación}
-% Concepto de Historia (History): Definición como evento de decaimiento único y su importancia para la validación ("Same History").
-% Concepto de Singles vs. Coincidencias: Diferencia entre el dato crudo (output de penRed) y el dato procesado.
-% Tallies: Explicación del Tally Singles utilizado para la adquisición de datos en modo lista.
 
 Para una correcta comprensión de los resultados obtenidos y del funcionamiento del flujo de trabajo, es necesario establecer una serie de definiciones fundamentales dentro del ecosistema de \penred:
 
 \begin{itemize}
-  \item \textbf{Historia (\textit{History}):} Representa la unidad básica de simulación. Una historia comprende una partícula primaria (generada directamente por la fuente radiactiva) y todas las partículas secundarias derivadas de sus interacciones hasta que son absorbidas o escapan del sistema. En este trabajo, cada historia se identifica unívocamente con un evento de desintegración, lo que permite implementar el algoritmo de validación ideal \textit{Same History}.
-  \item \textbf{\textit{Singles} vs. Coincidencias:} Se denomina \textit{single} a cualquier evento de detección individual (depósito de energía) registrado en los detectores. Este constituye el dato crudo u \textit{output} directo de \penred. Las coincidencias son entidades lógicas generadas durante el post-procesado al agrupar dos o más \textit{singles} que cumplen criterios específicos de tiempo y energía.
-  \item \textbf{\textit{Tallies} y Modo Lista:} Los \textit{tallies} son módulos encargados de recolectar magnitudes físicas durante la simulación. En este proyecto se utiliza el \texttt{Tally Singles}, el cual permite una adquisición en modo lista (\textit{list-mode}). Para cada interacción, se almacena un registro con el estado de la partícula: posición ($X, Y, Z$), energía depositada ($E$), tiempo de llegada (\textit{Age}) e identificador de historia, permitiendo el procesado posterior fuera del entorno de simulación.
+  \item \textbf{Partículas Primarias y Secundarias:} Las partículas primarias son aquellas generadas directamente por la fuente (por ejemplo, el positrón y los \textit{prompt gammas} en el $^{86}\text{Y}$). Las secundarias son producidas por interacciones de otras partículas, como los fotones de \SI{511}{\kilo\electronvolt} resultantes de la aniquilación del positrón.
+  \item \textbf{Historia (\textit{History}):} Representa la unidad básica de simulación. Una historia comprende una partícula primaria (generada directamente por la fuente radiactiva) y todas las partículas secundarias derivadas de sus interacciones hasta que son absorbidas o escapan del sistema (véase un ejemplo de las trayectorias de partículas simuladas en la Figura \ref{fig:particle_track}). En este trabajo, cada historia se identifica unívocamente con un evento de desintegración, con su correspondiente número de historia.
+  \item \textbf{Estado de la partícula (\textit{Particle State}):} En una simulación, \penred almacena información detallada del estado de cada partícula. Parámetros cruciales para este trabajo incluyen:
+        \begin{itemize}
+          \item \textbf{Edad (\textit{Age}):} El tiempo de vuelo de la partícula desde su generación. Es el parámetro crítico para evaluar la coincidencia temporal durante el post-procesado.
+          \item \textbf{Geometría:} Los índices de cuerpo (\texttt{IBODY}) y material (\texttt{MAT}), que permiten identificar si una interacción ocurrió dentro de un cristal detector o en el tejido del paciente (posible \textit{scatter}).
+        \end{itemize}
+  \item \textbf{Etiquetas ILB e Índices de Interacción:} Para cada partícula, \penred asigna etiquetas (\textit{ILBs}) que rastrean su genealogía (índice de la partícula padre) y el mecanismo de interacción que la generó (por ejemplo, \texttt{BETAp ANNIHILATION} para la aniquilación, o \texttt{GAMMA COMPTON} para la dispersión Compton). Esta trazabilidad es el núcleo que sustenta la clasificación analítica de eventos verdaderos y falsos en los datos simulados.
+  \item \textbf{\textit{Tallies}:} Los \textit{tallies} son los módulos encargados de registrar magnitudes físicas durante la simulación. En este proyecto se utiliza el \texttt{Tally Singles}. Para cada interacción en los detectores, se registra un evento guardando el estado completo de la partícula (energía depositada, \textit{Age}, posición, e identificador de historia, además de las mencionadas etiquetas ILB).
+  \item \textbf{\textit{Singles}:} Se denomina \textit{single} a cualquier evento de detección individual registrado por el \texttt{Tally Singles}. Este constituye el dato crudo u \textit{output} directo de \penred.
 \end{itemize}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{figuras/particle_track.png}
+  \caption{Ejemplo de la trayectoria de electrones en un medio acuoso. El color muestra el cambio en la energía del electrón. Fuente: Manual de Usuario de PenRed \cite{gimenez2025penred}.}
+  \label{fig:particle_track}
+\end{figure}
 
 \subsubsection{Unidades y Constantes en \penred}
 
-Internamente, el software opera con un sistema de unidades consistente: la longitud se mide en centímetros (cm), la energía en electronvoltios (eV), el tiempo en segundos (s) y la densidad en g/cm$^3$. Estas unidades son críticas al configurar los archivos de entrada y al interpretar los resultados del post-procesador.
+Internamente, el software opera con un sistema de unidades consistente: la longitud se mide en centímetros (cm), la energía en electronvoltios (eV), el tiempo en segundos (s) y la densidad en g/cm$^3$.
+
+\subsubsection{Tally Singles}
+
+El \textit{output} directo de la simulación se registra en formato binario mediante el módulo \texttt{Tally Singles}. Cada interacción válida en los detectores produce un registro individual con la siguiente estructura de memoria:
+
+\begin{lstlisting}[language=C++, caption={Estructura de memoria de un evento individual (\textit{single}) generado por \penred.}, label={lst:single_struct}]
+struct Single {
+    float E;
+    float x;
+    float y;
+    float z;
+    double t;
+    uint64_t hist; 
+    padding[7];
+};
+\end{lstlisting}
+
+En la Tabla \ref{tab:single_offset} se detalla el mapa de memoria de la estructura, cuyo tamaño total por evento es de exactamente 39 bytes.
+
+\begin{table}[h]
+  \centering
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{c l l l}
+    \hline
+    \textbf{Offset} & \textbf{Campo}   & \textbf{Tipo}    & \textbf{Valor}                           \\
+    \hline
+    0               & \texttt{E}       & \texttt{float}   & Energía depositada (eV)                  \\
+    4               & \texttt{x}       & \texttt{float}   & Coordenada espacial X (cm)               \\
+    8               & \texttt{y}       & \texttt{float}   & Coordenada espacial Y (cm)               \\
+    12              & \texttt{z}       & \texttt{float}   & Coordenada espacial Z (cm)               \\
+    16              & \texttt{t}       & \texttt{double}  & Tiempo de vuelo o \textit{Age} (s)       \\
+    24              & \texttt{hist}    & \texttt{u64}     & Identificador único de la historia       \\
+    32              & \texttt{padding} & \texttt{byte[7]} & Datos adicionales ignorados\footnotemark \\
+    \hline
+  \end{tabular}
+  \caption{Mapa de memoria y desplazamientos (\textit{offsets}) de la estructura \texttt{Single} empleada en el post-procesado.}
+  \label{tab:single_offset}
+\end{table}
+\footnotetext{En la salida original de \penred, estos 7 bytes se corresponden con metadatos adicionales que no son requeridos en este procesado: el peso estadístico de la partícula (4 bytes), una máscara booleana de estado (1 byte), el tipo de partícula (1 byte) y el tipo de la última interacción (1 byte).}
 
 \subsubsection{Plugin de \penred para Blender}
 
-La definición manual de geometrías complejas mediante archivos de texto (geometría constructiva de cuádricas) es propensa a errores humanos y difícil de verificar. Para superar esta limitación, en este trabajo se ha utilizado el software de modelado 3D de código abierto \textbf{Blender}, integrado con el \textbf{plugin específico de \penred}.
+La definición manual de geometrías complejas mediante archivos de texto mediante superficies cuádricas tiene una complejidad asociada. A medida que aumenta la complejidad del modelo, el proceso de construcción de la geometría se vuelve más difícil, tedioso, requiere más tiempo y es propenso a errores \cite{Wilson2010}. Para superar esta limitación, en este trabajo se ha utilizado el software de modelado 3D de código abierto Blender, integrado con el plugin específico de \penred \cite{PenredBlender}.
 
 Esta herramienta permite:
 \begin{itemize}
   \item \textbf{Modelado Visual:} Construir y visualizar en 3D los volúmenes del escáner y del fantoma, asegurando la correcta alineación y evitando solapamientos físicos imposibles (\textit{overlaps}) entre los materiales.
   \item \textbf{Asignación de Materiales:} Vincular directamente los objetos 3D con los archivos de materiales de la simulación (\texttt{.mat}) y definir sus propiedades (detectores sensibles, blindajes, fantomas).
-  \item \textbf{Exportación Automática:} El plugin traduce los objetos de la escena de Blender al formato de archivo de geometría (\texttt{.geo}) basado en cuádricas que utiliza \penred.
+  \item \textbf{Exportación Automática:} El plugin traduce los objetos de la escena de Blender al formato de archivo de geometría (\texttt{.geo}) basado en cuádricas que utiliza \penred de forma automática y transparente al usuario.
 \end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figuras/blender.png}
+  \caption{Interfaz del entorno de modelado Blender utilizando el plugin específico de \penred. A través de este complemento, es posible diseñar las geometrías y asignar los materiales directamente sobre el modelo 3D \cite{PenredBlender}.}
+  \label{fig:blender_plugin}
+\end{figure}
 
 Gracias a este flujo de trabajo, se han podido generar modelos de alta fidelidad del escáner y el fantoma, como se muestra en la figura \ref{fig:modelos_3d}.
 
