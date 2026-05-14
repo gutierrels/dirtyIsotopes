@@ -117,7 +117,7 @@ El análisis revela dos efectos principales:
     \item \textbf{Atenuación:} Una fracción significativa de los fotones es absorbida o dispersada fuera del campo de visión, lo que reduce el número total de cuentas verdaderas y, por tanto, incrementa el ruido estadístico.
 \end{itemize}
 
-Cuantitativamente, el CRC se desplomó de \textbf{185.27} en la fase ideal a \textbf{11.57} en esta fase. Esto representa una pérdida de contraste del 93.7\% atribuible exclusivamente a la física de interacción en el objeto y a los \textit{prompt gammas} no filtrados por el procesado ideal.
+Cuantitativamente, el CRC se desplomó de \textbf{185.27} en la fase ideal a \textbf{11.57} en esta fase, mientras que el SNR se situó en \textbf{3.13}. Esto representa una pérdida de contraste del 93.7\% atribuible exclusivamente a la física de interacción en el objeto y a los \textit{prompt gammas} no filtrados por el procesado ideal.
 
 \begin{figure}[htbp]
     \centering
@@ -142,7 +142,7 @@ Cuantitativamente, el CRC se desplomó de \textbf{185.27} en la fase ideal a \te
 En la Fase 3, se introdujo el comportamiento de un detector realista, desactivando el filtro por historial (\textit{Take Closest}). Esto añade las coincidencias aleatorias (\textit{randoms}) a los efectos de \textit{scatter} y atenuación ya presentes.
 
 El resultado es la imagen de referencia realista (IMG\_CLOSEST\_TIME-Y86), que representa la calidad de imagen obtenida en un escáner estándar sin correcciones avanzadas. Visualmente, el fondo de la imagen se vuelve significativamente más ruidoso y elevado, degradando aún más el contraste.
-Cuantitativamente, el CRC se mantuvo en un valor similar de \textbf{11.73}, mientras que el SNR empeoró ligeramente a \textbf{2.74}, confirmando que el mayor daño al contraste proviene de los eventos de \textit{scatter} y \textit{prompt gammas} correlacionados, y que los \textit{randoms} contribuyen principalmente al ruido estadístico general.
+Cuantitativamente, el CRC se mantuvo en un valor similar de \textbf{11.73}, mientras que el SNR empeoró un 12.5\% (de 3.13 a \textbf{2.74}), confirmando que el mayor daño al contraste proviene de los eventos de \textit{scatter} y \textit{prompt gammas} correlacionados, y que los \textit{randoms} contribuyen principalmente al ruido estadístico general.
 
 \begin{figure}[htbp]
     \centering
@@ -185,7 +185,7 @@ Para aislar el impacto específico de la física de desintegración del $^{86}\t
     \label{fig:comparativa_y86_f18}
 \end{figure}
 
-El análisis cuantitativo de esta comparación es concluyente:
+El análisis cuantitativo de esta comparación, recogido en la Tabla \ref{tab:comparativa_metricas}, es concluyente.
 
 \begin{table}[htbp]
     \centering
@@ -204,7 +204,7 @@ El análisis cuantitativo de esta comparación es concluyente:
 \end{table}
 
 \textbf{Conclusión de la caracterización:}
-La dramática diferencia en calidad de imagen, con una reducción del contraste en un factor de 2.6, no puede explicarse únicamente por el \textit{scatter} o los \textit{randoms} convencionales, ya que ambos afectan a los dos isótopos.
+La drástica diferencia en calidad de imagen, con una reducción del contraste en un factor de 2.6, no puede explicarse únicamente por el \textit{scatter} o los \textit{randoms} convencionales, ya que ambos afectan a los dos isótopos.
 Esta evidencia demuestra que el principal factor de degradación en la imagen de $^{86}\text{Y}$ es el fondo masivo de coincidencias espurias (aleatorias y correlacionadas) generado por la alta emisión de \textit{prompt gammas}, justificando la necesidad de las estrategias de optimización que se presentan a continuación.
 Una vez caracterizada la degradación de la imagen en condiciones realistas, el siguiente paso fue implementar y evaluar estrategias para mitigarla. Esta sección presenta los resultados de la optimización de los parámetros de post-procesado (Ventanas de Energía y Tiempo) sobre la imagen de referencia realista del $^{86}\text{Y}$, utilizando como base una simulación de $1.5 \cdot 10^9$ historias (\SI{208.333}{\kilo\becquerel}) para asegurar una estadística robusta.
 
