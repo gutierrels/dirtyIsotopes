@@ -142,19 +142,26 @@ La discretización espacial de \SI{0.50}{\milli\meter} permite una resolución s
 
 \subsection{Análisis de imagen: AMIDE.}
 % rois y obtención de la intensidad
-Para la visualización, manipulación y extracción de datos cuantitativos de los volúmenes reconstruidos, se ha utilizado el software \textbf{AMIDE} (\textit{A Medical Image Data Examiner}). Se trata de una herramienta de código abierto multiplataforma diseñada específicamente para el análisis de imagen molecular volumétrica (PET, SPECT, CT).
+Para la visualización, manipulación y extracción de datos cuantitativos de los volúmenes reconstruidos, se ha utilizado el software AMIDE (\textit{A Medical Image Data Examiner}). Se trata de una herramienta de código abierto multiplataforma diseñada específicamente para el análisis de imagen molecular volumétrica (PET, SPECT, CT).
 
-En el contexto de este trabajo, AMIDE ha desempeñado dos funciones fundamentales: la inspección cualitativa visual y la cuantificación numérica mediante Regiones de Interés (ROIs).
+En el contexto de este trabajo, AMIDE ha desempeñado dos funciones fundamentales: la inspección cualitativa visual y la cuantificación numérica mediante Regiones de Interés (ROIs). La interfaz principal de este software se muestra en la Figura \ref{fig:interfaz_amide}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figuras/interfaz_amide.png}
+  \caption{Interfaz principal del software AMIDE (\textit{A Medical Image Data Examiner}), utilizado para la visualización y análisis cuantitativo de los volúmenes reconstruidos.}
+  \label{fig:interfaz_amide}
+\end{figure}
 
 \subsubsection{Definición de Regiones de Interés (ROIs)}
 
 Para evaluar la calidad de la imagen y calcular las métricas de desempeño, es necesario medir la concentración de actividad en zonas específicas del fantoma. Dada la geometría del fantoma Derenzo (formado por varillas cilíndricas), se ha seguido la siguiente metodología:
 
 \begin{enumerate}
-  \item \textbf{Selección de Geometría:} Se han utilizado ROIs volumétricas de tipo \textbf{Cilindro Elíptico} (\textit{Elliptic Cylinder}). Esta geometría se ajusta óptimamente a la forma física de las varillas del fantoma, minimizando la inclusión de vóxeles de borde que podrían introducir errores por volumen parcial.
+  \item \textbf{Selección de Geometría:} Se han utilizado ROIs volumétricas de tipo Cilindro Elíptico (\textit{Elliptic Cylinder}). Esta geometría se ajusta óptimamente a la forma física de las varillas del fantoma, minimizando la inclusión de vóxeles de borde que podrían introducir errores por volumen parcial.
   \item \textbf{Estrategia de Posicionamiento Consistente:} Para garantizar que las comparaciones entre diferentes simulaciones (Ideal vs. Realista vs. Optimizada) sean científicamente válidas, se ha aplicado el siguiente protocolo:
         \begin{itemize}
-          \item Las ROIs se dibujaron inicialmente sobre la imagen de la \textbf{Simulación Ideal} (\texttt{SIM\_IDEAL}), donde la ausencia de ruido y la nitidez de los bordes permiten un posicionamiento perfecto sobre las varillas calientes y el fondo.
+          \item Las ROIs se dibujaron inicialmente sobre la imagen de la Simulación Ideal (\texttt{SIM\_IDEAL}), donde la ausencia de ruido y la nitidez de los bordes permiten un posicionamiento perfecto sobre las varillas calientes y el fondo.
           \item Una vez definido el conjunto de ROIs (varillas de distintos diámetros y región de fondo), este se copió y aplicó exactamente en las mismas coordenadas espaciales a todas las demás imágenes reconstruidas. Esto asegura que las variaciones medidas se deben exclusivamente a los efectos físicos y de procesado, y no a errores manuales de delimitación.
         \end{itemize}
   \item \textbf{Regiones Definidas:}
@@ -163,6 +170,15 @@ Para evaluar la calidad de la imagen y calcular las métricas de desempeño, es 
           \item \textbf{ROI de Fondo ($ROI_{bkg}$):} Se definió una región cilíndrica de gran volumen en una zona uniforme del fantoma, alejada de las varillas activas, para caracterizar el ruido de fondo.
         \end{itemize}
 \end{enumerate}
+
+La disposición y el ajuste de estas ROIs cilíndricas sobre los sectores activos del fantoma Derenzo en el entorno de AMIDE se ilustran en la Figura \ref{fig:roi_amide}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figuras/roi_amide.png}
+  \caption{Definición de las Regiones de Interés (ROIs) cilíndricas sobre la imagen reconstruida de la simulación ideal del fantoma Derenzo en el entorno de AMIDE.}
+  \label{fig:roi_amide}
+\end{figure}
 
 \subsubsection{Obtención de la Intensidad y Estadística}
 
@@ -204,7 +220,7 @@ Donde:
 En un sistema ideal sin ruido de fondo, si el fantoma solo tiene actividad en las varillas, $\mu_{bkg}$ tendería a cero y el CRC tendería a infinito.
 En el caso del $^{86}\text{Y}$, la presencia de coincidencias triples y aleatorias eleva artificialmente el valor de $\mu_{bkg}$, lo que reduce drásticamente el denominador y colapsa el valor del CRC. Por tanto, el objetivo principal de la optimización de la ventana de energía (ver sección \ref{subsec:fase4}) es reducir $\mu_{bkg}$ para maximizar el CRC.
 
-Adicionalmente, se espera que el CRC varíe en función del diámetro de la varilla debido al \textbf{Efecto de Volumen Parcial (PVE)}. Las varillas más pequeñas (inferiores a 2-3 veces la resolución espacial del sistema) sufrirán una pérdida de señal ($\mu_{hot}$ menor a la real) debido al vertido de cuentas (\textit{spill-out}) hacia el fondo, resultando en CRCs menores que las varillas grandes.
+Adicionalmente, se espera que el CRC varíe en función del diámetro de la varilla debido al Efecto de Volumen Parcial (PVE). Las varillas más pequeñas (inferiores a 2-3 veces la resolución espacial del sistema) sufrirán una pérdida de señal ($\mu_{hot}$ menor a la real) debido al vertido de cuentas (\textit{spill-out}) hacia el fondo, resultando en CRCs menores que las varillas grandes.
 
 \subsection{Relación Señal-Ruido (SNR).}
 
@@ -241,7 +257,7 @@ Para garantizar la validez clínica de los resultados, se ha modelado un entorno
 \subsection{Modelado del escáner: Geometría del Bruker PET/CT Si78.}
 \label{subsec:metodologia:escenario_sim:geometria_bruker}
 
-El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial \textbf{Bruker PET/CT Si78}. La geometría se ha definido en Blender y se ha exportado a geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}) gracias al plugin para Blender de \penred.
+El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial Bruker PET/CT Si78. La geometría se ha definido en Blender y se ha exportado a geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}) gracias al plugin para Blender de \penred.
 
 El modelo virtual consta de un tres anillos de detectores con las siguientes características:
 
@@ -250,7 +266,7 @@ El modelo virtual consta de un tres anillos de detectores con las siguientes car
   \item \textbf{Estructura Axial:} El sistema completo consta de 3 anillos contiguos, cubriendo un Campo de Visión (FOV) axial suficiente para albergar el fantoma completo.
   \item \textbf{Dimensiones del Módulo:} Cada bloque detector tiene unas dimensiones de superficie activa de $\SI{48.0}{\milli\meter} \times \SI{48.0}{\milli\meter}$ y un espesor de cristal de $\SI{10.0}{\milli\meter}$.
   \item \textbf{Diámetro del Escáner:} La distancia entre detectores opuestos se ha fijado en $\SI{117.0}{\milli\meter}$.
-  \item \textbf{Material del Centelleador:} Se ha asignado al volumen sensible las propiedades físicas del \textbf{LYSO} (Lutecio-Itrio Oxiortosilicato), definiendo su densidad ($\rho = \SI{7.1}{\gram\per\cubic\centi\meter}$) y composición elemental para simular correctamente la atenuación y la eficiencia de detección de los fotones de \SI{511}{\kilo\electronvolt} y los \emph{prompt gammas}.
+  \item \textbf{Material del Centelleador:} Se ha asignado al volumen sensible las propiedades físicas del LYSO (Lutecio-Itrio Oxiortosilicato), definiendo su densidad ($\rho = \SI{7.1}{\gram\per\cubic\centi\meter}$) y composición elemental para simular correctamente la atenuación y la eficiencia de detección de los fotones de \SI{511}{\kilo\electronvolt} y los \emph{prompt gammas}.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -282,7 +298,7 @@ Esta configuración permite reproducir efectos geométricos realistas, como la v
 
 \subsection{El Fantoma Derenzo: Especificaciones y materiales.}
 
-Para evaluar la resolución espacial y el contraste, se ha utilizado un modelo digital del \textbf{Fantoma de Calidad de Imagen (IQ) tipo Derenzo}. El fantoma consiste en un cilindro de PMMA (Poli-metacrilato de metilo) de $\SI{35}{\milli\meter}$ de radio, que contiene perforaciones cilíndricas (varillas) de $\SI{10}{\centi\meter}$ de largo que se rellenan con la disolución radiactiva. Las varillas están agrupadas en seis sectores, variando su diámetro para evaluar distintos niveles de resolución espacial.
+Para evaluar la resolución espacial y el contraste, se ha utilizado un modelo digital del Fantoma de Calidad de Imagen (IQ) tipo Derenzo. El fantoma consiste en un cilindro de PMMA (Poli-metacrilato de metilo) de $\SI{35}{\milli\meter}$ de radio, que contiene perforaciones cilíndricas (varillas) de $\SI{10}{\centi\meter}$ de largo que se rellenan con la disolución radiactiva. Las varillas están agrupadas en seis sectores, variando su diámetro para evaluar distintos niveles de resolución espacial.
 
 Los diámetros de las varillas simuladas son:
 \begin{itemize}
@@ -299,9 +315,9 @@ En cuanto a los materiales, se han definido dos configuraciones para las distint
 
 \subsection{Configuración de la fuente radiactiva (Archivos .nuc).}
 
-La fuente radiactiva se ha simulado utilizando el módulo \textbf{PENNUC} de \penred, el cual requiere archivos de datos nucleares (\texttt{.nuc}) que describen el esquema de desintegración completo.
+La fuente radiactiva se ha simulado utilizando el módulo PENNUC de \penred, el cual requiere archivos de datos nucleares (\texttt{.nuc}) que describen el esquema de desintegración completo.
 
-Estos archivos se han generado a partir de los datos obtenidos de la base de datos de referencia \textbf{NuDat 3} del National Nuclear Data Center \parencite{bnlNuDat}. Se han empleado dos archivos:
+Estos archivos se han generado a partir de los datos obtenidos de la base de datos de referencia NuDat 3 del National Nuclear Data Center \parencite{bnlNuDat}. Se han empleado dos archivos:
 
 \begin{itemize}
   \item \textbf{\texttt{F18.nuc}:} Simula el decaimiento del $^{18}\text{F}$, generando pares de aniquilación puros como referencia.
@@ -315,9 +331,9 @@ Estos archivos se han generado a partir de los datos obtenidos de la base de dat
 
 La simulación Monte Carlo con \texttt{penRed} genera como salida archivos de datos en modo lista que contienen eventos individuales o \textit{singles}. Cada entrada registra la posición, el tiempo, la energía depositada y, crucialmente para la validación, el identificador de la historia (\textit{EventID}) de cada interacción en el detector.
 
-Para reconstruir imágenes PET, es necesario procesar estos eventos individuales para identificar pares de fotones que correspondan a una aniquilación. Dado que este proceso requiere una lógica específica no disponible en las herramientas de reconstrucción estándar, se ha utilizado un software de post-procesado escrito en \textbf{C++}
+Para reconstruir imágenes PET, es necesario procesar estos eventos individuales para identificar pares de fotones que correspondan a una aniquilación. Dado que este proceso requiere una lógica específica no disponible en las herramientas de reconstrucción estándar, se ha utilizado un software de post-procesado escrito en C++
 
-La base del código de post-procesado (\texttt{createCoincidences}) es una herramienta de investigación interna desarrollada en \textbf{Bruker}. Sobre esta arquitectura base, en el marco de este TFG, se han desarrollado e implementado extensiones específicas para incorporar la lógica de detección de triples y separación de isótopos (Multiplexing), adaptando la metodología descrita en la literatura \parencite{Andreyev2011}.
+La base del código de post-procesado (\texttt{createCoincidences}) es una herramienta de investigación interna desarrollada en Bruker. Sobre esta arquitectura base, en el marco de este TFG, se han desarrollado e implementado extensiones específicas para incorporar la lógica de detección de triples y separación de isótopos (Multiplexing), adaptando la metodología descrita en la literatura \parencite{Andreyev2011}.
 
 \subsection{Arquitectura y flujo de datos.}
 
@@ -337,7 +353,7 @@ La arquitectura del software sigue un modelo de procesamiento secuencial basado 
         y se suma un valor aleatorio de una distribución normal $\mathcal{N}(0, \sigma)$ a la energía original. Este paso es fundamental para simular la respuesta real del cristal centelleador y evaluar el rechazo de eventos dispersos (\textit{scatter}). En este trabajo, se estableció una resolución energética del 14\% (FWHM a \SI{511}{\kilo\electronvolt}) y una resolución espacial intrínseca de \SI{0.08}{cm}, valores típicos para este tipo de escáner.
 
   \item \textbf{Salida:}
-        Los eventos de coincidencia identificados se proyectan sobre la superficie de los detectores y se escriben en formato List-Mode (LM), soportando estándares como Bruker LM y CASToR.
+        Los eventos de coincidencia identificados se proyectan sobre la superficie de los detectores y se escriben en formato List-Mode (LM).
 \end{enumerate}
 
 \subsection{Algoritmos de coincidencia:}
@@ -466,7 +482,7 @@ Esto permite identificar qué parte de la degradación de la imagen se debe a la
 El objetivo de esta fase es establecer la referencia absoluta o \textit{Ground Truth} del sistema. Se busca obtener una imagen que dependa exclusivamente de la geometría del escáner y de la distribución de la fuente, eliminando cualquier artefacto por interacción con la materia o ruido aleatorio.
 
 \begin{itemize}
-  \item \textbf{Configuración de Materiales:} Se definen todos los volúmenes del fantoma (varillas y cuerpo) y del entorno como \textbf{vacío} (\texttt{void.mat}). Esto elimina por completo la \textbf{atenuación} y la \textbf{dispersión Compton (\textit{scatter})}. Los fotones viajan en línea recta desde la emisión hasta el detector.
+  \item \textbf{Configuración de Materiales:} Se definen todos los volúmenes del fantoma (varillas y cuerpo) y del entorno como vacío (\texttt{void.mat}). Esto elimina por completo la atenuación y la dispersión Compton (\textit{scatter}). Los fotones viajan en línea recta desde la emisión hasta el detector.
   \item \textbf{Configuración del Detector:} Se define el material del cristal detector como un absorbente perfecto (\texttt{eabs = \SI{1e30}{\electronvolt}}) para asegurar una eficiencia de detección del \SI{100}{\percent} sin dispersión inter-cristal.
   \item \textbf{Post-Procesado:} Se utiliza el modo \textbf{\textit{Take Same History}}. Esto garantiza que solo se reconstruyen pares de fotones que provienen de la misma desintegración nuclear, eliminando matemáticamente el 100\% de las \textbf{coincidencias aleatorias}.
 \end{itemize}
@@ -492,11 +508,11 @@ Aunque la simulación incluye ahora la física completa (interacción en el agua
 Esta fase representa la adquisición clínica real.
 
 \begin{itemize}
-  \item \textbf{Configuración de Simulación:} Se utilizan \textbf{exactamente los mismos archivos de datos} generados en la Fase 2 (misma configuración de materiales y fuentes). No es necesario realizar una nueva simulación Monte Carlo.
+  \item \textbf{Configuración de Simulación:} Se utilizan exactamente los mismos archivos de datos generados en la Fase 2 (misma configuración de materiales y fuentes). No es necesario realizar una nueva simulación Monte Carlo.
   \item \textbf{Post-Procesado:} La diferencia radica exclusivamente en el algoritmo de clasificación. Se cambia al modo \textbf{\textit{Take Closest}}.
 \end{itemize}
 
-Al ignorar la información del historial y emparejar eventos basándose únicamente en la ventana temporal ($2\tau = \SI{5}{\nano\second}$), se introducen las \textbf{coincidencias aleatorias}. Dado que el $^{86}\text{Y}$ genera una alta tasa de \textit{singles} debido a los \textit{prompt gammas}, y que los materiales realistas (agua/aire) generan \textit{scatter} que también contribuye a los \textit{singles}, esta fase captura la degradación máxima de la imagen: atenuación + scatter + randoms.
+Al ignorar la información del historial y emparejar eventos basándose únicamente en la ventana temporal ($2\tau = \SI{5}{\nano\second}$), se introducen las coincidencias aleatorias. Dado que el $^{86}\text{Y}$ genera una alta tasa de \textit{singles} debido a los \textit{prompt gammas}, y que los materiales realistas (agua/aire) generan \textit{scatter} que también contribuye a los \textit{singles}, esta fase captura la degradación máxima de la imagen: atenuación + scatter + randoms.
 
 
 \subsection{ Optimización de Ventanas (Energía y Tiempo).}
