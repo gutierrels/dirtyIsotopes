@@ -1,6 +1,197 @@
-\chapter{Snippets del código fuente del post-procesado}
+\chapter{Código fuente del post-procesado}
 \label{anx:codigo}
 
+En este anejo se presentan los fragmentos más relevantes del código fuente en C++ utilizado para el post-procesado de los datos de simulación generados por \penred. El código completo se encuentra disponible en el repositorio de GitHub referenciado en el Anejo \ref{anx:repo}.
 
-\title{Snippets}
-% \lstinputlisting[language=C++]{postProcess/createCoincidences.cpp}
+\section{Estructura de datos: \texttt{single}}
+
+La estructura \texttt{single} representa un evento individual de detección registrado por el \texttt{Tally Singles} de \penred. Almacena la energía depositada, las coordenadas espaciales, el tiempo de vuelo, el identificador de historia y el módulo detector. La función \texttt{readPenRed} es responsable de leer los datos binarios y de aplicar el \emph{energy blurring} gaussiano.
+
+\begin{lstlisting}[language=C++, caption={Estructura de datos \texttt{single} y función de lectura con \emph{energy blurring}.}, label={lst:single_struct_annex}]
+struct single {
+
+  static constexpr const size_t bufferSize =
+      5 * sizeof(float) + sizeof(double) +
+      3 * sizeof(uint8_t) + sizeof(unsigned long long);
+
+  float e, x, y, z;
+  double t;
+  std::array<uint8_t, 3> info;
+  unsigned long long hist;
+  unsigned module;
+
+  single() : t(1.0e35) {}
+
+  inline int readPenRed(FILE *f, const unsigned m,
+                        const double emin, const double emax,
+                        const double eRes,
+                        std::normal_distribution<double> &normDist,
+                        std::mt19937 &gen) {
+    t = 1.0e35;
+    e = -1.0;
+    module = m;
+
+    char buffer[bufferSize];
+    while (e < emin || e > emax) {
+      if (fread(buffer, 1, bufferSize, f) == bufferSize) {
+        size_t pos = 0;
+        memcpy(&e, buffer, sizeof(float));       pos += sizeof(float);
+        memcpy(&x, buffer + pos, sizeof(float)); pos += sizeof(float);
+        memcpy(&y, buffer + pos, sizeof(float)); pos += sizeof(float);
+        memcpy(&z, buffer + pos, sizeof(float)); pos += sizeof(float);
+        memcpy(&t, buffer + pos, sizeof(double)); pos += sizeof(double);
+        memcpy(&hist, buffer + pos, sizeof(unsigned long long));
+      } else {
+        t = 1.0e35;
+        return 1; // End of file
+      }
+      // Apply energy blurring
+      double sigma = e * eRes / 2.355;
+      e += sigma * normDist(gen);
+    }
+    e /= 1.0e3; // Convert to keV
+    return 0;
+  }
+
+  inline bool operator<(const single &o) const { return t < o.t; }
+};
+\end{lstlisting}
+
+\section{Estructura de datos: \texttt{coincidence}}
+
+La estructura \texttt{coincidence} almacena los datos de una coincidencia detectada en formato compatible con el \emph{List Mode} de Bruker. Contiene el tiempo del evento, las energías de ambos fotones, las posiciones proyectadas en los detectores, el índice del par de detectores y un flag de \emph{gate}.
+
+\begin{lstlisting}[language=C++, caption={Estructura de datos \texttt{coincidence} para la escritura en formato \emph{List Mode}.}, label={lst:coincidence_struct_annex}]
+struct coincidence {
+  double time;
+  float energy1;
+  float energy2;
+  float amount;
+  unsigned short xPosition1;
+  unsigned short yPosition1;
+  unsigned short xPosition2;
+  unsigned short yPosition2;
+  unsigned short pair;
+  unsigned short gate_flag;
+};
+\end{lstlisting}
+
+
+\section{Búsqueda de pares de detectores}
+
+La función \texttt{getPair} determina si dos módulos detectores forman un par válido para establecer una Línea de Respuesta (LOR). La lista de pares permitidos se carga desde un archivo de configuración que define la geometría del campo de visión.
+
+\begin{lstlisting}[language=C++, caption={Función de búsqueda de pares de detectores válidos.}, label={lst:getpair_annex}]
+struct detPair {
+  unsigned a, b;
+  detPair(const unsigned _a, const unsigned _b)
+      : a(_a), b(_b) {}
+  inline bool operator==(const detPair &o) const {
+    return (a == o.a && b == o.b) ||
+           (a == o.b && b == o.a);
+  }
+};
+
+inline unsigned getPair(
+    const std::vector<detPair> &list,
+    const unsigned a, const unsigned b) {
+  const detPair p(a, b);
+  for (unsigned i = 0; i < list.size(); ++i) {
+    if (p == list[i])
+      return i;
+  }
+  return list.size(); // No valid pair found
+}
+\end{lstlisting}
+
+\section{Bucle principal de procesado}
+
+El bucle principal del programa itera sobre todos los eventos individuales, manteniendo una ventana temporal deslizante. En cada iteración, carga los \textit{singles} de todos los módulos detectores que caen dentro de la ventana de coincidencia, los ordena cronológicamente y aplica el algoritmo de coincidencia seleccionado.
+
+\begin{lstlisting}[language=C++, caption={Fragmento del bucle principal de procesado de coincidencias.}, label={lst:main_loop_annex}]
+while (true) {
+  double initTime = nextSingles[0].t;
+  double endTime = initTime + coincidenceWindow;
+  if (initTime > 1.0e20)
+    break; // End of execution
+
+  // Read all singles within time window
+  for (size_t i = 0; i < fmods.size(); ++i) {
+    while (noInTimeSingles[i].t < endTime) {
+      nextSingles.push_back(noInTimeSingles[i]);
+      errRead = noInTimeSingles[i].readPenRed(
+          fmods[i], i, emin, readingUpperLimit,
+          eRes, normDist, gen);
+      if (errRead != 0) {
+        if (errRead == 1) {
+          fclose(fmods[i]);
+          fmods[i] = nullptr;
+        } else {
+          return -4;
+        }
+      }
+    }
+  }
+
+  // Sort new singles chronologically
+  std::sort(nextSingles.begin(), nextSingles.end());
+
+  // Apply coincidence algorithm (switch on coinMethod)
+  // ... (see Listing 3.3, 3.4 and 3.5 in the main text)
+
+  // Remove processed event and continue
+  nextSingles.erase(nextSingles.begin());
+}
+\end{lstlisting}
+
+\section{Escritura condicional para multiplexado}
+
+Cuando se ejecuta el modo \textit{Take Closest Multiplexing}, el software genera dos archivos de salida de forma simultánea: uno con todas las coincidencias dobles (\texttt{data\_AB.lm}) y otro exclusivamente con las coincidencias triples (\texttt{data\_B\_prime.lm}).
+
+\begin{lstlisting}[language=C++, caption={Escritura condicional de archivos de salida para la separación de isótopos.}, label={lst:writing_annex}]
+// Save Bruker format
+if (outputFormat != OUTPUT_FORMAT::CASTOR) {
+  if (outputFormat !=
+        OUTPUT_FORMAT::BRUKER_LM_ONLY_COINCIDENCES ||
+      acceptedCoincidence) {
+    if (fLM != nullptr)
+      fwrite(&c, sizeof(coincidence), 1, fLM);
+
+    if (coinMethod ==
+          COINCIDENCE_METHOD::TAKE_CLOSEST_MULTIPLEXING &&
+        acceptedCoincidence) {
+      // Write all doubles to A+B
+      if (fLM_AB)
+        fwrite(&c, sizeof(coincidence), 1, fLM_AB);
+
+      // Write only triples to B'
+      if (isTriple && fLM_B_prime)
+        fwrite(&c, sizeof(coincidence), 1, fLM_B_prime);
+    }
+  }
+}
+\end{lstlisting}
+
+\section{Enumeraciones de modos de operación}
+
+Las siguientes enumeraciones definen los distintos modos de coincidencia disponibles en el software de post-procesado.
+
+\begin{lstlisting}[language=C++, caption={Enumeraciones de los modos de coincidencia y formatos de salida.}, label={lst:enums_annex}]
+namespace COINCIDENCE_METHOD {
+  enum COINCIDENCE_METHOD : unsigned {
+    TAKE_WINNER_IF_ALL_ARE_GOODS = 0,
+    TAKE_CLOSEST,
+    TAKE_SAME_HISTORY,
+    TAKE_SAME_HISTORY_511,
+    TAKE_CLOSEST_MULTIPLEXING,
+  };
+}
+
+namespace OUTPUT_FORMAT {
+  enum OUTPUT_FORMAT : unsigned {
+    BRUKER_LM = 0,
+    BRUKER_LM_ONLY_COINCIDENCES,
+    CASTOR,
+  };
+}
+\end{lstlisting}

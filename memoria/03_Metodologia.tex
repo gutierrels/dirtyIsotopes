@@ -224,7 +224,7 @@ Adicionalmente, se espera que el CRC varíe en función del diámetro de la vari
 
 \subsection{Relación Señal-Ruido (SNR).}
 
-la Relación Señal-Ruido (SNR, \textit{Signal-to-Noise Ratio}) evalúa la precisión o la \enquote{limpieza} estadística de la imagen. Un SNR alto indica una imagen suave y uniforme en zonas homogéneas, mientras que un SNR bajo indica una imagen \enquote{granulosa} o ruidosa.
+La Relación Señal-Ruido (SNR, \textit{Signal-to-Noise Ratio}) evalúa la precisión o la \enquote{limpieza} estadística de la imagen. Un SNR alto indica una imagen suave y uniforme en zonas homogéneas, mientras que un SNR bajo indica una imagen \enquote{granulosa} o ruidosa.
 
 Para este estudio, se ha utilizado la definición de SNR basada en la estadística de la región de fondo, calculada como:
 
@@ -259,7 +259,7 @@ Para garantizar la validez clínica de los resultados, se ha modelado un entorno
 
 El sistema de detección simulado se basa en las especificaciones técnicas del escáner preclínico comercial Bruker PET/CT Si78. La geometría se ha definido en Blender y se ha exportado a geometría constructiva de cuádricas (\texttt{PEN\_QUADRIC}) gracias al plugin para Blender de \penred.
 
-El modelo virtual consta de un tres anillos de detectores con las siguientes características:
+El modelo virtual consta de tres anillos de detectores con las siguientes características:
 
 \begin{itemize}
   \item \textbf{Configuración Geométrica:} Disposición octogonal formada por 8 módulos detectores por anillo.
@@ -385,7 +385,7 @@ Se han utilizado tres modos distintos para cubrir las diferentes fases del estud
 
 \textbf{Modo Realista (\textit{Take Closest})}: Este modo se activa con el flag \texttt{TAKE\_CLOSEST}, emula el comportamiento de la electrónica de coincidencias de un escáner PET real. Dado que el búfer de eventos está ordenado temporalmente, el algoritmo selecciona como pareja al primer evento válido que encuentra en el búfer (que cumpla los criterios de energía y geometría). Al estar ordenados por tiempo, este evento es intrínsecamente el que tiene la menor diferencia de tiempo ($\Delta t$) con respecto al evento de referencia. Es el modo estándar para generar datos realistas (secciones \ref{subsec:fase3} y \ref{subsec:fase4}). Introduce naturalmente coincidencias aleatorias (\textit{randoms}) si la tasa de cuentas es alta, tal como ocurriría en un detector físico.
 
-\begin{lstlisting}[language=C++, caption={Implementación de la lógica de detección basada en tomar el primer evento válido dentro de la ventana de coincidencia.}, label={lst:take_closest}]
+\begin{lstlisting}[language=C++, caption={Implementación de la lógica de detección basada en tomar el primer evento válido dentro de la ventana de coincidencia.}, label={lst:take_closest_code}]
 	case COINCIDENCE_METHOD::TAKE_CLOSEST:
     default:
       for (size_t i = 1; i < nextSingles.size(); ++i) {
@@ -584,20 +584,12 @@ En esta fase final, se diseñó un experimento para validar la capacidad de sepa
 
 Se modificó el fantoma para contener dos fuentes radiactivas distintas en regiones separadas espacialmente:
 
-\begin{enumerate}
-  \item \textbf{Ventana de Energía (EW):} El objetivo es rechazar los fotones que han sufrido \textit{scatter} y, específicamente para el $^{86}\text{Y}$, filtrar los \textit{prompt gammas} de menor energía (como el de \SI{628}{\kilo\electronvolt}) que contaminan la ventana estándar. Se definieron tres ventanas centradas en el fotopico de \SI{511}{\kilo\electronvolt}, progresivamente más estrechas:
-        \begin{itemize}
-          \item \textbf{EW 20\%:} [\SI{409}{\kilo\electronvolt}, \SI{613}{\kilo\electronvolt}]
-          \item \textbf{EW 15\%:} [\SI{434}{\kilo\electronvolt}, \SI{588}{\kilo\electronvolt}].
-          \item \textbf{EW 10\%:} [\SI{460}{\kilo\electronvolt}, \SI{562}{\kilo\electronvolt}].
-        \end{itemize}
+\begin{itemize}
+  \item \textbf{Región A:} Varilla llena exclusivamente con $^{18}\text{F}$ (isótopo puro).
+  \item \textbf{Región B:} Varilla llena exclusivamente con $^{86}\text{Y}$ (isótopo sucio).
+\end{itemize}
 
-  \item \textbf{Ventana de Coincidencia (CW):} El objetivo es reducir la tasa de coincidencias aleatorias, la cual es crítica en el $^{86}\text{Y}$. Se probaron reducciones respecto al valor estándar:
-        \begin{itemize}
-          \item \textbf{CW = \SI{4}{\nano\second}:}
-          \item \textbf{CW = \SI{3}{\nano\second}:}
-        \end{itemize}
-\end{enumerate}
+El post-procesado se ejecutó en modo \textbf{\textit{Take Closest Multiplexing}} con una ventana de energía del 10\% [\SI{460}{\kilo\electronvolt}, \SI{562}{\kilo\electronvolt}], una ventana de coincidencia de \SI{4}{\nano\second} y un umbral de detección de \textit{prompt gamma} de \SI{650}{\kilo\electronvolt}.
 
 \subsection*{Asignación de materiales }
 
@@ -635,7 +627,7 @@ Para esta fase, la geometría distingue cinco regiones: mundo, detectores, cuerp
     \includegraphics[width=\linewidth]{materiales_mp.png}
   \end{minipage}
 
-  \caption{Resumen de la asignación de materiales en la geometría de simulación según la fase experimental. Los colores (cuadrados) se corresponden con la visualización gráfica de la derecha. En la fase realista se introducen materiales físicos (agua, aire) y física detallada en el detector para evaluar el \textit{scatter} y la atenuación.}
+  \caption{Asignación de materiales en la geometría de simulación para la prueba de concepto de multiplexado (Fase 5). Los colores (cuadrados) se corresponden con la visualización gráfica de la derecha. Todas las regiones emplean materiales realistas (agua, aire, LYSO).}
   \label{fig:materiales_mp}
 \end{figure}
 
@@ -652,10 +644,6 @@ Para esta fase, la geometría distingue cinco regiones: mundo, detectores, cuerp
   \caption{Modelo 3D del fantoma para el estudio de multiplexado.}
   \label{fig:multiplexado}
 \end{figure}
-\begin{itemize}
-  \item \textbf{Región A:} Varilla llena exclusivamente con $^{18}\text{F}$ (isótopo puro).
-  \item \textbf{Región B:} Varilla llena exclusivamente con $^{86}\text{Y}$ (isótopo sucio).
-\end{itemize}
 
 \textbf{Metodología de Separación:}
 El flujo de trabajo aplicado consta de tres etapas:

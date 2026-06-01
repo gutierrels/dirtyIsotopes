@@ -1,0 +1,202 @@
+
+#
+#
+#    Copyright (C) 2019 Universitat de València - UV
+#    Copyright (C) 2019 Universitat Politècnica de València - UPV
+#
+#    This file is part of PenRed: Parallel Engine for Radiation Energy Deposition.
+#
+#    PenRed is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    PenRed is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with PenRed.  If not, see <https://www.gnu.org/licenses/>. 
+#
+#
+#    contact emails:
+#
+#        vicent.gimenez.alventosa@gmail.com
+#        vicente.gimenez@uv.es
+#    
+#
+
+
+#########################
+##  SOURCES           ###
+#########################
+
+#------------------------
+#  Source 1
+#########################
+
+sources/generic/source1/nhist 1.0e10
+sources/generic/source1/kpar "positron"
+sources/generic/source1/record-time true
+sources/generic/source1/source-material 4
+
+# PENNUC
+#sources/generic/source1/specific/type "PENNUC"
+#sources/generic/source1/specific/nucleide_filename "../isotopes/Y86.nuc"
+#sources/generic/source1/specific/age true
+#sources/generic/source1/specific/source-material 4
+
+# Directional sampling
+#########################
+
+sources/generic/source1/direction/type "CONE"
+
+
+# Set theta
+sources/generic/source1/direction/theta 180.0
+
+# Set phi
+sources/generic/source1/direction/phi 360.0
+
+# Set oberture (alpha)
+sources/generic/source1/direction/alpha 0.0
+
+
+# Energy sampling
+#########################
+
+sources/generic/source1/energy/type "MONOENERGETIC"
+
+# Set energy
+sources/generic/source1/energy/energy 0.6335e6
+
+
+# Time sampling
+#########################
+
+sources/generic/source1/time/type "DECAY"
+sources/generic/source1/time/halfLife 6586.26
+sources/generic/source1/time/time/time0 0.0
+sources/generic/source1/time/time/time1 3600.0
+
+
+# Spatial sampling
+#########################
+
+sources/generic/source1/spatial/type "CYLINDER"
+
+# Set origin
+sources/generic/source1/spatial/position/x 0.0
+sources/generic/source1/spatial/position/y 0.0
+sources/generic/source1/spatial/position/z 7.5
+
+# Set cyl size
+sources/generic/source1/spatial/size/rmin 0.0
+sources/generic/source1/spatial/size/rmax 3.5
+sources/generic/source1/spatial/size/dzmin 0.0
+sources/generic/source1/spatial/size/dzmax 5.0
+
+
+#########################
+##  TALLIES           ###
+#########################
+
+#tallies/tracks/type "TRACK"
+#tallies/tracks/nhists 1000
+
+tallies/singles/type "SINGLES"
+
+tallies/singles/energy/single/min 200.0e3
+tallies/singles/energy/single/max 1200.0e3
+
+tallies/singles/time/min 0
+tallies/singles/time/max 3600.0
+tallies/singles/time/join 5.0e-9
+
+tallies/singles/filters/detections/min 2
+tallies/singles/filters/detections/max 3
+
+tallies/singles/filters/pileup false
+
+tallies/singles/filters/scatter false
+
+tallies/singles/clear True
+
+tallies/singles/detectors [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+
+tallies/singles/save/weight false
+tallies/singles/save/metadata false
+tallies/singles/save/history true
+
+
+#########################
+#  GEOMETRY PARAMETERS  #
+#########################
+
+geometry/type "PEN_QUADRIC"
+geometry/input-file "derenzo.geo"
+geometry/processed-geo-file "report.geo"
+
+
+geometry/kdet/1  1
+geometry/kdet/2  2
+geometry/kdet/3  3
+geometry/kdet/4  4
+geometry/kdet/5  5
+geometry/kdet/6  6
+geometry/kdet/7  7
+geometry/kdet/8  8
+geometry/kdet/9  9
+geometry/kdet/10  10
+geometry/kdet/11  11
+geometry/kdet/12  12
+geometry/kdet/13  13
+geometry/kdet/14  14
+geometry/kdet/15  15
+geometry/kdet/16  16
+geometry/kdet/17  17
+geometry/kdet/18  18
+geometry/kdet/19  19
+geometry/kdet/20  20
+geometry/kdet/21  21
+geometry/kdet/22  22
+geometry/kdet/23  23
+geometry/kdet/24  24
+
+#########################
+#       MATERIALS       #
+#########################
+
+materials/detMat/number 1
+materials/detMat/eabs/electron 1.0e30
+materials/detMat/eabs/positron 1.0e30
+materials/detMat/eabs/gamma 1.0e3
+materials/detMat/filename "detMat.mat"
+
+materials/world/number 2
+materials/world/eabs/electron 1.0e30
+materials/world/eabs/positron 1.0e30
+materials/world/eabs/gamma 1.0e3
+materials/world/filename "void.mat"
+
+materials/activeMat/number 4
+materials/activeMat/eabs/electron 1.0e30
+#materials/activeMat/range/positron 0.05
+materials/activeMat/eabs/gamma 1.0e3
+materials/activeMat/eabs/positron 20.0e35
+materials/activeMat/filename "void.mat"
+
+materials/attMat/number 3
+materials/attMat/eabs/electron 1.0e30
+materials/attMat/eabs/positron 1.0e35
+materials/attMat/eabs/gamma 1.0e3    
+materials/attMat/filename "void.mat"
+
+#########################
+# SIMULATION PARAMETERS #
+#########################
+
+simulation/threads 0
+simulation/seedPair 20
+simulation/max-time 600

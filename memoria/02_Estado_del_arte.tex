@@ -7,7 +7,7 @@
 \subsection{Proceso de desintegración radiactiva}
 La Medicina Nuclear es una especialidad médica que utiliza sustancias radiactivas con fines diagnósticos. Estas sustancias, denominadas radiofármacos o radiotrazadores, alcanzan estabilidad mediante la emisión de partículas elementales y ondas electromagnéticas, dando lugar a la aparición de nuevos nucleidos que pueden ser estables o inestables, en este último caso dan a lugar a nuevos procesos de desintegración.
 
-Los procesos básicos de desintegración son: desintegración alfa, desintegración beta, desintegración gamma y captura eletrónica. Aunque en el contexto de este trabajo abordaremos los procesos de desintegración beta y gamma, a continuación se presenta una breve descripción de cada uno de ellos.
+Los procesos básicos de desintegración son: desintegración alfa, desintegración beta, desintegración gamma y captura electrónica. Aunque en el contexto de este trabajo abordaremos los procesos de desintegración beta y gamma, a continuación se presenta una breve descripción de cada uno de ellos.
 
 \subsubsection{Desintegración beta}
 
@@ -21,7 +21,7 @@ La desintegración $\beta^{+}$ se produce cuando un protón se transforma en un 
       ^{A}_{Z}X \rightarrow ^{A}_{Z-1}Y + \beta^{+} + \nu \label{eq:desintegracion_beta_mas}
 \end{equation}
 
-Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $\beta^{+}$ es el positrón emitido y $\nu$ es el neutrino emitido. Un neutrino es una partícula sin carga elétrica y con masa en reposo casi nula. Por lo tanto, no tiene importancia desde el punto de vista radio-biológico.
+Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $\beta^{+}$ es el positrón emitido y $\nu$ es el neutrino emitido. Un neutrino es una partícula sin carga eléctrica y con masa en reposo casi nula. Por lo tanto, no tiene importancia desde el punto de vista radio-biológico.
 
 \subsubsection{Desintegración gamma}
 
@@ -33,12 +33,12 @@ Este proceso se produce cuando el núcleo se encuentra con un exceso de energía
 
 Donde $X^{*}$ es el núcleo en estado excitado, $X$ es el núcleo en estado fundamental y $\gamma$ es el fotón gamma emitido.
 
-\subsubsection{Captura Eletrónica}
+\subsubsection{Captura Electrónica}
 
 La captura electrónica es un proceso en el que el núcleo atómico captura uno de los electrones de su corteza electrónica y se transforma en un neutrón, según el proceso:
 
 \begin{equation}
-      ^{A}_{Z}X + e^{-} \rightarrow ^{A}_{Z-1}Y + \nu \label{eq:captura_eletronica}
+      ^{A}_{Z}X + e^{-} \rightarrow ^{A}_{Z-1}Y + \nu \label{eq:captura_electronica}
 \end{equation}
 
 Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $e^{-}$ es el electrón capturado y $\nu$ es el neutrino emitido.
@@ -46,7 +46,7 @@ Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $e^{-}$ es el electrón 
 
 La Tomografía por Emisión de Positrones (PET) es una técnica de imagen
 que permite la visualización cuantitativa de procesos fisiológicos y
-metabólicos \emph{in vivo}. Para la obrención de imágenes PET se utiliza como radiotrazador un emisor de positrones (radionúclido $\beta^+$ unido a una molécula biológicamente activa), este se administra al sujeto y se distribuye en el organismo en función de su afinidad biológica \cite{heiss2012positron}. Un positrón emitido por el núcleo recorre una distancia denominada rango del positrón, normalmente submilimétrica, durante la que pierde su energía cinética mediante colisiones con los átomos de su entorno hasta que que se recombina con un electrón para dar lugar a una reacción de aniquilación, dando lugar a dos fotones gamma simultáneos de \SI{511}{\kilo\electronvolt} cada uno que se emiten en direcciones opuestas formando un ángulo de aproximadamente \SI{180}{\degree} entre si (Ver Figura \ref{fig:reaccion_aniquilacion}).
+metabólicos \emph{in vivo}. Para la obtención de imágenes PET se utiliza como radiotrazador un emisor de positrones (radionúclido $\beta^+$ unido a una molécula biológicamente activa), este se administra al sujeto y se distribuye en el organismo en función de su afinidad biológica \cite{heiss2012positron}. Un positrón emitido por el núcleo recorre una distancia denominada rango del positrón, normalmente submilimétrica, durante la que pierde su energía cinética mediante colisiones con los átomos de su entorno hasta que se recombina con un electrón para dar lugar a una reacción de aniquilación, dando lugar a dos fotones gamma simultáneos de \SI{511}{\kilo\electronvolt} cada uno que se emiten en direcciones opuestas formando un ángulo de aproximadamente \SI{180}{\degree} entre sí (ver Figura \ref{fig:reaccion_aniquilacion}).
 
 \begin{figure}[H]
       \centering
@@ -62,7 +62,7 @@ al paciente (Figura \ref{fig:deteccion_coincidencia}). La base de la formación 
 
 \begin{enumerate}
       \item Cada uno de los fotones detectados tiene una energía de \SI{511}{\kilo\electronvolt}
-      \item El intervalo de de tiempo entre las dos detecciones es inferior al tiempo definido en la ventana de coincidencia (del orden de varios nanosegundos).
+      \item El intervalo de tiempo entre las dos detecciones es inferior al tiempo definido en la ventana de coincidencia (del orden de varios nanosegundos).
 \end{enumerate}
 
 \begin{figure}[H]
@@ -116,7 +116,7 @@ práctica, existen diferentes tipos de eventos que afectan a la calidad y
 cuantificación de la imagen:
 
 \begin{itemize}
-      \item \textbf{Coincidencias Dispersas (\emph{Scatter}):} Los fotones pueden interaccionar con el medio antes de alcanzar los detectores por medio de la dispersión Compton, manteniendo su energía dentro de la ventana de energía (rango de energías de alrededor de los \SI{511}{\kilo\electronvolt} establecido para admitir detecciónes). Aunque provienen de la misma aniquilación, la dispersión cambia la dirección del fotón, por lo que la LOR reconstruida no pasa por el punto de emisión real (Fig. \ref{fig:tipos_coincidencia} B).
+      \item \textbf{Coincidencias Dispersas (\emph{Scatter}):} Los fotones pueden interaccionar con el medio antes de alcanzar los detectores por medio de la dispersión Compton, manteniendo su energía dentro de la ventana de energía (rango de energías de alrededor de los \SI{511}{\kilo\electronvolt} establecido para admitir detecciones). Aunque provienen de la misma aniquilación, la dispersión cambia la dirección del fotón, por lo que la LOR reconstruida no pasa por el punto de emisión real (Fig. \ref{fig:tipos_coincidencia} B).
 
       \item \textbf{Coincidencias Aleatorias (\emph{Randoms}):} Ocurren cuando dos
             fotones de \SI{511}{\kilo\electronvolt} provenientes de dos aniquilaciones diferentes son detectados
