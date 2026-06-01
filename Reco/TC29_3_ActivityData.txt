@@ -1,6 +1,0 @@
-MeasurementTime=0
-IsotopeHalfLife=6588.0
-Activity=58.92644189955985
-IsotopeName="FDG"
-IsotopeBranchingFraction=0.98
-IsotopeCalibWindow=0.3

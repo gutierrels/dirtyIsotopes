@@ -1,2 +1,0 @@
-imgFile=\\127.0.0.1\nmi_data\TCFiles\norm.img
-imgFileSize=1638400000
