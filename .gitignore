@@ -1,3 +1,42 @@
-tfg_Guillermo.*
-!tfg_Guillermo.tex
+# ─── LaTeX build artifacts ────────────────────────────────────────────────────
+tfg_Guillermo.aux
+tfg_Guillermo.bbl
+tfg_Guillermo.bcf
+tfg_Guillermo.blg
+tfg_Guillermo.fdb_latexmk
+tfg_Guillermo.fls
+tfg_Guillermo.idx
+tfg_Guillermo.ilg
+tfg_Guillermo.ind
+tfg_Guillermo.out
+tfg_Guillermo.run.xml
+tfg_Guillermo.synctex.gz
+tfg_Guillermo.toc
+tfg_Guillermo.pdf
+indent.log
 *.log
+*.aux
+*.toc
+
+# ─── C++ build artifacts ──────────────────────────────────────────────────────
+*.o
+*.out
+postProcess/createCoincidences
+postProcess/perfectCoin2LM
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.ipynb_checkpoints/
+
+# ─── Large data files (keep scripts, ignore raw simulation output) ────────────
+*.img
+*.lm
+*.root
+
+# ─── OS / Editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
