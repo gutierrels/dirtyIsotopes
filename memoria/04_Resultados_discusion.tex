@@ -32,18 +32,20 @@ La Tabla \ref{tab:validacion_espectro} compara las energías de los picos observ
     \centering
     \caption{Comparación entre las energías de emisión simuladas y los datos nucleares de referencia para el $^{86}\text{Y}$.}
     \label{tab:validacion_espectro}
-    \begin{tabular}{c c c c}
-        \hline
-        \textbf{Origen}        & \textbf{Energía Teórica (keV)} & \textbf{Energía Simulada (keV)} & \textbf{Intensidad Relativa (\%)} \\
-        \hline
-        Aniquilación $\beta^+$ & 511.0                          & 511                             & -                                 \\
-        Prompt $\gamma_1$      & 627.7                          & $\sim 628$                      & 32.6                              \\
-        Prompt $\gamma_2$      & 1076.6                         & $\sim 1077$                     & 82.5                              \\
-        Prompt $\gamma_3$      & 1153.1                         & $\sim 1153$                     & 30.5                              \\
-        Prompt $\gamma_4$      & 1854.4                         & $\sim 1854$                     & 17.2                              \\
-        Prompt $\gamma_5$      & 1920.7                         & $\sim 1921$                     & 20.8                              \\
-        \hline
-    \end{tabular}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{c c c c}
+            \hline
+            \textbf{Origen}        & \textbf{Energía Teórica (keV)} & \textbf{Energía Simulada (keV)} & \textbf{Intensidad Relativa (\%)} \\
+            \hline
+            Aniquilación $\beta^+$ & 511.0                          & 511                             & -                                 \\
+            Prompt $\gamma_1$      & 627.7                          & $\sim 628$                      & 32.6                              \\
+            Prompt $\gamma_2$      & 1076.6                         & $\sim 1077$                     & 82.5                              \\
+            Prompt $\gamma_3$      & 1153.1                         & $\sim 1153$                     & 30.5                              \\
+            Prompt $\gamma_4$      & 1854.4                         & $\sim 1854$                     & 17.2                              \\
+            Prompt $\gamma_5$      & 1920.7                         & $\sim 1921$                     & 20.8                              \\
+            \hline
+        \end{tabular}%
+    }
 \end{table}
 
 La coincidencia precisa entre los picos simulados y los teóricos valida el uso del archivo \texttt{Y86.nuc} y el correcto funcionamiento del módulo \texttt{PENNUC} para generar las cascadas gamma que causan las coincidencias triples. Es notable la alta intensidad del pico de \SI{1077}{\kilo\electronvolt}, que supera en probabilidad de emisión por desintegración a los propios fotones de aniquilación, anticipando su gran impacto en la señal de fondo.
@@ -117,7 +119,7 @@ El análisis revela dos efectos principales:
     \item \textbf{Atenuación:} Una fracción significativa de los fotones es absorbida o dispersada fuera del campo de visión, lo que reduce el número total de cuentas verdaderas y, por tanto, incrementa el ruido estadístico.
 \end{itemize}
 
-Cuantitativamente, el CRC se desplomó de 185.27 en la fase ideal a 11.57 en esta fase, mientras que el SNR se situó en 3.13. Esto representa una pérdida de contraste del 93.7\% atribuible exclusivamente a la física de interacción en el objeto y a los \textit{prompt gammas} no filtrados por el procesado ideal.
+Cuantitativamente, el CRC se desplomó de 185.27 en la fase ideal a 11.57 en esta fase, mientras que el SNR se situó en 3.13. Esto representa una pérdida de contraste del 93.7\% atribuible exclusivamente a la física de interacción en el objeto y a los \textit{prompt gammas} no filtrados por el procesado ideal. Este efecto también se evidencia claramente en los espectros de energía de los detectores (ver Figura \ref{fig:espectro_scatter}), donde aparece un denso fondo continuo a bajas energías provocado por la dispersión Compton, el cual es notablemente más severo en el $^{86}\text{Y}$ debido al \textit{down-scatter} de sus fotones de alta energía.
 
 \begin{figure}[htbp]
     \centering
@@ -142,7 +144,7 @@ Cuantitativamente, el CRC se desplomó de 185.27 en la fase ideal a 11.57 en est
 En la Fase 3, se introdujo el comportamiento de un detector realista, desactivando el filtro por historial (\textit{Take Closest}). Esto añade las coincidencias aleatorias (\textit{randoms}) a los efectos de \textit{scatter} y atenuación ya presentes.
 
 El resultado es la imagen de referencia realista (IMG\_CLOSEST\_TIME-Y86), que representa la calidad de imagen obtenida en un escáner estándar sin correcciones avanzadas. Visualmente, el fondo de la imagen se vuelve significativamente más ruidoso y elevado, degradando aún más el contraste.
-Cuantitativamente, el CRC se mantuvo en un valor similar de 11.73, mientras que el SNR empeoró un 12.5\% (de 3.13 a 2.74), confirmando que el mayor daño al contraste proviene de los eventos de \textit{scatter} y \textit{prompt gammas} correlacionados, y que los \textit{randoms} contribuyen principalmente al ruido estadístico general.
+Cuantitativamente, el CRC se mantuvo en un valor similar de 11.73, mientras que el SNR empeoró un 12.5\% (de 3.13 a 2.74), confirmando que el mayor daño al contraste proviene de los eventos de \textit{scatter} y \textit{prompt gammas} correlacionados, y que los \textit{randoms} contribuyen principalmente al ruido estadístico general. Este incremento del ruido estadístico global también deja su firma en los espectros de energía de la configuración realista final (ver Figura \ref{fig:espectro_randoms}).
 
 \begin{figure}[htbp]
     \centering
@@ -181,7 +183,7 @@ Para aislar el impacto específico de la física de desintegración del $^{86}\t
         \caption{Imagen Realista con $^{86}\text{Y}$.}
         \label{fig:comparativa_y86}
     \end{subfigure}
-    \caption{Comparación de la calidad de imagen en condiciones realistas. La imagen de $^{18}\text{F}$ presenta un fondo significativamente más limpio y un contraste superior, demostrando el impacto negativo de los \textit{prompt gammas} del $^{86}\text{Y}$.}
+    \caption{Comparación de la calidad de imagen en condiciones realistas. Para asegurar una comparación visual justa, la escala de color (umbral máximo) de ambas imágenes se ha normalizado respecto a su pico de señal. Bajo estas mismas condiciones, la imagen de $^{18}\text{F}$ presenta un fondo significativamente más limpio y un contraste superior, demostrando el impacto negativo de los \textit{prompt gammas} del $^{86}\text{Y}$.}
     \label{fig:comparativa_y86_f18}
 \end{figure}
 
@@ -330,10 +332,10 @@ Las imágenes reconstruidas a partir de estos dos \textit{datasets} se muestran 
     \label{fig:multiplexing_inicial}
 \end{figure}
 
-Para recuperar la imagen pura del $^{18}\text{F}$, se aplicó un algoritmo \ref{lst:python_post} de sustracción lineal en Python. Primero, se estimó la contribución de dobles del $^{86}\text{Y}$ (Imagen B) escalando la imagen de triples (B') con un factor $\beta$ determinado experimentalmente. El factor $\beta$, que representa el ratio de dobles a triples para el $^{86}\text{Y}$ en este sistema, se calculó en 75.8.
+Para recuperar la imagen pura del $^{18}\text{F}$, se aplicó un algoritmo \ref{lst:python_post} de sustracción lineal en Python. Primero, se estimó la contribución de dobles del $^{86}\text{Y}$ (Imagen B) escalando la imagen de triples (B') con un factor empírico $F$. Este factor se determinó experimentalmente trazando una Región de Interés (ROI) sobre el cilindro exclusivo de $^{86}\text{Y}$ en ambas imágenes (dobles y triples) y calculando el cociente de sus intensidades medias, obteniendo un valor de 75.8. Cabe señalar que, dado que no se aplican algoritmos de corrección por atenuación en esta prueba de concepto, este factor $F$ empírico es estrictamente válido para la posición espacial de ese ROI y podría presentar dependencias espaciales en distribuciones de actividad más complejas.
 
 \begin{equation}
-    I_{Y86}^{\text{D}} = \beta \cdot I_{Y86}^{\text{T}}
+    I_{Y86}^{\text{D}} = F \cdot I_{Y86}^{\text{T}}
 \end{equation}
 
 Finalmente, esta contribución estimada se sustrajo de la imagen mixta total:

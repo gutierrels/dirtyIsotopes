@@ -5,7 +5,7 @@
 \label{sec:estado_del_arte_fund_teoricos:fundamentos_PET}
 
 \subsection{Proceso de desintegración radiactiva}
-La Medicina Nuclear es una especialidad médica que utiliza sustancias radiactivas con fines diagnósticos. Estas sustancias, denominadas radiofármacos o radiotrazadores, alcanzan estabilidad mediante la emisión de partículas elementales y ondas electromagnéticas, dando lugar a la aparición de nuevos nucleidos que pueden ser estables o inestables, en este último caso dan a lugar a nuevos procesos de desintegración.
+La Medicina Nuclear es una especialidad médica que utiliza sustancias radiactivas con fines diagnósticos y terapéuticos. Estas sustancias, denominadas radiofármacos o radiotrazadores, alcanzan estabilidad mediante la emisión de partículas, dando lugar a la aparición de nuevos nucleidos que pueden ser estables o inestables, en este último caso dan a lugar a nuevos procesos de desintegración.
 
 Los procesos básicos de desintegración son: desintegración alfa, desintegración beta, desintegración gamma y captura electrónica. Aunque en el contexto de este trabajo abordaremos los procesos de desintegración beta y gamma, a continuación se presenta una breve descripción de cada uno de ellos.
 
@@ -13,7 +13,7 @@ Los procesos básicos de desintegración son: desintegración alfa, desintegraci
 
 Existen dos tipos de desintegración beta, la desintegración beta menos ($\beta^{-}$) y la desintegración beta más ($\beta^{+}$), según que se produzca la emisión de un electrón o un positrón. El positrón es la antipartícula del electrón, tiene su misma masa pero con una carga eléctrica positiva del mismo valor que la del electrón.
 
-Las partículas  $\beta$ se emiten con velocidades distintas en cada tipo de desintegración y como la energía de una partícula material depende de su velocidad, se dice que se emiten con energías variables. Desde un punto de vista práctico, se consideran la energía máxima y la energía media.
+Las desintegraciones $\beta$ producen un espectro continuo de energías de emisión para las partículas $\beta$, ya que la energía liberada en la transición se comparte de forma variable con el neutrino (o antineutrino) emitido de forma simultánea. Desde un punto de vista práctico, para caracterizar esta emisión se consideran la energía máxima y la energía media del espectro.
 
 La desintegración $\beta^{+}$ se produce cuando un protón se transforma en un positrón y un neutrón, según la ecuación:
 
@@ -21,17 +21,17 @@ La desintegración $\beta^{+}$ se produce cuando un protón se transforma en un 
       ^{A}_{Z}X \rightarrow ^{A}_{Z-1}Y + \beta^{+} + \nu \label{eq:desintegracion_beta_mas}
 \end{equation}
 
-Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $\beta^{+}$ es el positrón emitido y $\nu$ es el neutrino emitido. Un neutrino es una partícula sin carga eléctrica y con masa en reposo casi nula. Por lo tanto, no tiene importancia desde el punto de vista radio-biológico.
+Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $\beta^{+}$ es el positrón emitido y $\nu$ es el neutrino emitido. El neutrino es una partícula sin carga eléctrica y con una probabilidad de interacción con la materia extremadamente baja, por lo que atraviesa los tejidos sin apenas interaccionar y carece de relevancia desde el punto de vista radiobiológico.
 
 \subsubsection{Desintegración gamma}
 
-Este proceso se produce cuando el núcleo se encuentra con un exceso de energía respecto a la de su estado fundamental. En este caso el exceso de energía se emite en forma de radiación electromagnética que recibe el nombre de fotones gamma. Se puede representar según la siguiente ecuación:
+Este proceso se produce cuando el núcleo se encuentra en un \enquote{estado excitado}, es decir, ocupando un nivel de energía discreto superior al de su estado fundamental. En este caso, la transición hacia un nivel de menor energía (o al estado fundamental) conlleva la emisión de ese exceso de energía en forma de radiación electromagnética, concretamente como fotones gamma de energías bien definidas. Se puede representar según la siguiente ecuación:
 
 \begin{equation}
       ^{A}_{Z}X^{*} \rightarrow ^{A}_{Z}X + \gamma \label{eq:desintegracion_gamma}
 \end{equation}
 
-Donde $X^{*}$ es el núcleo en estado excitado, $X$ es el núcleo en estado fundamental y $\gamma$ es el fotón gamma emitido.
+Donde $X^{*}$ es el núcleo en estado excitado, $X$ es el núcleo en un nivel de menor energía (que puede ser el estado fundamental u otro estado intermedio) y $\gamma$ es el fotón gamma emitido. Cabe destacar que la transición hacia el estado fundamental no tiene por qué darse en un único salto; es habitual que el núcleo decaiga progresivamente a través de una cascada de diferentes niveles de energía, emitiendo múltiples fotones gamma distintos. Esta multiplicidad de emisiones es, de hecho, el origen de la complejidad que presentan los isótopos \enquote{sucios} abordada en este trabajo.
 
 \subsubsection{Captura Electrónica}
 
@@ -46,7 +46,7 @@ Donde $X$ es el núcleo emisor, $Y$ es el núcleo hijo, $e^{-}$ es el electrón 
 
 La Tomografía por Emisión de Positrones (PET) es una técnica de imagen
 que permite la visualización cuantitativa de procesos fisiológicos y
-metabólicos \emph{in vivo}. Para la obtención de imágenes PET se utiliza como radiotrazador un emisor de positrones (radionúclido $\beta^+$ unido a una molécula biológicamente activa), este se administra al sujeto y se distribuye en el organismo en función de su afinidad biológica \cite{heiss2012positron}. Un positrón emitido por el núcleo recorre una distancia denominada rango del positrón, normalmente submilimétrica, durante la que pierde su energía cinética mediante colisiones con los átomos de su entorno hasta que se recombina con un electrón para dar lugar a una reacción de aniquilación, dando lugar a dos fotones gamma simultáneos de \SI{511}{\kilo\electronvolt} cada uno que se emiten en direcciones opuestas formando un ángulo de aproximadamente \SI{180}{\degree} entre sí (ver Figura \ref{fig:reaccion_aniquilacion}).
+metabólicos \emph{in vivo}. Para la obtención de imágenes PET se utiliza como radiotrazador un emisor de positrones (radionúclido $\beta^+$ unido a una molécula biológicamente activa). Dado que el comportamiento químico de los isótopos es indistinguible del de los átomos estables, la molécula marcada se comporta fisiológicamente igual que su equivalente natural, distribuyéndose en el organismo en función de su afinidad biológica \cite{heiss2012positron}. Al desintegrarse, el positrón emitido por el núcleo recorre una distancia denominada rango del positrón, normalmente submilimétrica, durante la que pierde su energía cinética mediante colisiones con los átomos de su entorno hasta que se recombina con un electrón para dar lugar a una reacción de aniquilación, dando lugar a dos fotones gamma simultáneos de \SI{511}{\kilo\electronvolt} cada uno que se emiten en direcciones opuestas formando un ángulo de aproximadamente \SI{180}{\degree} entre sí (ver Figura \ref{fig:reaccion_aniquilacion}).
 
 \begin{figure}[H]
       \centering
@@ -211,7 +211,7 @@ donde $\bar{p}_j$ y $p_j$ son el número esperado y medido de cuentas en el $j$-
 donde:
 \begin{itemize}
       \item $f_i^k$ es la estimación del vóxel $i$ en la iteración $k$,
-      \item $M_{ij}$ es la matriz de sistema que vincula el vóxel $i$ a la proyección $j$,
+      \item $M_{ij}$ es el elemento de la matriz del sistema, que representa la probabilidad de que una emisión originada en el vóxel $i$ sea detectada en la proyección $j$,
       \item $p_j$ es el conteo medido en el elemento de proyección $j$,
       \item $\sum_l M_{lj} f_l^k$ es el conteo esperado en el elemento $j$ para la estimación actual.
 \end{itemize}
@@ -239,7 +239,7 @@ Es importante destacar que el algoritmo MLEM estándar opera bajo la suposición
 Además de los límites físicos intrínsecos (rango y no-colinealidad), la calidad y cuantificación de la imagen PET se ven afectadas por interacciones de los fotones con la materia y limitaciones del detector:
 
 \begin{itemize}
-      \item \textbf{Atenuación:} Es la pérdida de fotones verdaderos debido a su absorción (efecto fotoeléctrico) o dispersión fuera del campo de visión. Depende de la densidad y el espesor del objeto atravesado. Si no se corrige (generalmente usando un mapa de atenuación obtenido por CT), las estructuras profundas aparecen con menos actividad de la real.
+      \item \textbf{Atenuación:} Es la pérdida de fotones verdaderos debido a su absorción (efecto fotoeléctrico) o dispersión fuera del campo de visión. Esta pérdida depende del espesor, la densidad y, de manera fundamental, de la composición elemental del material atravesado (su número atómico efectivo). Si no se corrige (generalmente usando un mapa de atenuación obtenido por CT), las estructuras profundas aparecen con menos actividad de la real.
 
       \item \textbf{Dispersión Compton (\emph{Scatter}):} Como se definió anteriormente, son fotones que cambian de dirección pero siguen siendo detectados. Esto añade un fondo de baja frecuencia a la imagen, reduciendo el contraste y falseando la cuantificación al añadir cuentas en zonas donde no hay actividad.
 
@@ -373,7 +373,7 @@ La capacidad de obtener imágenes de dos procesos biológicos distintos simultá
 El principio fundamental de la tomografía por emisión de positrones se basa en la detección de dos fotones de aniquilación de \SI{511}{\keV} emitidos en direcciones opuestas. En una adquisición convencional, esta característica física hace que las señales provenientes de diferentes radiotrazadores sean indistinguibles energéticamente. Si se inyectan simultáneamente dos trazadores etiquetados con isótopos emisores de positrones estándar (por ejemplo, $^{18}\text{F}$ y $^{11}\text{C}$), el escáner no puede determinar intrínsecamente de qué núcleo proviene cada par de fotones detectado \parencite{Andreyev2011}.
 
 Sin embargo, cuando se trata de isótopos sucios, como en el caso del \yochoseis, la gran presencia de fotones \textit{gamma prompt} de alta energía, conduce a eventos de detección
-que involucran tanto a los dos fotones de aniquilación de \SI{511}{\keV} como a un fotón gamma adicional, lo que se conoce como coincidencias triples. Estos eventos triples son físicamente imposibles en la imagen PET convencional y pueden ser utilizados para distinguir al isótopo sucio del isótopo limpio.
+que involucran tanto a los dos fotones de aniquilación de \SI{511}{\keV} como a un fotón gamma adicional, lo que se conoce como coincidencias triples. Si bien en la imagen PET convencional con isótopos $\beta^+$ puros pueden registrarse tripletes debido a coincidencias aleatorias (un par real detectado simultáneamente con un evento \emph{single} independiente), la emisión intrínseca de una verdadera coincidencia triple originada por la desintegración de un mismo núcleo no se produce. Por tanto, esta firma física puede ser utilizada para distinguir al isótopo sucio del isótopo $\beta^+$ puro.
 
 El estado actual de la técnica ha evolucionado hacia el aprovechamiento de las propiedades de
 desintegración no estándar de ciertos isótopos. La metodología más robusta, y objeto de estudio
@@ -392,7 +392,7 @@ La separación de las distribuciones de actividad de dos isótopos (A y B) en un
 
 \begin{enumerate}
       \item \textbf{Dataset Primario ($D_{A+B}$):} Contiene todos los eventos de coincidencia doble (pares de \SI{511}{\keV}). Dado que tanto el isótopo A como el B emiten positrones, este conjunto representa la superposición de ambas distribuciones de actividad.
-      \item \textbf{Dataset Etiquetado ($D_{B'}$):} Contiene únicamente aquellos eventos en los que se detecta una coincidencia triple: el par de aniquilación (\SI{511}{\keV}) más la \textit{prompt gamma} característica del Isótopo B (en este trabajo, gammas $> \SI{650}{\keV}$).
+      \item \textbf{Dataset Etiquetado ($D_{B'}$):} Contiene únicamente aquellos eventos en los que se detecta una coincidencia triple: el par de aniquilación (\SI{511}{\keV}) más la \textit{prompt gamma} característica del Isótopo B. En este trabajo se utilizan gammas con energía $> \SI{650}{\keV}$; la elección de este alto umbral energético se justifica para minimizar la probabilidad de registrar fotones gamma que hayan sufrido dispersión Compton, evitando así añadir ruido espacial proveniente de fotones dispersados.
 \end{enumerate}
 
 La detección de la \textit{prompt gamma} sirve como una etiqueta temporal que identifica inequívocamente el origen del evento de aniquilación. Debido a que la vida media del positrón en la materia es muy corta, inferior a $\SI{1}{\ns}$ \parencite{Bell1953}, la emisión de la gamma de desexcitación nuclear y la aniquilación se consideran simultáneas dentro de la ventana de coincidencia temporal del escáner \parencite{Andreyev2011}.

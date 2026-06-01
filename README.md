@@ -52,7 +52,7 @@ dirtyIsotopes/
 |---|---|---|
 | Monte Carlo simulation | [PenRed](https://github.com/PenRed/PenRed) + PENNUC module | Particle transport |
 | Coincidence processing | C++17, compiled with `g++` | See `postProcess/compile.sh` |
-| Image reconstruction | [PMOD](https://www.pmod.com/) / TC29 config | Reconstruction parameters in `Reco/` |
+| Image reconstruction | Bruker RecoServer / Albira | Reconstruction parameters in `Reco/` |
 | Image analysis | Python 3 + NumPy / Matplotlib | `factor_substract/read.py` |
 | Thesis document | LaTeX (XeLaTeX + biblatex) | Source in `memoria/` |
 

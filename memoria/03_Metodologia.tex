@@ -32,7 +32,7 @@ Para una correcta comprensión de los resultados obtenidos y del funcionamiento 
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{figuras/particle_track.png}
-  \caption{Ejemplo de la trayectoria de electrones en un medio acuoso. El color muestra el cambio en la energía del electrón. Fuente: Manual de Usuario de PenRed \cite{gimenez2025penred}.}
+  \caption{Ejemplo de la trayectoria de electrones en un medio acuoso. El color muestra el cambio en la energía del electrón. Fuente: Manual de Usuario de PenRed \cite{gimenez2025penred} (Reproducida con permiso de los autores).}
   \label{fig:particle_track}
 \end{figure}
 
@@ -218,7 +218,7 @@ Donde:
 
 \textbf{Interpretación en este trabajo:}
 En un sistema ideal sin ruido de fondo, si el fantoma solo tiene actividad en las varillas, $\mu_{bkg}$ tendería a cero y el CRC tendería a infinito.
-En el caso del $^{86}\text{Y}$, la presencia de coincidencias triples y aleatorias eleva artificialmente el valor de $\mu_{bkg}$, lo que reduce drásticamente el denominador y colapsa el valor del CRC. Por tanto, el objetivo principal de la optimización de la ventana de energía (ver sección \ref{subsec:fase4}) es reducir $\mu_{bkg}$ para maximizar el CRC.
+En el caso del $^{86}\text{Y}$, la presencia de coincidencias triples y aleatorias eleva artificialmente el valor de $\mu_{bkg}$, lo que reduce drásticamente el cociente y colapsa el valor del CRC. Por tanto, el objetivo principal de la optimización de la ventana de energía (ver sección \ref{subsec:fase4}) es reducir $\mu_{bkg}$ para maximizar el CRC.
 
 Adicionalmente, se espera que el CRC varíe en función del diámetro de la varilla debido al Efecto de Volumen Parcial (PVE). Las varillas más pequeñas (inferiores a 2-3 veces la resolución espacial del sistema) sufrirán una pérdida de señal ($\mu_{hot}$ menor a la real) debido al vertido de cuentas (\textit{spill-out}) hacia el fondo, resultando en CRCs menores que las varillas grandes.
 
@@ -482,7 +482,7 @@ Esto permite identificar qué parte de la degradación de la imagen se debe a la
 El objetivo de esta fase es establecer la referencia absoluta o \textit{Ground Truth} del sistema. Se busca obtener una imagen que dependa exclusivamente de la geometría del escáner y de la distribución de la fuente, eliminando cualquier artefacto por interacción con la materia o ruido aleatorio.
 
 \begin{itemize}
-  \item \textbf{Configuración de Materiales:} Se definen todos los volúmenes del fantoma (varillas y cuerpo) y del entorno como vacío (\texttt{void.mat}). Esto elimina por completo la atenuación y la dispersión Compton (\textit{scatter}). Los fotones viajan en línea recta desde la emisión hasta el detector.
+  \item \textbf{Configuración de Materiales:} Se definen todos los volúmenes del fantoma (varillas y cuerpo) y del entorno como vacío (\texttt{void.mat}). Esto elimina por completo la atenuación y la dispersión Compton (\textit{scatter}). Los fotones viajan en línea recta desde la emisión hasta el detector. Adicionalmente, dado que en el vacío el positrón emitido no encontraría electrones con los que interactuar, se ha forzado en la simulación su aniquilación inmediata en el mismo punto de la desintegración nuclear. Esta aproximación metodológica tiene la ventaja añadida de eliminar también el efecto de degradación de imagen asociado al rango del positrón.
   \item \textbf{Configuración del Detector:} Se define el material del cristal detector como un absorbente perfecto (\texttt{eabs = \SI{1e30}{\electronvolt}}) para asegurar una eficiencia de detección del \SI{100}{\percent} sin dispersión inter-cristal.
   \item \textbf{Post-Procesado:} Se utiliza el modo \textbf{\textit{Take Same History}}. Esto garantiza que solo se reconstruyen pares de fotones que provienen de la misma desintegración nuclear, eliminando matemáticamente el 100\% de las \textbf{coincidencias aleatorias}.
 \end{itemize}
@@ -650,21 +650,21 @@ El flujo de trabajo aplicado consta de tres etapas:
 
 \begin{enumerate}
   \item \textbf{Reconstrucción Dual:} Utilizando el modo \textit{Take Closest Multiplexing}, el post-procesado genera dos archivos de coincidencias: \texttt{data\_AB.lm} (todos los dobles) y \texttt{data\_B\_prime.lm} (solo los eventos donde se detectó un tercer gamma). Ambos se reconstruyen independientemente con el \texttt{RecoServer}, obteniéndose la imagen total ($I_{\text{total}}$) y la imagen de triples ($I_{\text{Y86}}^{\text{T}}$).
-  \item \textbf{Estimación de la Contaminación:} Dado que la sensibilidad de detección de triples es mucho menor que la de dobles, la imagen $B'$ representa la distribución espacial del $^{86}\text{Y}$ pero con menor intensidad. Se asume que la contribución del $^{86}\text{Y}$ a los dobles ($I_{\text{Y86}}^{\text{D}}$) es proporcional a la imagen de triples ($I_{\text{Y86}}^{\text{T}}$) mediante un factor de escalado $\beta$:
+  \item \textbf{Estimación de la Contaminación:} Dado que la sensibilidad de detección de triples es mucho menor que la de dobles, la imagen $B'$ representa la distribución espacial del $^{86}\text{Y}$ pero con menor intensidad. Se asume que la contribución del $^{86}\text{Y}$ a los dobles ($I_{\text{Y86}}^{\text{D}}$) es proporcional a la imagen de triples ($I_{\text{Y86}}^{\text{T}}$) mediante un factor de escalado $F$:
 
         \begin{equation}
-          I_{\text{Y86}}^{\text{D}} \approx \beta \cdot I_{\text{Y86}}^{\text{T}}
-          \label{eq:estimacion_beta}
+          I_{\text{Y86}}^{\text{D}} \approx F \cdot I_{\text{Y86}}^{\text{T}}
+          \label{eq:estimacion_F}
         \end{equation}
 
   \item \textbf{Sustracción de Imágenes:} Se aplicó un post-procesado en Python \ref{lst:python_post} para recuperar la imagen del isótopo puro ($^{18}\text{F}$) sustraendo la contaminación estimada de la imagen total:
 
         \begin{equation}
-          I_{\text{F18}} = I_{\text{total}} - \beta \cdot I_{\text{Y86}}^{\text{T}}
+          I_{\text{F18}} = I_{\text{total}} - F \cdot I_{\text{Y86}}^{\text{T}}
           \label{eq:sustraccion}
         \end{equation}
 
-        El factor $\beta$ se determinó experimentalmente comparando la intensidad en las regiones conocidas de solo $^{86}\text{Y}$ en ambas imágenes.
+        El factor $F$ se determinó experimentalmente comparando la intensidad en las regiones conocidas de solo $^{86}\text{Y}$ en ambas imágenes.
 \end{enumerate}
 
 \begin{lstlisting}[language=Python, caption={Post-procesado para la separación de imágenes.}, label={lst:python_post}]
