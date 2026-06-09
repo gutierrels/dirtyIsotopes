@@ -1,0 +1,40 @@
+\frametitle{Mi Desarrollo en C++: Lógica de Triples}
+\begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Detección de Triples}
+                \begin{itemize}
+                    \item \textbf{PET Doble:} Coincidencia temporal estándar.
+                    \item \textbf{Prompt Gamma:} Busca un tercer single con $e > 650$\,keV.
+                          \begin{itemize}
+                              \item \scriptsize Umbral alto: minimiza la aceptación de gammas dispersados (\textit{scatter}).
+                          \end{itemize}
+                    \item \textbf{Salida Dual LM:}
+                          \begin{itemize}
+                              \item \texttt{data\_AB.lm}: Dobles (mixtas).
+                              \item \texttt{data\_B\_prime.lm}: Triples de \yochoseis.
+                          \end{itemize}
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Código C++ de Clasificación}
+                \begin{lstlisting}[language=C++, basicstyle=\ttfamily\tiny, keywordstyle=\color{blue}, commentstyle=\color{green!60!black}, breaklines=true]
+// Filter standard PET singles
+if (nextSingles[i].e > emax) continue;
+iCoincidence = i; iPair = localPair;
+
+// Scan for Prompt Gamma (Triple)
+for (size_t k = 0; k < nextSingles.size(); ++k) {
+  if (k == 0 || k == i) continue;
+  if (nextSingles[k].e >= promptGammaThreshold) {
+    isTriple = true; // Event classified
+    break;
+  }
+}
+\end{lstlisting}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{0.1cm}
+    \hfill {\tiny\color{mcmBlack!40} [Andreyev et al., 2011]}
+    % NOTA DEL PONENTE: Aquí muestro la lógica del algoritmo de multiplexado. Buscamos la pareja convencional de 511 keV. Si en su ventana temporal detectamos un tercer fotón con energía superior a 650 keV, lo clasificamos como triple. Este umbral alto es crítico: minimiza la inclusión de prompt gammas que han sufrido dispersión Compton, las cuales degradarían la resolución espacial. Finalmente, guardamos dos datasets independientes en modo lista.
