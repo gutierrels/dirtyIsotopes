@@ -735,15 +735,36 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
 
 % --- Diapositiva 23 ---
 \begin{frame}{Conclusiones}
-    \begin{block}{Conclusiones Principales del Trabajo}
-        \begin{itemize}\setlength{\itemsep}{0.8em}
-            \item \textbf{Validación del Entorno:} Se validó el entorno Monte Carlo con \penred + \ce{PENNUC} + Blender para el modelado físico de detectores y decaimientos complejos.
-            \item \textbf{Física del Ruido:} Se identificó cuantitativamente que el scatter Compton de los prompt gammas es el principal causante de la pérdida de contraste de la imagen del \yochoseis.
-            \item \textbf{Optimización Paramétrica:} Estrechar la ventana energética al $10\%$ logra una \alert{mejora de contraste de hasta el 79\%} (y del \textbf{63\%} en el análisis global de la memoria) manteniendo un SNR robusto.
-            \item \textbf{Viabilidad de mPET:} Se validó la viabilidad de realizar adquisiciones simultáneas duales (multiplexado) separando las señales mediante coincidencias triples.
-        \end{itemize}
-    \end{block}
-    % NOTA DEL PONENTE: Como conclusiones finales de este trabajo: primero, hemos puesto en marcha y validado un entorno de simulación Monte Carlo preciso; segundo, hemos identificado que el scatter Compton de los prompt gammas es la fuente principal de degradación del contraste; tercero, demostramos que estrechar la ventana de energía al 10% optimiza drásticamente el contraste; y cuarto, demostramos que es viable usar las coincidencias triples para el multiplexado PET.
+    \begin{columns}[T]
+        \begin{column}{0.54\textwidth}
+            \begin{block}{Conclusiones Clave}
+                \begin{itemize}\setlength{\itemsep}{0.6em}
+                    \item \textbf{Validación Monte Carlo:} Entorno preciso y fiel con \penred y Blender.
+                    \item \textbf{Física del Ruido:} El scatter Compton de prompt gammas es el principal origen del ruido.
+                    \item \textbf{Optimización Física:} Contraste aumentado un 79\% estrechando la ventana EW al 10\%.
+                    \item \textbf{Multiplexado mPET:} Separación de trazadores viable mediante coincidencias triples.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.41\textwidth}
+            \begin{exampleblock}{Transferencia y Relevancia}
+                \centering
+                \small
+                \vspace{0.1cm}
+                \textbf{Colaboración con Bruker} para la futura optimización comercial del mPET.\par
+                \vspace{0.25cm}
+                \hrule
+                \vspace{0.25cm}
+                Aceptado para comunicación en el:\par
+                \textbf{European Congress of Medical Physics}\par
+                \vspace{0.25cm}
+                \includegraphics[width=0.65\textwidth]{logo_congreso.png}\par
+                \vspace{0.05cm}
+                {\tiny\color{mcmBlack!50} 6th ECMP (Valencia, 2026)\par}
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+    % NOTA DEL PONENTE: Como conclusiones finales, quiero destacar el valor de transferencia y la relevancia internacional de este trabajo. A nivel científico, validamos el entorno de simulación, identificamos la física del ruido Compton y demostramos que estrechar la ventana al 10% mejora el contraste un 79%. A nivel de empresa y transferencia tecnológica, este proyecto abre camino en colaboración con Bruker para comercializar el multiplexado. Y finalmente, como prueba de su alta relevancia, el trabajo ha sido aceptado para su presentación en el próximo Congreso Europeo de Física Médica, el ECMP de 2026, lo cual consolida el valor y el rigor de los resultados obtenidos.
 \end{frame}
 
 % --- Diapositiva 24 ---
@@ -758,15 +779,41 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
     % NOTA DEL PONENTE: De cara al futuro, planteamos tres vías principales: primero, en lugar de separar las señales a posteriori, incluirlas directamente en las iteraciones de los algoritmos MLEM; segundo, probar la técnica mPET en otros isótopos con emisiones en cascada como el Iodo-124; y por último, aprovechar la inmensa sensibilidad de los nuevos escáneres Total Body PET para compensar la pérdida estadística inherente al multiplexado.
 \end{frame}
 
-% --- Diapositiva 25: Bibliografía seleccionada ---
-\begin{frame}{Bibliografía Seleccionada}
-    \footnotesize
-    \begin{itemize}
-        \item \textbf{Lubberink, M., \& Herzog, H. (2011).} \ingles{Quantitative imaging of \ce{^{124}I} and \ce{^{86}Y} with PET}. \textit{European Journal of Nuclear Medicine and Molecular Imaging}, 38(S1), 10-18.
-        \item \textbf{Giménez-Alventosa, V., et al. (2021).} \ingles{PenRed: An extensible and parallel Monte-Carlo framework for radiation transport based on PENELOPE}. \textit{Computer Physics Communications}, 267, 108065.
-        \item \textbf{Andreyev, A., \& Celler, A. (2011).} \ingles{Dual-isotope PET using positron-gamma emitters}. \textit{Physics in Medicine \& Biology}, 56(14), 4539-4556.
-        \item \textbf{Pratt, E. C., et al. (2023).} \ingles{Simultaneous quantitative imaging of two PET radiotracers via the detection of positron-electron annihilation and prompt gamma emissions}. \textit{Nature Biomedical Engineering}, 7(8), 1028-1039.
-    \end{itemize}
+% --- Diapositiva 25: Presupuesto ---
+\begin{frame}{Presupuesto Estimado}
+    \begin{columns}[c]
+        \begin{column}{0.52\textwidth}
+            \begin{block}{Desglose de Costes}
+                Resumen de las partidas presupuestarias del proyecto:
+                \begin{itemize}\setlength{\itemsep}{0.5em}
+                    \item \textbf{Personal:} Dedicación del autor y tutorización del proyecto.
+                    \item \textbf{Software:} Amortización de la licencia de reconstrucción de imagen Bruker.
+                    \item \textbf{Hardware:} Uso del clúster de computación QUASAR y equipo local.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.43\textwidth}
+            \centering
+            \small
+            \begin{table}
+                \centering
+                \begin{tabular}{lr}
+                    \toprule
+                    \textbf{Concepto} & \textbf{Importe (€)} \\
+                    \midrule
+                    Costes de Personal & 8.110,00 \\
+                    Costes de Software & 8.000,00 \\
+                    Costes de Hardware & 527,66 \\
+                    Gastos Generales (10\%) & 1.663,77 \\
+                    IVA (21\%) & 3.843,30 \\
+                    \midrule
+                    \textbf{TOTAL} & \textbf{22.144,73} \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+        \end{column}
+    \end{columns}
+    % NOTA DEL PONENTE: Respecto al presupuesto estimado para el desarrollo del proyecto, este se divide en tres áreas principales: costes de personal por valor de 8110 euros, costes de software por 8000 euros asociados a la amortización proporcional de la licencia de Bruker RecoServer, y costes de hardware por 527 euros correspondientes a la amortización del portátil y el uso del clúster QUASAR. Con los gastos generales del 10% y el IVA de 21%, el importe total del presupuesto asciende a 22144,73 euros.
 \end{frame}
 
 % --- Diapositiva 26: Diapositiva de cierre ---
