@@ -4,7 +4,7 @@
             \begin{block}{Detección de Triples}
                 \begin{itemize}
                     \item \textbf{PET Doble:} Coincidencia temporal estándar.
-                    \item \textbf{Prompt Gamma:} Busca un tercer single con $e > 650$\,keV.
+                    \item \textbf{Prompt Gamma:} Busca un tercer single en el rango $650 - 2000$\,keV.
                           \begin{itemize}
                               \item \scriptsize Umbral alto: minimiza la aceptación de gammas dispersados (\textit{scatter}).
                           \end{itemize}
