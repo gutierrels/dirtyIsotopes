@@ -1,4 +1,4 @@
-\frametitle{Mi Desarrollo en C++: Lógica de Triples}
+\frametitle{Desarrollo en C++: Lógica de Triples}
 \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \begin{block}{Detección de Triples}

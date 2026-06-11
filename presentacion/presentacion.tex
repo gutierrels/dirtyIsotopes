@@ -85,16 +85,22 @@
 \section{Introducción y Objetivos}
 % --- Diapositiva 3 ---
 \begin{frame}{El Paradigma de la Teranosis}
-    \begin{block}{Teranosis y el Par \yochoseis / \ynuevecero}
+    \begin{block}{El Vehículo y la Carga Radiológica}
         \begin{itemize}
-            \item \alert{Terapia + diagnóstico} con el mismo vector molecular.
-            \item \textbf{\ynuevecero:} Emisor $\beta^-$ terapéutico, sin imagen directa.
-            \item \textbf{\yochoseis:} Emisor $\beta^+$, análogo químico idéntico $\to$ PET cuantitativo previo a la terapia.
+            \item \alert{Terapia + diagnóstico:} \textit{«Vemos lo que tratamos y tratamos lo que vemos»}.
+            \item \textbf{Molécula portadora:} Vector biológico que reconoce y se une selectivamente a los receptores tumorales.
+            \item \textbf{Isótopos (Carga):} Se acoplan a la molécula en fases clínicas distintas.
         \end{itemize}
     \end{block}
-    \vspace{0.4cm}
-    \hfill {\tiny\color{mcmBlack!40} [Lubberink \& Conti, 2011]}
-    % NOTA DEL PONENTE: Buenos días a todos. Comenzamos la presentación de mi TFG. La teranosis es un paradigma en medicina de precisión que une terapia y diagnóstico. El par Y-86/Y-90 es clave. El Y-90 es terapéutico pero ciego a la imagen. Usando su isótopo gemelo Y-86, podemos hacer un escáner PET cuantitativo previo para planificar la dosis y predecir el comportamiento del tratamiento.
+    \begin{exampleblock}{El Par Teranóstico Verdadero: \yochoseis / \ynuevecero}
+        \begin{itemize}
+            \item Al ser el mismo elemento, el cuerpo no los distingue (\textbf{biodistribución 100\% idéntica}).
+            \item \textbf{\yochoseis:} Emisor $\beta^+$ para el escáner PET previo (planificación).
+            \item \textbf{\ynuevecero:} Emisor $\beta^-$ para radioterapia dirigida (destrucción).
+        \end{itemize}
+    \end{exampleblock}
+    \vspace{0.2cm}
+    % NOTA DEL PONENTE: Buenos días. Comenzamos la presentación de mi TFG. La teranosis en medicina nuclear funciona uniendo un isótopo a una molécula portadora, un vector biológico con alta afinidad por los receptores del tumor. La clave está en la carga. El par Y-86/Y-90 es lo que llamamos un par teranóstico verdadero. Como son el mismo elemento, la química es idéntica y el cuerpo no los distingue. Primero inyectamos la molécula con Y-86, el "explorador" emisor de positrones, para hacer un PET y planificar. Días después, inyectamos la misma molécula con Y-90, el "tratamiento", para hacer radioterapia local. El Y-86 nos da un mapa 100% perfecto de dónde irá la radioterapia.
 \end{frame}
 
 % --- Diapositiva 3b: Esquemas de desintegración ---
@@ -106,15 +112,19 @@
             \includegraphics[height=6.0cm,keepaspectratio]{esquemaf18.png}
             \vskip0.15cm
             {\scriptsize\color{mcmBlack!65} Figura 1. Esquema de desintegración del \fdiezocho (emisor $\beta^+$ puro).\par}
+            \vspace{0.1cm}
+            {\tiny\color{mcmBlack!40} [Bergeron et al., 2014]\par}
         \end{column}
         \begin{column}{0.48\textwidth}
             \centering
             \includegraphics[height=6.0cm,keepaspectratio]{esquemaY86.png}
             \vskip0.15cm
             {\scriptsize\color{mcmBlack!65} Figura 2. Esquema de desintegración del \yochoseis (emisor complejo con prompt gammas).\par}
+            \vspace{0.1cm}
+            {\tiny\color{mcmBlack!40} [Adaptado de Lubberink y Herzog, 2011]\par}
         \end{column}
     \end{columns}
-    % NOTA DEL PONENTE: A la izquierda vemos el esquema de desintegración del Flúor-18, un emisor beta-positivo puro. A la derecha, el del Itrio-86, con su decaimiento complejo y múltiples líneas gamma en cascada que son la fuente del problema.
+    % NOTA DEL PONENTE: A la izquierda vemos el esquema de desintegración del Flúor-18, un emisor beta-positivo puro que decae directamente al estado base. A la derecha, el esquema del Itrio-86 revela la raíz física de nuestro problema: este isótopo no decae al estado fundamental, sino a múltiples estados energéticos excitados del Estroncio-86 (Sr-86). Para alcanzar la estabilidad, el núcleo hijo de Estroncio se desexcita emitiendo casi instantáneamente esa compleja cascada de fotones o "prompt gammas", que son la verdadera fuente de ruido en nuestra imagen PET.
 \end{frame}
 
 % --- Diapositiva 4 ---
@@ -122,9 +132,8 @@
     \begin{block}{El Desafío Físico del \yochoseis}
         \begin{itemize}
             \item \textbf{Decaimiento sucio:} Emisión de \alert{gammas en cascada} (\ingles{prompt gammas}).
-            \item \textbf{Líneas clave:} \SI{1077}{\kilo\electronvolt} (\textbf{82.5\%}) y \SI{628}{\kilo\electronvolt} (\textbf{32.6\%}).
-            \item \textbf{Dispersión Compton:} Deposita energía en el rango del fotofico (\SI{511}{\kilo\electronvolt}).
-            \item \textbf{Efecto:} Impide la discriminación energética simple.
+            \item \textbf{Dispersión Compton:} Deposita energía en el rango de la ventana de detección (\SI{511}{\kilo\electronvolt}).
+            \item \textbf{Efecto:} Da lugar a \alert{coincidencias triples y espurias}.
         \end{itemize}
     \end{block}
     % NOTA DEL PONENTE: Sin embargo, el Y-86 presenta graves desafíos físicos. Se le conoce como un isótopo "sucio" debido a que emite gammas rápidos en cascada. El de 1077 keV se emite en el 82.5% de los decaimientos, superando a los propios positrones. Estos gammas de alta energía interactúan Compton en el tejido y depositan energía que cae justo en la ventana de detección de 511 keV, contaminando la adquisición.
@@ -153,20 +162,58 @@
     % NOTA DEL PONENTE: Aquí vemos el mecanismo de interferencia. Un PET estándar busca coincidencias dobles de 511 keV. Pero en el Y-86, al emitirse un prompt gamma simultáneamente, la electrónica puede registrar una coincidencia triple. Al no poder procesarla, el sistema genera líneas de respuesta erróneas o dobles falsas, provocando un halo de ruido masivo y reduciendo severamente el contraste de la imagen.
 \end{frame}
 
-% --- Diapositiva 6 ---
-\begin{frame}{Objetivos del Trabajo}
+% --- Diapositiva 6: Motivación Clínica mPET ---
+\begin{frame}{Motivación Clínica: Multiplexado (mPET)}
+    \begin{columns}[c]
+        \begin{column}{0.50\textwidth}
+            \begin{block}{El Cambio de Paradigma}
+                \begin{itemize}
+                    \item \textbf{De ruido a señal:} Usar los \ingles{prompt gammas} como \textbf{firma única} para discriminar isótopos.
+                    \item \textbf{Correlación biológica:} Visión dinámica simultánea de dos procesos distintos.
+                \end{itemize}
+            \end{block}
+            \begin{exampleblock}{Beneficio Hospitalario}
+                \begin{itemize}
+                    \item Una sesión PET en vez de 2.
+                    \item \alert{Reducción de dosis:} Evita doble exposición de rayos X al no repetir escáner CT.
+                \end{itemize}
+            \end{exampleblock}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth,keepaspectratio]{../figuras/multiplexing_ejemplo.png}
+            \vskip0.1cm
+            {\scriptsize\color{mcmBlack!65} Figura 4. Esquema de adquisición simultánea dual (mPET).\par}
+            \vspace{0.2cm}
+            \hfill {\tiny\color{mcmBlack!40} [Pratt et al., 2023]}
+        \end{column}
+    \end{columns}
+    % NOTA DEL PONENTE: Además de la corrección, este trabajo explora una motivación innovadora: el cambio de paradigma hacia la imagen multiplexada. Planteamos usar los prompt gammas no como ruido, sino como una firma para distinguir eventos de un isótopo sucio frente a otro puro, abriendo la puerta a adquisiciones simultáneas duales o mPET. Esto ofrece una correlación espacio-temporal óptima para observar interacciones entre dos procesos biológicos. Clínicamente esto es vital: frente al PET convencional que requeriría dos sesiones, el multiplexado lo consolida en una sola. Esto no solo reduce drásticamente el tiempo de ocupación del escáner, sino que disminuye enormemente la dosis de radiación al paciente, ya que le ahorramos la exposición a la segunda tomografía computarizada (CT) que siempre es necesaria para la corrección de atenuación en cada sesión independiente.
+\end{frame}
+
+% --- Diapositiva 7 (1/2) ---
+\begin{frame}{Alcance y Objetivos del Proyecto (1/2)}
     \begin{block}{Objetivo General}
         Optimizar la imagen PET de \yochoseis mediante simulación Monte Carlo de alta fidelidad y técnicas de multiplexado (\textbf{mPET}).
     \end{block}
-    \begin{exampleblock}{Objetivos Específicos}
+    \begin{exampleblock}{Alcance Específico}
         \begin{itemize}
-            \item \textbf{Modelado:} Modelos 3D del escáner Bruker Si78 y fantoma Derenzo.
-            \item \textbf{C++:} Algoritmos en modo lista para procesar dobles y triples.
-            \item \textbf{Optimización:} Evaluar el compromiso CRC vs. SNR según EW/CW.
-            \item \textbf{Multiplexado:} Separación simultánea de \fdiezocho e \yochoseis.
+            \item \textbf{Modelado y Simulación:} Geometría del escáner Bruker Si78 y fantoma Derenzo en Blender, simulados en \penred{}.
+            \item \textbf{Software de Post-procesado:} Algoritmos en C++ para extracción de coincidencias y clasificación de eventos triples.
         \end{itemize}
     \end{exampleblock}
-    % NOTA DEL PONENTE: Con esta problemática en mente, los objetivos se dividen en cuatro: primero, modelar geométricamente el escáner preclínico Bruker Si78 en el software penRed; segundo, programar en C++ el algoritmo de coincidencia y detección de triples; tercero, realizar un barrido paramétrico para optimizar ventanas; y cuarto, hacer una prueba de concepto para separar físicamente F-18 y Y-86 en un mismo escaneo.
+    % NOTA DEL PONENTE: El alcance del proyecto, tal y como se detalla en la memoria, abarca 4 fases fundamentales. En esta primera parte abordamos: 1) El modelado y simulación computacional: modelamos el escáner comercial Bruker y el fantoma Derenzo en Blender, simulando la física de desintegración con el framework penRed y su módulo PENNUC. 2) Desarrollo de software propio en C++ para procesar los datos list mode y aislar las coincidencias triples, basándonos en Andreyev y Celler.
+\end{frame}
+
+% --- Diapositiva 7 (2/2) ---
+\begin{frame}{Alcance y Objetivos del Proyecto (2/2)}
+    \begin{exampleblock}{Alcance Específico}
+        \begin{itemize}
+            \item \textbf{Estudio de Optimización:} Barrido de ventanas (EW y CW) evaluando métricas de imagen (CRC y SNR) sobre reconstrucciones MLEM.
+            \item \textbf{Prueba de Concepto (mPET):} Simulación de fantoma dual (\yochoseis/\fdiezocho) y separación mediante sustracción de imagen.
+        \end{itemize}
+    \end{exampleblock}
+    % NOTA DEL PONENTE: Siguiendo con los objetivos, la segunda parte incluye: 3) Un estudio exhaustivo de optimización paramétrica donde hicimos un barrido de las ventanas de energía y coincidencia para maximizar el contraste y SNR de las reconstrucciones MLEM. 4) Y finalmente, aplicar todo esto en una prueba de concepto de imagen multiplexada, simulando dos isótopos simultáneamente para demostrar la viabilidad de su separación física y computacional.
 \end{frame}
 
 % =====================================================================
@@ -178,7 +225,7 @@
 \begin{frame}{Flujo de Trabajo Metodológico}
     \centering
     \begin{tikzpicture}[
-            node distance=0.6cm and 0.3cm,
+            node distance=1cm and 0.8cm,
             box/.style={
                     draw=mcmPrimary,
                     thick,
@@ -186,8 +233,8 @@
                     text=mcmBlack,
                     font=\bfseries\scriptsize,
                     align=center,
-                    minimum height=1.1cm,
-                    text width=2.4cm,
+                    minimum height=2cm,
+                    text width=3.2cm,
                     rounded corners=3pt
                 },
             arrow/.style={
@@ -197,21 +244,19 @@
                     mcmPrimary
                 }
         ]
-        \node (blender) [box] {1. Modelado 3D\\(Blender + plugin\\\penred)};
-        \node (sim) [box, right=of blender] {2. Simulación MC\\(Monte Carlo\\\penred + PENNUC)};
+        \node (blender) [box] {\includegraphics[height=0.9cm]{logo_blender.png}\\[1mm] 1. Modelado 3D\\(Blender + plugin\\\penred)};
+        \node (sim) [box, right=of blender] {\includegraphics[height=0.9cm]{PenRed_color.png}\\[1mm] 2. Simulación MC\\(Monte Carlo\\\penred + PENNUC)};
         \node (post) [box, right=of sim] {3. Post-procesado\\(C++: singles a\\coincidencias LM)};
-        \node (reco) [box, right=of post] {4. Reconstrucción\\(Bruker RecoServer\\algoritmo MLEM)};
-        \node (anal) [box, right=of reco] {5. Análisis / mPET\\(AMIDE y sustracción\\en Python)};
+        
+        % Segunda fila, bajando desde el nodo 3 y yendo hacia la izquierda
+        \node (reco) [box, below=of post, yshift=-0.5cm] {\includegraphics[height=0.6cm]{logo_bruker.pdf}\\[1mm] 4. Reconstrucción\\(Bruker RecoServer\\algoritmo MLEM)};
+        \node (anal) [box, left=of reco] {5. Análisis / mPET\\(AMIDE y sustracción\\en Python)};
 
         \draw [arrow] (blender) -- (sim);
         \draw [arrow] (sim) -- (post);
         \draw [arrow] (post) -- (reco);
         \draw [arrow] (reco) -- (anal);
     \end{tikzpicture}
-    \vskip0.2cm
-    \begin{block}{Metodología de Validación}
-        Replica la adquisición física del laboratorio. Desactivamos las correcciones estándar del reconstructor Bruker para asegurar que la mejora en calidad dependa únicamente de nuestro algoritmo en C++.
-    \end{block}
     % NOTA DEL PONENTE: Este diagrama representa nuestro flujo metodológico. Es un enfoque integral "in silico". Comenzamos modelando en Blender, simulamos en Quasar, post-procesamos las cuentas con nuestro algoritmo C++, reconstruimos con el software comercial RecoServer de la propia Bruker y finalmente analizamos las imágenes resultantes en AMIDE y un script de Python que implementa la sustracción.
 \end{frame}
 
@@ -219,7 +264,7 @@
 \begin{frame}{Modelado Geométrico: Escáner y Fantoma}
     \begin{columns}[T]
         \begin{column}{0.54\textwidth}
-            \begin{block}{Geometría en \penred}
+            \begin{block}{Geometría en Blender}
                 \begin{itemize}
                     \item \textbf{Bruker Si78:} Escáner octogonal preclínico con 3 anillos de detectores de LYSO ($48\times 48\times 10$\,mm).
                     \item \textbf{Fantoma Derenzo:} PMMA ($R=35$\,mm) con 6 sectores de varillas ($0.8$ a $2.5$\,mm) rellenas de actividad.
@@ -228,46 +273,51 @@
         \end{column}
         \begin{column}{0.42\textwidth}
             \centering
-            \includegraphics[height=4.2cm,keepaspectratio]{geometria_completa2.png}
+            \includegraphics[height=4.5cm,keepaspectratio]{geometria_completa2.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 4. Modelado geométrico tridimensional del escáner Bruker Si78 y el fantoma Derenzo en \penred.\par}
+            {\scriptsize\color{mcmBlack!65} Figura 5. Modelado geométrico tridimensional del escáner Bruker Si78 y el fantoma Derenzo en Blender.\par}
         \end{column}
     \end{columns}
     % NOTA DEL PONENTE: Modelamos con precisión submilimétrica los componentes clave. El Bruker Si78 se modeló como una geometría octogonal de tres anillos con cristales centelleadores de LYSO. El fantoma Derenzo digital replica el fantoma experimental con sus 6 sectores de varillas. Esta geometría se definió de forma visual y se exportó a cuádricas analíticas.
 \end{frame}
 
 % --- Diapositiva 9 ---
-\begin{frame}{Física y Entorno de Simulación}
+\begin{frame}{Simulación Monte Carlo: Definiciones Clave}
     \begin{columns}[T]
         \begin{column}{0.54\textwidth}
-            \begin{block}{Simulación con \penred y PENNUC}
+            \begin{block}{Conceptos Fundamentales}
                 \begin{itemize}
-                    \item \textbf{Transporte:} Código C++14 sobre PENELOPE.
-                    \item \textbf{Decaimiento:} Módulo PENNUC con esquemas NuDat 3 (\texttt{Y86.nuc} e \texttt{F18.nuc}).
-                    \item \textbf{Registro:} Tally Singles de posición, energía y tiempo.
+                    \item \textbf{History (Historia):}\\Unidad de simulación (partícula primaria + secundarias).
+                    \vspace{0.3cm}
+                    \item \textbf{Singles:}\\Registro de fotones individuales (tiempo, energía e ID).
                 \end{itemize}
             \end{block}
         \end{column}
         \begin{column}{0.42\textwidth}
-            \begin{exampleblock}{Clúster Quasar}
-                \begin{itemize}
-                    \item 182 núcleos AMD, MPI + threads.
-                    \item $1.5\cdot 10^9$ historias simuladas.
-                \end{itemize}
-            \end{exampleblock}
             \centering
             \includegraphics[width=\textwidth]{particle_track.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 5. Visualización del transporte de trazas de partículas secundarias simuladas en \penred.\par}
+            {\scriptsize\color{mcmBlack!65} Figura 6. Visualización del transporte de trazas de partículas secundarias simuladas en \penred.\par}
+            \vskip0.2cm
+            \begin{exampleblock}{Ficheros}
+                \begin{itemize}
+                    \item Ejecutable (\penred)
+                    \item Configuración
+                    \item Geometría
+                \end{itemize}
+            \end{exampleblock}
         \end{column}
     \end{columns}
     \vspace{0.2cm}
-    \hfill {\tiny\color{mcmBlack!40} [Giménez-Alventosa et al., 2021]}
-    % NOTA DEL PONENTE: La simulación física se basa en el transporte de radiación de PENELOPE a través de penRed. El módulo PENNUC es crucial para cargar las transiciones gamma exactas del Y-86. Las simulaciones se corrieron en el clúster Quasar del ISIRYM mediante MPI. Este clúster cuenta con 182 núcleos, lo que nos permitió simular mil quinientos millones de historias con alta estadística.
+    % NOTA DEL PONENTE: Para entender la simulación computacional de este proyecto, es vital tener claros tres conceptos de Monte Carlo. Primero, la "Historia", que es el seguimiento completo desde que la fuente emite un decaimiento hasta que todas las partículas resultantes se detienen. Segundo, los "Tallies", que son nuestros detectores virtuales que guardan la información. Y tercero, los "Singles", el tally específico que registra cada evento de deposición de energía de forma cruda antes de formar coincidencias. Todo esto fue orquestado en penRed usando cuatro ficheros clave (ejecutable, configuración, geometría y materiales) que fueron enviados al supercomputador Quasar de la universidad, donde simulamos nada menos que 1500 millones de historias con alta precisión.
 \end{frame}
 
 % --- Diapositiva 10 ---
 \begin{frame}{Diseño Experimental: Fases 1 y 2}
+    \begin{itemize}
+        \item \textbf{Estadística simulada:} $2\cdot 10^8$ historias (\SI{27.77}{\kilo\becquerel} en 2\,h).
+    \end{itemize}
+    \vspace{-0.1cm}
     \begin{block}{Fase 1: Validación Ideal (Ground Truth)}
         \begin{itemize}
             \item \textbf{Configuración:} Vacío (\texttt{void}) y detectores perfectos.
@@ -282,7 +332,7 @@
         \begin{itemize}
             \item \textbf{Configuración:} Fantoma de agua, detectores LYSO realistas.
             \item \textbf{Post-procesado:} Modo \ingles{Same History} ($0\%$ aleatorios).
-            \item \textbf{Objetivo:} Aislar el impacto Compton y absorción en agua/cristal.
+            \item \textbf{Objetivo:} Aislar el impacto Compton y atenuación en agua/cristal.
         \end{itemize}
     \end{block}
     % NOTA DEL PONENTE: La metodología propone un enfoque incremental. En la Fase 1 establecemos el Ground Truth definiendo todo como vacío. Como detalle técnico, en el vacío el positrón no tendría materia con la que aniquilarse, por lo que forzamos su aniquilación in situ en el simulador. Esto genera los fotones de 511 keV y elimina por completo el emborronamiento por el rango del positrón, dándonos una referencia perfecta. En la Fase 2 añadimos agua y detectores realistas para aislar el scatter Compton y la atenuación.
@@ -292,8 +342,8 @@
 \begin{frame}{Diseño Experimental: Fases 3, 4 y 5}
     \begin{block}{Fases Metodológicas Finales}
         \begin{itemize}
-            \item \textbf{Fase 3 (Línea Base):} Simulación realista con emparejamiento temporal \ingles{Take Closest} para reproducir el ruido físico real.
-            \item \textbf{Fase 4 (Optimización):} Barrido paramétrico de ventanas de energía (EW: $20\%$, $15\%$, $10\%$) y coincidencia (CW: $4$, $3$\,ns).
+            \item \textbf{Fase 3 (Línea Base):} Mismos datos de Fase 2 (\SI{27.77}{\kilo\becquerel}). Se usa el modo \ingles{Take Closest} (CW: $5$\,ns y EW: $30\%$) para añadir coincidencias aleatorias.
+            \item \textbf{Fase 4 (Optimización):} Barrido paramétrico (EW: $20\%$, $15\%$, $10\%$ y CW: $4$, $3$\,ns). \alert{Estadística ampliada:} $1.5 \cdot 10^9$ historias (\SI{208.3}{\kilo\becquerel}).
             \item \textbf{Fase 5 (mPET):} Adquisición dual simultánea con \fdiezocho y \yochoseis, clasificando triples para la separación de trazadores.
         \end{itemize}
     \end{block}
@@ -301,15 +351,18 @@
 \end{frame}
 
 % --- Diapositiva 12 ---
-\begin{frame}{Mi Desarrollo en C++: Post-procesado}
+\begin{frame}{Desarrollo en C++: Post-procesado}
     \begin{columns}[T]
         \begin{column}{0.54\textwidth}
             \begin{block}{El Software \texttt{createCoincidences}}
                 \begin{itemize}
-                    \item Código en C++ desarrollado para lectura de singles.
-                    \item Buffer deslizante dinámico para ordenación temporal.
-                    \item \textbf{Energy Blurring:} Resolución energética de \textbf{14\% FWHM} a \SI{511}{\kilo\electronvolt}).
-                    \item \textbf{Spatial Blurring:} Resolución espacial de \textbf{0.08\,cm}.
+                    \item Añade efectos del detector no simulables nativamente en \penred.
+                    \item \textbf{Modelado de Hardware (Blurring):}
+                    \begin{itemize}
+                        \item \textbf{Energético:} 14\% FWHM a \SI{511}{\kilo\electronvolt}.
+                        \item \textbf{Espacial:} Resolución intrínseca de 0.08\,cm.
+                    \end{itemize}
+                    \item \textbf{Lógica:} Buffer deslizante y aplicación de ventanas (CW y EW).
                 \end{itemize}
             \end{block}
         \end{column}
@@ -317,14 +370,14 @@
             \centering
             \includegraphics[height=4.2cm,keepaspectratio]{materiales_colores.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 6. Definición espacial y geométrica de materiales y componentes del escáner en C++.\par}
+            {\scriptsize\color{mcmBlack!65} Figura 7. Definición espacial y geométrica de materiales y componentes del escáner en C++.\par}
         \end{column}
     \end{columns}
-    % NOTA DEL PONENTE: Desarrollamos el software createCoincidences en C++. Este lee las interacciones discretas o singles y aplica el modelado de la electrónica del detector: la resolución espacial intrínseca de 0.08 cm y el desenfoque energético del 14% mediante una gaussiana. El buffer temporal dinámico es el encargado de buscar coincidencias.
+    % NOTA DEL PONENTE: Uno de los pilares del proyecto es el software propio createCoincidences desarrollado en C++. penRed simula física ideal, por lo que es necesario nuestro código para modelar la electrónica del escáner real. Este software lee los "singles", aplica el desenfoque o "blurring" gaussiano (resolución espacial, energética y temporal), e implementa la lógica de emparejamiento. Es aquí exactamente donde definimos las ventanas de energía (EW) y de coincidencia (CW) con las que el buffer deslizante filtra y extrae las coincidencias.
 \end{frame}
 
 % --- Diapositiva 13 ---
-\begin{frame}[fragile]{Mi Desarrollo en C++: Lógica de Triples}
+\begin{frame}[fragile]{Desarrollo en C++: Lógica de Triples}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \begin{block}{Detección de Triples}
@@ -374,7 +427,7 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
 % --- Diapositiva 14 ---
 \begin{frame}{Validación del Espectro del Itrio-86}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.38\textwidth}
             \begin{block}{Verificación Física}
                 \begin{itemize}
                     \item Espectro de singles extraído en vacío.
@@ -397,11 +450,11 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
                 \end{tabular}
             \end{table}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.58\textwidth}
             \centering
-            \includegraphics[height=4.8cm,keepaspectratio]{espectro_energia_kev_y_kev.png}
+            \includegraphics[width=\textwidth]{espectro_energia_kev_y_kev.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 7. Espectro simulado de depósito de energía de singles de \yochoseis en vacío.\par}
+            {\scriptsize\color{mcmBlack!65} Figura 8. Espectro simulado de depósito de energía de singles de \yochoseis en vacío.\par}
         \end{column}
     \end{columns}
     % NOTA DEL PONENTE: Entramos en la sección de Resultados. El primer paso fue validar la física de desintegración nuclear. Al simular en vacío, el histograma de singles muestra de forma discreta los fotopicos teóricos. Identificamos perfectamente el de 511 keV de aniquilación y las líneas de prompt gammas a 628, 1077 y 1153 keV, con energías idénticas a los datos oficiales de NuDat 3. Esto confirma la validez de nuestro modelo físico.
@@ -422,9 +475,9 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
         \end{column}
         \begin{column}{0.48\textwidth}
             \centering
-            \includegraphics[height=4.8cm,keepaspectratio]{IMG_IDEAL_Y86.png}
+            \includegraphics[height=4cm,keepaspectratio]{IMG_IDEAL_Y86.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 8. Reconstrucción tomográfica ideal MLEM (Fase 1: Ground Truth).\par}
+            {\scriptsize\color{mcmBlack!65} Figura 9. Reconstrucción tomográfica ideal MLEM (Fase 1: Ground Truth).\par}
         \end{column}
     \end{columns}
     % NOTA DEL PONENTE: Reconstruyendo en condiciones ideales de la Fase 1, obtenemos una imagen de referencia perfecta de nuestro fantoma Derenzo. Al no haber medio dispersor y aplicar el Same History, el contraste es óptimo con un CRC de 185.27. Las varillas más pequeñas de 0.8 mm están perfectamente resueltas. Este es el techo teórico de calidad de nuestro sistema.
@@ -445,9 +498,9 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
         \end{column}
         \begin{column}{0.48\textwidth}
             \centering
-            \includegraphics[height=4.8cm,keepaspectratio]{IMG_SCATTER_Y86.png}
+            \includegraphics[height=4cm,keepaspectratio]{IMG_SCATTER_Y86.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 9. Imagen reconstruida de \yochoseis bajo el efecto de scatter y atenuación en agua (Fase 2).\par}
+            {\scriptsize\color{mcmBlack!65} Figura 10. Imagen reconstruida de \yochoseis bajo el efecto de scatter y atenuación en agua (Fase 2).\par}
         \end{column}
     \end{columns}
     % NOTA DEL PONENTE: Al introducir agua en la Fase 2, el contraste colapsa dramáticamente cayendo a 11.57. Es una pérdida de contraste del 93.7%. En la imagen de la derecha apreciamos cómo las varillas pequeñas se emborronan debido a los halos Compton generados por los fotones dispersados en el agua, los cuales contaminan la región fría.
@@ -459,9 +512,9 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
         \begin{column}{0.48\textwidth}
             \begin{block}{Impacto de Coincidencias Aleatorias}
                 \begin{itemize}
-                    \item La electrónica realista (\ingles{Take Closest}) añade aleatorios.
+                    \item La lógica realista de emparejamiento de coincidencia ({Take Closest}) añade aleatorios.
                     \item El CRC es estable (\textbf{11.73}), pero el \textbf{SNR cae un 12.5\%} a \alert{2.74}.
-                    \item \textbf{Conclusión física:} El scatter Compton de prompt gammas daña el contraste (CRC), y los aleatorios añaden ruido granulado (SNR).
+                    \item \textbf{Conclusión física:} El scatter Compton de prompt gammas daña el contraste (CRC), y los aleatorios añaden ruido (SNR).
                 \end{itemize}
             \end{block}
         \end{column}
@@ -469,7 +522,7 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
             \centering
             \includegraphics[height=4.8cm,keepaspectratio]{espectro_det10_SIM_RANDOMS.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 10. Espectro realista de energía final registrado en los detectores (Fase 3).\par}
+            {\scriptsize\color{mcmBlack!65} Figura 11. Espectro realista de energía final registrado en los detectores (Fase 3).\par}
         \end{column}
     \end{columns}
     % NOTA DEL PONENTE: Al pasar a la simulación realista final de la Fase 3, donde no hay filtros de historia, introducimos las coincidencias aleatorias. El CRC se mantiene muy similar a la Fase 2, pero el SNR baja un 12.5% hasta 2.74. La conclusión física es que el scatter Compton de los prompt gammas dicta la pérdida de contraste (CRC), y las coincidencias aleatorias son las que añaden ruido estadístico general.
@@ -508,7 +561,7 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
     \hspace{0.3cm}
     \includegraphics[width=0.29\textwidth,height=2.7cm,keepaspectratio]{IMG_CLOSEST_TIME-Y86.png}
     \vskip0.05cm
-    {\scriptsize\color{mcmBlack!65} Figura 11. Comparativa de reconstrucciones en condiciones reales: \fdiezocho (izquierda) e \yochoseis (derecha) bajo idénticos parámetros de adquisición.\par}
+    {\scriptsize\color{mcmBlack!65} Figura 12. Comparativa de reconstrucciones en condiciones reales: \fdiezocho (izquierda) e \yochoseis (derecha) bajo idénticos parámetros de adquisición.\par}
     % NOTA DEL PONENTE: Para aislar el efecto de los prompt gammas, simulamos el Fluor-18, emisor beta+ puro, bajo los mismos parámetros. El contraste del F-18 es de 31.09 frente al 11.73 del Y-86. El Y-86 sufre una caída de contraste de 2.6 veces y un ruido muy superior debido puramente a los prompt gammas. Esto justifica metodológicamente la necesidad de optimizar las ventanas del detector.
 \end{frame}
 
@@ -521,15 +574,13 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
             \item El SNR disminuye levemente (de \textbf{7.53} a \textbf{6.64}) por la pérdida de sensibilidad.
         \end{itemize}
     \end{block}
-    \vskip0.05cm
     \centering
     \includegraphics[width=0.29\textwidth,height=2.5cm,keepaspectratio]{IMG_OPT_EW1_CW1.png}
     \hspace{0.1cm}
     \includegraphics[width=0.29\textwidth,height=2.5cm,keepaspectratio]{IMG_OPT_EW2_CW1.png}
     \hspace{0.1cm}
     \includegraphics[width=0.29\textwidth,height=2.5cm,keepaspectratio]{IMG_OPT_EW3_CW1.png}
-    \vskip0.05cm
-    {\scriptsize\color{mcmBlack!65} Figura 12. Efecto visual de la reducción de la ventana de energía EW (20\% izquierda, 15\% centro, 10\% derecha).\par}
+    {\scriptsize\color{mcmBlack!65} Figura 13. Efecto visual de la reducción de la ventana de energía EW (20\% izquierda, 15\% centro, 10\% derecha).\par}
     % NOTA DEL PONENTE: Evaluamos la optimización estrechando la ventana de energía (EW) para bloquear el scatter Compton y prompt gammas. Al bajar la ventana del 30% al 10%, el CRC mejora un 79%, duplicando el contraste y pasando de 10.73 a 19.17. La penalización de ruido es mínima, con el SNR variando ligeramente de 7.53 a 6.64. Visualmente, se recupera el contraste en las varillas de 1.2 mm.
 \end{frame}
 
@@ -553,13 +604,13 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
             \centering
             \includegraphics[height=4.8cm,keepaspectratio]{tradeoff.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 13. Curvas de compromiso entre contraste (CRC) y ruido (SNR) en función de la ventana EW.\par}
+            {\scriptsize\color{mcmBlack!65} Figura 14. Curvas de compromiso entre contraste (CRC) y ruido (SNR) en función de la ventana EW.\par}
         \end{column}
     \end{columns}
     % NOTA DEL PONENTE: Analizamos el efecto de la ventana de coincidencia temporal (CW). Acortar de 4 a 3 ns solo genera una mejora marginal en el ruido (del 1-5%) y no influye en el contraste. Por tanto, confirmamos que la ventana de energía es la variable dominante. El punto óptimo de funcionamiento que proponemos es EW 10% / CW 4ns, maximizando la detectabilidad de structures pequeñas.
 \end{frame}
 
-% --- Diapositiva 21 ---
+% --- Diapositiva 22 ---
 \begin{frame}{Prueba de Concepto mPET: Metodología}
     \begin{columns}[T]
         \begin{column}{0.54\textwidth}
@@ -576,7 +627,7 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
             \centering
             \includegraphics[height=4.2cm,keepaspectratio]{modelo_fantoma_mp.png}
             \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 14. Geometría del fantoma cilindro dual simulado para la adquisición mPET simultánea.\par}
+            {\scriptsize\color{mcmBlack!65} Figura 15. Geometría del fantoma cilindro dual simulado para la adquisición mPET simultánea.\par}
         \end{column}
     \end{columns}
     \vspace{0.2cm}
@@ -586,24 +637,12 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
 
 % --- Diapositiva 22 ---
 \begin{frame}{Prueba de Concepto mPET: Resultados}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \begin{block}{Separación de Trazadores}
-                \begin{itemize}
-                    \item \textbf{AB (Mixta):} Ambos cilindros visibles en la adquisición.
-                    \item \textbf{B' (Triples):} Aísla con éxito el cilindro de \yochoseis.
-                    \item \textbf{A (Recuperada):} Muestra exclusivamente el \fdiezocho.
-                    \item La contaminación del Y-86 se elimina casi al \alert{100\%}.
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \centering
-            \includegraphics[height=4.8cm,keepaspectratio]{imagen_cuatro_subplots.png}
-            \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 15. Distribuciones de actividad obtenidas durante el multiplexado mPET: mixta (AB), triples ($B'$) y Fluor-18 pura recuperada ($A$).\par}
-        \end{column}
-    \end{columns}
+    \vspace{-0.2cm}
+    \begin{center}
+        \includegraphics[height=6.4cm,keepaspectratio]{imagen_cuatro_subplots.png}
+        \vskip0.1cm
+        {\scriptsize\color{mcmBlack!65} Figura 16. Distribuciones de actividad en multiplexado: mixta (AB), Y-86 aislado con triples ($B'$) y F-18 puro recuperado ($A$).\par}
+    \end{center}
     % NOTA DEL PONENTE: El resultado de la separación es excelente. En el panel AB vemos la imagen de dobles mezclada con ambas señales. B' es la imagen de triples que solo responde al Y-86. Aplicando la sustracción descrita, obtenemos la imagen final A que aísla de forma pura al Fluor-18. El cilindro del Y-86 ha desaparecido de esta imagen por completo, validando el principio físico in silico.
 \end{frame}
 
@@ -629,22 +668,22 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
 \begin{frame}{Líneas de Trabajo Futuro}
     \begin{exampleblock}{Líneas de Investigación Futuras}
         \begin{itemize}
-            \item \textbf{Validación Experimental:} Trasladar la ventana óptima determinada (EW 10\% / CW 4\,ns) a adquisiciones en el escáner físico Bruker Si78 real del laboratorio.
-            \item \textbf{Modelado de Corrección Físico:} Desarrollar algoritmos analíticos específicos para la corrección por atenuación y dispersión Compton adaptados a coincidencias triples.
-            \item \textbf{Reconstrucción Multiplexada Integrada:} Incorporar la sustracción de la contaminación del isótopo emisor de prompt gammas directamente dentro del algoritmo de reconstrucción iterativo MLEM.
-            \item \textbf{Extensión Clinica:} Aplicar la metodología mPET a otros radionucleidos teranósticos de alta energía de interés clínico (como \ce{^{124}I} o \ce{^{89}Zr}).
+            \item \textbf{Reconstrucción Avanzada:} Incorporar las coincidencias triples directamente en la matriz del sistema de algoritmos iterativos (MLEM/OSEM).
+            \item \textbf{Extensión de Isótopos:} Validar la robustez del algoritmo mPET con otros radionúclidos de interés médico (\ce{^{124}I}, \ce{^{76}Br}, \ce{^{89}Zr}).
+            \item \textbf{Total Body PET:} Evaluar el impacto de la altísima sensibilidad geométrica de los escáneres de cuerpo completo en la viabilidad clínica del mPET.
         \end{itemize}
     \end{exampleblock}
-    % NOTA DEL PONENTE: De cara al futuro, planteamos cuatro líneas de trabajo principales: primero, llevar los parámetros óptimos a pruebas físicas en el escáner del laboratorio; segundo, desarrollar modelos analíticos de atenuación y scatter para triples; tercero, integrar la sustracción directamente dentro de las iteraciones del MLEM; y cuarto, ensayar la técnica mPET con otros radionucleidos de relevancia clínica.
+    % NOTA DEL PONENTE: De cara al futuro, planteamos tres vías principales: primero, en lugar de separar las señales a posteriori, incluirlas directamente en las iteraciones de los algoritmos MLEM; segundo, probar la técnica mPET en otros isótopos con emisiones en cascada como el Iodo-124; y por último, aprovechar la inmensa sensibilidad de los nuevos escáneres Total Body PET para compensar la pérdida estadística inherente al multiplexado.
 \end{frame}
 
 % --- Diapositiva 25: Bibliografía seleccionada ---
 \begin{frame}{Bibliografía Seleccionada}
+    \footnotesize
     \begin{itemize}
-        \item \textbf{Lubberink, M. \& Conti, M. (2011).} \ingles{PET imaging of "dirty" positron emitters}. \textit{European Journal of Nuclear Medicine and Molecular Imaging}, 38(3), 563-578.
-        \item \textbf{Giménez-Alventosa, V., et al. (2021).} \ingles{penRed: A Monte Carlo simulation framework for radiation transport based on PENELOPE}. \textit{Computer Physics Communications}, 261, 107775.
-        \item \textbf{Andreyev, A., et al. (2011).} \ingles{Single-photon transmission and triple coincidences in PET}. \textit{Physics in Medicine \& Biology}, 56(14), 4543.
-        \item \textbf{Pratt, R., et al. (2023).} \ingles{Multiplexed PET (mPET) imaging: A review of principles and applications}. \textit{Medical Physics}, 50(2), 785-802.
+        \item \textbf{Lubberink, M., \& Herzog, H. (2011).} \ingles{Quantitative imaging of \ce{^{124}I} and \ce{^{86}Y} with PET}. \textit{European Journal of Nuclear Medicine and Molecular Imaging}, 38(S1), 10-18.
+        \item \textbf{Giménez-Alventosa, V., et al. (2021).} \ingles{PenRed: An extensible and parallel Monte-Carlo framework for radiation transport based on PENELOPE}. \textit{Computer Physics Communications}, 267, 108065.
+        \item \textbf{Andreyev, A., \& Celler, A. (2011).} \ingles{Dual-isotope PET using positron-gamma emitters}. \textit{Physics in Medicine \& Biology}, 56(14), 4539-4556.
+        \item \textbf{Pratt, E. C., et al. (2023).} \ingles{Simultaneous quantitative imaging of two PET radiotracers via the detection of positron-electron annihilation and prompt gamma emissions}. \textit{Nature Biomedical Engineering}, 7(8), 1028-1039.
     \end{itemize}
 \end{frame}
 
