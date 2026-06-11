@@ -332,35 +332,6 @@
     % NOTA DEL PONENTE: Modelamos con precisión submilimétrica los componentes clave. El Bruker Si78 se modeló como una geometría octogonal de tres anillos con cristales centelleadores de LYSO. El fantoma Derenzo digital replica el fantoma experimental con sus 6 sectores de varillas. Esta geometría se definió de forma visual y se exportó a cuádricas analíticas.
 \end{frame}
 
-% --- Diapositiva 8b: Métricas de Calidad de Imagen ---
-\begin{frame}{Métricas de Calidad de Imagen}
-    \begin{columns}[c]
-        \begin{column}{0.52\textwidth}
-            \colorbox{mcmPrimaryMuted}{\strut\textcolor{mcmPrimary}{\bfseries\scriptsize CONTRASTE}}
-            \enskip \textbf{Coeficiente de Recuperación}
-            \[ \text{CRC} = \frac{\textcolor{mcmPrimary}{\mu_{\text{hot}}}}{\mu_{\text{bkg}}} - 1 \]
-
-            \vspace{0.4cm}
-
-            \colorbox{mcmExampleBg}{\strut\textcolor{mcmExample}{\bfseries\scriptsize RUIDO}}
-            \enskip \textbf{Relación Señal-Ruido}
-            \[ \text{SNR} = \frac{\mu_{\text{bkg}}}{\textcolor{mcmExample}{\sigma_{\text{bkg}}}} \]
-        \end{column}
-        \begin{column}{0.44\textwidth}
-            \centering
-            \includegraphics[height=4cm,keepaspectratio]{roi_amide.png}
-            \vskip0.1cm
-            {\scriptsize\color{mcmBlack!65} Figura 8. ROIs de varillas y fondo en AMIDE.\par}
-        \end{column}
-    \end{columns}
-    \vspace{0.4cm}
-    \centering
-    {\scriptsize\color{mcmBlack!60}
-        \boldmath\textcolor{mcmPrimary}{$\mu_{\text{hot}}$}\unboldmath: Media en varillas (Señal) \quad \textbullet \quad
-        $\mu_{\text{bkg}}$, \boldmath\textcolor{mcmExample}{$\sigma_{\text{bkg}}$}\unboldmath: Media y Desviación Estándar en el fondo (Ruido)
-    }
-    % NOTA DEL PONENTE: Para evaluar la calidad de las imágenes reconstruidas de forma cuantitativa, utilizamos dos métricas principales: el Coeficiente de Recuperación de Contraste (CRC) y la Relación Señal-Ruido (SNR). El CRC compara la actividad media medida en las varillas calientes con la del fondo, restándole uno. El SNR mide el nivel de ruido en una región de fondo homogénea dividiendo su media por la desviación estándar. Como apoyo visual, a la derecha se muestran las Regiones de Interés (ROIs) cilíndricas que dibujamos sobre el fantoma Derenzo en el software AMIDE para realizar estas medidas de forma reproducible.
-\end{frame}
 
 % --- Diapositiva 9 ---
 \begin{frame}{Simulación Monte Carlo: Definiciones Clave}
@@ -498,6 +469,37 @@ for (size_t k = 0; k < nextSingles.size(); ++k) {
     \vspace{0.1cm}
     \hfill {\tiny\color{mcmBlack!40} [Andreyev et al., 2011]}
     % NOTA DEL PONENTE: Aquí muestro la lógica del algoritmo de multiplexado. Buscamos la pareja convencional de 511 keV. Si en su ventana temporal detectamos un tercer fotón con energía superior a 650 keV, lo clasificamos como triple. Este umbral alto es crítico: minimiza la inclusión de prompt gammas que han sufrido dispersión Compton, las cuales degradarían la resolución espacial. Finalmente, guardamos dos datasets independientes en modo lista.
+\end{frame}
+
+
+% --- Diapositiva 8b: Métricas de Calidad de Imagen ---
+\begin{frame}{Métricas de Calidad de Imagen}
+    \begin{columns}[c]
+        \begin{column}{0.52\textwidth}
+            \colorbox{mcmPrimaryMuted}{\strut\textcolor{mcmPrimary}{\bfseries\scriptsize CONTRASTE}}
+            \enskip \textbf{Coeficiente de Recuperación}
+            \[ \text{CRC} = \frac{\textcolor{mcmPrimary}{\mu_{\text{hot}}}}{\mu_{\text{bkg}}} - 1 \]
+
+            \vspace{0.4cm}
+
+            \colorbox{mcmExampleBg}{\strut\textcolor{mcmExample}{\bfseries\scriptsize RUIDO}}
+            \enskip \textbf{Relación Señal-Ruido}
+            \[ \text{SNR} = \frac{\mu_{\text{bkg}}}{\textcolor{mcmExample}{\sigma_{\text{bkg}}}} \]
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \centering
+            \includegraphics[height=4cm,keepaspectratio]{roi_amide.png}
+            \vskip0.1cm
+            {\scriptsize\color{mcmBlack!65} Figura 8. ROIs de varillas y fondo en AMIDE.\par}
+        \end{column}
+    \end{columns}
+    \vspace{0.4cm}
+    \centering
+    {\scriptsize\color{mcmBlack!60}
+        \boldmath\textcolor{mcmPrimary}{$\mu_{\text{hot}}$}\unboldmath: Media en varillas (Señal) \quad \textbullet \quad
+        $\mu_{\text{bkg}}$, \boldmath\textcolor{mcmExample}{$\sigma_{\text{bkg}}$}\unboldmath: Media y Desviación Estándar en el fondo (Ruido)
+    }
+    % NOTA DEL PONENTE: Para evaluar la calidad de las imágenes reconstruidas de forma cuantitativa, utilizamos dos métricas principales: el Coeficiente de Recuperación de Contraste (CRC) y la Relación Señal-Ruido (SNR). El CRC compara la actividad media medida en las varillas calientes con la del fondo, restándole uno. El SNR mide el nivel de ruido en una región de fondo homogénea dividiendo su media por la desviación estándar. Como apoyo visual, a la derecha se muestran las Regiones de Interés (ROIs) cilíndricas que dibujamos sobre el fantoma Derenzo en el software AMIDE para realizar estas medidas de forma reproducible.
 \end{frame}
 
 % =====================================================================
